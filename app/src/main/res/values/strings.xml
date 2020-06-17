@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">BetGame</string>
+    <string name="active_bets">Active Bets</string>
+    <string name="vs">vs</string>
+    <string name="upcoming_games">Upcoming Games</string>
+    <string name="home_button">Home</string>
+    <string name="money_button">Cash</string>
+    <string name="schedule_button">All Games</string>
+    <string name="home_fragment_display_all_string">See all</string>
+</resources>
