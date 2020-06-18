@@ -25,7 +25,11 @@ public class GamesForSport extends AppCompatActivity implements GameCardsActivit
         super.onCreate(savedInstanceState);
 
         Intent intent = getIntent();
-        games = intent.getExtras().getParcelableArrayList("Extra");
+        try {
+            games = intent.getExtras().getParcelableArrayList("Extra");
+        } catch (NullPointerException e){
+
+        }
         GameTypeQuery = intent.getStringExtra("SportType");
         setContentView(R.layout.explicit_sports_display);
         rv_games = (RecyclerView) findViewById(R.id.rv_explicit_sports_display);
