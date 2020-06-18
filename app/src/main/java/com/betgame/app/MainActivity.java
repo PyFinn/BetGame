@@ -1,30 +1,22 @@
 package com.betgame.app;
 
-import android.content.Intent;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.betgame.app.Fragments.CashFragment;
 import com.betgame.app.Fragments.HomeFragment;
 import com.betgame.app.Fragments.ScheduleFragment;
-import com.betgame.app.specific_views.GamesForSport;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.Arrays;
 

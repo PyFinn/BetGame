@@ -12,7 +12,6 @@ import android.util.Log;
 import com.betgame.app.Game;
 import com.betgame.app.R;
 import com.betgame.app.recycler_view_adapters.GameCardsActivityAdapter;
-import com.betgame.app.recycler_view_adapters.ScheduleFragmentAdapter;
 
 import java.util.ArrayList;
 
