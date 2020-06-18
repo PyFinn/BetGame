@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,7 +16,7 @@ import android.view.ViewGroup;
 import com.betgame.app.Game;
 import com.betgame.app.R;
 import com.betgame.app.recycler_view_adapters.ScheduleFragmentAdapter;
-import com.betgame.app.specific_views.GamesForSport;
+import com.betgame.app.specific_views.ScheduleSpecificSport;
 
 import java.util.ArrayList;
 
@@ -24,6 +25,7 @@ public class ScheduleFragment extends Fragment implements ScheduleFragmentAdapte
     private ScheduleFragmentAdapter mScheduleFragmentAdapter;
     private ArrayList<Parcelable> mGameArray;
     private static final String GameArrayKey = "GameArray";
+    Fragment LeaguesFragment;
 
     public static ScheduleFragment newInstance(ArrayList<Game> games) {
         ScheduleFragment fragment = new ScheduleFragment();
@@ -60,9 +62,10 @@ public class ScheduleFragment extends Fragment implements ScheduleFragmentAdapte
 
     @Override
     public void onClick(String weatherForDay) {
-        Intent intent = new Intent(getContext(), GamesForSport.class);
-        intent.putParcelableArrayListExtra("Extra", mGameArray);
-        intent.putExtra("SportType",weatherForDay);
-        startActivity(intent);
+        LeaguesFragment = ScheduleSpecificSport.newInstance(mGameArray, weatherForDay);
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.addToBackStack(null);
+        ft.replace(R.id.sv_home_page, LeaguesFragment);
+        ft.commit();
     }
 }
