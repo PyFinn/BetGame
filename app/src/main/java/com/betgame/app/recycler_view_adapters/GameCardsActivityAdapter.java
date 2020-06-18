@@ -27,9 +27,12 @@ import android.widget.TextView;
 import com.betgame.app.Game;
 import com.betgame.app.R;
 
+import java.util.ArrayList;
+
 
 public class GameCardsActivityAdapter extends RecyclerView.Adapter<GameCardsActivityAdapter.ForecastAdapterViewHolder> {
 
+    private ArrayList<Game> mPreArrayGames = new ArrayList<>();
     private Game[] mGameArray;
 
     private final ForecastAdapterOnClickHandler mClickHandler;
@@ -131,7 +134,7 @@ public class GameCardsActivityAdapter extends RecyclerView.Adapter<GameCardsActi
         forecastAdapterViewHolder.mTimeTextView.setText(thisGame.getTime());
         forecastAdapterViewHolder.mLeagueTextView.setText(thisGame.getLeague());
         forecastAdapterViewHolder.mOddHomeTeamTextView.setText(thisGame.getOdd_home_team());
-        forecastAdapterViewHolder.mOddAwayTeamTextView.setText(thisGame.getAway_team());
+        forecastAdapterViewHolder.mOddAwayTeamTextView.setText(thisGame.getOdd_away_team());
         forecastAdapterViewHolder.mOddDrawTextView.setText(thisGame.getOdd_draw());
     }
 
@@ -154,8 +157,14 @@ public class GameCardsActivityAdapter extends RecyclerView.Adapter<GameCardsActi
      *
      * The new weather data to be displayed.
      */
-    public void setWeatherData(Game[] games) {
-        mGameArray = games;
+    public void setWeatherData(ArrayList<Game> games) {
+        mPreArrayGames = games;
+        try {
+            mGameArray = new Game[games.size()];
+            mGameArray = mPreArrayGames.toArray(mGameArray);
+        } catch (NullPointerException e){
+
+        }
         notifyDataSetChanged();
     }
 }

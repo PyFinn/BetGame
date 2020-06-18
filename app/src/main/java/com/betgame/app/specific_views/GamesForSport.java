@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -25,10 +26,12 @@ public class GamesForSport extends AppCompatActivity implements GameCardsActivit
 
         Intent intent = getIntent();
         games = intent.getExtras().getParcelableArrayList("Extra");
-        Log.e("M", games.toString());
         setContentView(R.layout.explicit_sports_display);
         rv_games = (RecyclerView) findViewById(R.id.rv_explicit_sports_display);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rv_games.getContext(), layoutManager.getOrientation());
+        dividerItemDecoration.setDrawable(getResources().getDrawable(R.drawable.rectangle));
+        rv_games.addItemDecoration(dividerItemDecoration);
         rv_games.setLayoutManager(layoutManager);
         rv_games.setHasFixedSize(true);
         mAdapterGames = new GameCardsActivityAdapter(this);
@@ -42,7 +45,7 @@ public class GamesForSport extends AppCompatActivity implements GameCardsActivit
                 "Alaskan",
                 "MLS"
         };
-//        mAdapterGames.setWeatherData(games);
+        mAdapterGames.setWeatherData(games);
     }
 
     @Override

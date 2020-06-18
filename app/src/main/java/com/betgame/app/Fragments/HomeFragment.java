@@ -28,7 +28,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Acti
     private RecyclerView rv_active_bets;
     private ActiveBetsAdapter mActiveBetsAdapter;
     private static final String GameArrayKey = "GameArray";
-    private Serializable mGameArray;
+    private ArrayList<Parcelable> mGameArray;
 
 
     public static HomeFragment newInstance(ArrayList<Game> games) {
@@ -44,7 +44,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Acti
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View myView = inflater.inflate(R.layout.fragment_home, container, false);
 
-        mGameArray = getArguments() != null ? (Game[]) getArguments().getSerializable(GameArrayKey) : null;
+        mGameArray = getArguments() != null ? getArguments().getParcelableArrayList(GameArrayKey) : null;
         rv_active_bets = (RecyclerView) myView.findViewById(R.id.rv_active_bets);
         LinearLayoutManager active_bets_layout_manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,false);
         rv_active_bets.setLayoutManager(active_bets_layout_manager);

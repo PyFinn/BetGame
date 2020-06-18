@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -14,7 +14,7 @@
         >
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -27,6 +27,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/tv_vs"
             android:text="@string/vs"
+            android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_home_team_name"/>
@@ -35,6 +36,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/tv_away_team_name"
             app:layout_constraintLeft_toRightOf="@id/tv_vs"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_home_team_name"
             />
         <TextView

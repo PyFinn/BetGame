@@ -29,15 +29,15 @@ public class MainActivity extends AppCompatActivity {
             "    \"total_pages\": 500,\n" +
             "    \"results\": [\n" +
             "        {\n" +
-            "            \"home_team\": 277.87,\n" +
-            "            \"away_team\": 3701,\n" +
-            "            \"sports\": false,\n" +
-            "            \"league\": \"/xBHvZcjRiWyobQ9kxBhO6B2dtRI.jpg\",\n" +
-            "            \"date\": 419704,\n" +
-            "            \"time\": false,\n" +
-            "            \"odd_home_team\": \"/5BwqwxMEjeFtdknRV792Svo0K1v.jpg\",\n" +
-            "            \"odd_away_team\": \"en\",\n" +
-            "            \"odd_draw\": \"Ad Astra\"\n" +
+            "            \"home_team\": \"FC Bayern München\",\n" +
+            "            \"away_team\": \"Borussia Dortmund\",\n" +
+            "            \"sports\": Soccer,\n" +
+            "            \"league\": \"Bundesliga\",\n" +
+            "            \"date\": \"24.07\",\n" +
+            "            \"time\": \"15:30\",\n" +
+            "            \"odd_home_team\": \"1.57\",\n" +
+            "            \"odd_away_team\": \"2.41\",\n" +
+            "            \"odd_draw\": \"3.95\"\n" +
             "        },\n" +
             "        {\n" +
             "            \"home_team\": 277.88,\n" +
