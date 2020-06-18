@@ -62,6 +62,7 @@ public class ScheduleFragment extends Fragment implements ScheduleFragmentAdapte
     public void onClick(String weatherForDay) {
         Intent intent = new Intent(getContext(), GamesForSport.class);
         intent.putParcelableArrayListExtra("Extra", mGameArray);
+        intent.putExtra("SportType",weatherForDay);
         startActivity(intent);
     }
 }

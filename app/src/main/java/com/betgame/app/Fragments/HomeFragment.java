@@ -2,7 +2,6 @@ package com.betgame.app.Fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,7 +20,6 @@ import com.betgame.app.recycler_view_adapters.ActiveBetsAdapter;
 import com.betgame.app.specific_views.ActiveBets;
 import com.betgame.app.specific_views.UpcomingGames;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 public class HomeFragment extends Fragment implements View.OnClickListener, ActiveBetsAdapter.ForecastAdapterOnClickHandler {

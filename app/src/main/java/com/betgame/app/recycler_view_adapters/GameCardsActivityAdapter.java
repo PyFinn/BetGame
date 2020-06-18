@@ -33,6 +33,7 @@ import java.util.ArrayList;
 public class GameCardsActivityAdapter extends RecyclerView.Adapter<GameCardsActivityAdapter.ForecastAdapterViewHolder> {
 
     private ArrayList<Game> mPreArrayGames = new ArrayList<>();
+    private ArrayList<Game> mQueriedGames = new ArrayList<Game>();
     private Game[] mGameArray;
 
     private final ForecastAdapterOnClickHandler mClickHandler;
@@ -157,11 +158,16 @@ public class GameCardsActivityAdapter extends RecyclerView.Adapter<GameCardsActi
      *
      * The new weather data to be displayed.
      */
-    public void setWeatherData(ArrayList<Game> games) {
+    public void setWeatherData(ArrayList<Game> games, String gameTypeQuery) {
         mPreArrayGames = games;
+        for (Game game: games){
+            if (game.getSports().equals(gameTypeQuery)){
+                mQueriedGames.add(game);
+            }
+        }
         try {
-            mGameArray = new Game[games.size()];
-            mGameArray = mPreArrayGames.toArray(mGameArray);
+            mGameArray = new Game[mQueriedGames.size()];
+            mGameArray = mQueriedGames.toArray(mGameArray);
         } catch (NullPointerException e){
 
         }
