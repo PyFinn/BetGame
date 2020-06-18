@@ -16,7 +16,6 @@
 package com.betgame.app.recycler_view_adapters;
 
 import android.content.Context;
-import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -160,17 +159,21 @@ public class GameCardsActivityAdapter extends RecyclerView.Adapter<GameCardsActi
      */
     public void setWeatherData(ArrayList<Game> games, String gameTypeQuery) {
         mPreArrayGames = games;
-        for (Game game: games){
-            if (game.getSports().equals(gameTypeQuery)){
-                mQueriedGames.add(game);
+        if (games == null){
+            mGameArray = null;
+        }else {
+            for (Game game : games) {
+                if (game.getSports().equals(gameTypeQuery)) {
+                    mQueriedGames.add(game);
+                }
             }
-        }
-        try {
-            mGameArray = new Game[mQueriedGames.size()];
-            mGameArray = mQueriedGames.toArray(mGameArray);
-        } catch (NullPointerException e){
+            try {
+                mGameArray = new Game[mQueriedGames.size()];
+                mGameArray = mQueriedGames.toArray(mGameArray);
+            } catch (NullPointerException e) {
 
+            }
+            notifyDataSetChanged();
         }
-        notifyDataSetChanged();
     }
 }
