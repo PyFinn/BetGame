@@ -12,8 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.betgame.app.Fragments.ScheduleFragment;
-import com.betgame.app.Game;
 import com.betgame.app.R;
 import com.betgame.app.recycler_view_adapters.ScheduleFragmentAdapter;
 

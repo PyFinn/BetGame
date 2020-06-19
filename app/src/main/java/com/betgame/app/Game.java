@@ -6,6 +6,7 @@ import android.os.Parcelable;
 public class Game implements Parcelable {
     private String home_team;
     private String away_team;
+    private String id;
     private String sports;
     private String league;
     private String date;
@@ -17,9 +18,10 @@ public class Game implements Parcelable {
     public Game() {
     }
 
-    public Game(String home_team, String away_team, String sports, String league, String date, String time, String odd_home_team, String odd_away_team, String odd_draw) {
+    public Game(String home_team, String away_team, String id,String sports, String league, String date, String time, String odd_home_team, String odd_away_team, String odd_draw) {
         this.home_team = home_team;
         this.away_team = away_team;
+        this.id = id;
         this.sports = sports;
         this.league = league;
         this.date = date;
@@ -43,6 +45,14 @@ public class Game implements Parcelable {
 
     public void setAway_team(String away_team) {
         this.away_team = away_team;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getSports() {
@@ -110,6 +120,7 @@ public class Game implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(home_team);
         dest.writeString(away_team);
+        dest.writeString(id);
         dest.writeString(sports);
         dest.writeString(league);
         dest.writeString(date);
@@ -122,6 +133,7 @@ public class Game implements Parcelable {
     private Game(Parcel parcel) {
         home_team = parcel.readString();
         away_team = parcel.readString();
+        id = parcel.readString();
         sports = parcel.readString();
         league = parcel.readString();
         date = parcel.readString();

@@ -7,12 +7,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.betgame.app.Game;
 import com.betgame.app.R;
@@ -26,14 +26,20 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Acti
     private RecyclerView rv_active_bets;
     private ActiveBetsAdapter mActiveBetsAdapter;
     private static final String GameArrayKey = "GameArray";
-    private ArrayList<Parcelable> mGameArray;
+    private static final String ActiveBetsKey = "ActiveBets";
+    private String[] mActiveBets;
 
 
-    public static HomeFragment newInstance(ArrayList<Game> games) {
+    public static HomeFragment newInstance(ArrayList<Game> games, String[] activeBets) {
         HomeFragment fragment = new HomeFragment();
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(GameArrayKey, games);
-        fragment.setArguments(bundle);
+        Bundle parentBundle = new Bundle();
+        Bundle bundle1 = new Bundle();
+        Bundle bundle2 = new Bundle();
+        bundle1.putParcelableArrayList(GameArrayKey, games);
+        bundle2.putStringArray(ActiveBetsKey, activeBets);
+        parentBundle.putBundle(GameArrayKey,bundle1);
+        parentBundle.putBundle(ActiveBetsKey, bundle2);
+        fragment.setArguments(parentBundle);
         return fragment;
     }
 
@@ -42,22 +48,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Acti
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View myView = inflater.inflate(R.layout.fragment_home, container, false);
 
-        mGameArray = getArguments() != null ? getArguments().getParcelableArrayList(GameArrayKey) : null;
+        ArrayList<Game> msGameArray;
+        if (getArguments() != null)
+            msGameArray = getArguments().getBundle(GameArrayKey).getParcelableArrayList(GameArrayKey);
+        else msGameArray = null;
+        mActiveBets = getArguments() != null ? getArguments().getBundle(ActiveBetsKey).getStringArray(ActiveBetsKey) : null;
         rv_active_bets = (RecyclerView) myView.findViewById(R.id.rv_active_bets);
         LinearLayoutManager active_bets_layout_manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,false);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rv_active_bets.getContext(), active_bets_layout_manager.getOrientation());
+        dividerItemDecoration.setDrawable(getResources().getDrawable(R.drawable.black_rectangle));
         rv_active_bets.setLayoutManager(active_bets_layout_manager);
         rv_active_bets.setHasFixedSize(true);
         mActiveBetsAdapter = new ActiveBetsAdapter(this);
+        rv_active_bets.addItemDecoration(dividerItemDecoration);
         rv_active_bets.setAdapter(mActiveBetsAdapter);
-        String[] strings = {
-                "Was geht ab",
-                "Hola",
-                "Moin",
-                "Liverpool",
-                "Arsenal",
-                "ManU"
-        };
-        mActiveBetsAdapter.setWeatherData(strings);
+        mActiveBetsAdapter.setWeatherData(msGameArray, mActiveBets);
 
 
         CardView cv_active_bets = (CardView) myView.findViewById(R.id.cv_active_bets);
@@ -85,8 +90,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Acti
     }
 
     @Override
-    public void onClick(String weatherForDay) {
-        Toast.makeText(getContext(), weatherForDay, Toast.LENGTH_SHORT)
-                .show();
+    public void onClick(Game gameActual) {
+
     }
 }

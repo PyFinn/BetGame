@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
             "        {\n" +
             "            \"home_team\": \"FC Bayern München\",\n" +
             "            \"away_team\": \"Borussia Dortmund\",\n" +
+            "            \"id\": \"00001\",\n" +
             "            \"sports\": Soccer,\n" +
             "            \"league\": \"Bundesliga\",\n" +
             "            \"date\": \"24.07\",\n" +
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
             "        {\n" +
             "            \"home_team\": \"FC Bayern München\",\n" +
             "            \"away_team\": \"Borussia Dortmund\",\n" +
+            "            \"id\": \"00002\",\n" +
             "            \"sports\": Basketball,\n" +
             "            \"league\": \"NBA\",\n" +
             "            \"date\": \"24.07\",\n" +
@@ -52,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
             "        {\n" +
             "            \"home_team\": \"FC Bayern München\",\n" +
             "            \"away_team\": \"Borussia Dortmund\",\n" +
+            "            \"id\": \"00003\",\n" +
             "            \"sports\": Soccer,\n" +
             "            \"league\": \"Premier League\",\n" +
             "            \"date\": \"24.07\",\n" +
@@ -63,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
             "        {\n" +
             "            \"home_team\": \"FC Bayern München\",\n" +
             "            \"away_team\": \"Borussia Dortmund\",\n" +
+            "            \"id\": \"00004\",\n" +
             "            \"sports\": Soccer,\n" +
             "            \"league\": \"Bundesliga\",\n" +
             "            \"date\": \"24.07\",\n" +
@@ -74,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
             "        {\n" +
             "            \"home_team\": \"FC Bayern München\",\n" +
             "            \"away_team\": \"Borussia Dortmund\",\n" +
+            "            \"id\": \"00005\",\n" +
             "            \"sports\": Soccer,\n" +
             "            \"league\": \"Bundesliga\",\n" +
             "            \"date\": \"24.07\",\n" +
@@ -85,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
             "        {\n" +
             "            \"home_team\": \"FC Bayern München\",\n" +
             "            \"away_team\": \"Borussia Dortmund\",\n" +
+            "            \"id\": \"00006\",\n" +
             "            \"sports\": Soccer,\n" +
             "            \"league\": \"Bundesliga\",\n" +
             "            \"date\": \"24.07\",\n" +
@@ -95,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
             "        }\n" +
             "    ]\n" +
             "}";
+    private String[] games_bet_active = new String[3];
     Game[] games;
     ArrayList<Game> game_arr;
 
@@ -102,15 +109,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        games_bet_active[0] = "00001";
+        games_bet_active[1] = "00002";
+        games_bet_active[2] = "00003";
+
         bnbMain = (BottomNavigationView) findViewById(R.id.bottom_navigation_bar);
         bnbMain.setOnNavigationItemSelectedListener(navListener);
-        getSupportFragmentManager().beginTransaction().replace(R.id.sv_home_page, new HomeFragment()).commit();
         bnbMain.setSelectedItemId(R.id.nav_home);
         try {
             game_arr = new ArrayList<Game>(Arrays.asList(makeGamesDataToArray(makeMeToJSON)));
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        getSupportFragmentManager().beginTransaction().replace(R.id.sv_home_page, HomeFragment.newInstance(game_arr, games_bet_active)).commit();
     }
 
 
@@ -121,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
             String tag = "Home";
             switch (menuItem.getItemId()){
                 case R.id.nav_home:
-                    selectedFragment = HomeFragment.newInstance(game_arr);
+                    selectedFragment = HomeFragment.newInstance(game_arr, games_bet_active);
                     tag = "Home";
                     break;
                 case R.id.nav_schedule:
@@ -149,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
         final String RESULTS = "results";
         final String HOME_TEAM = "home_team";
         final String AWAY_TEAM = "away_team";
+        final String ID = "id";
         final String SPORTS = "sports";
         final String LEAGUE = "league";
         final String DATE = "date";
@@ -174,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
             // Store data in game object
             games[i].setHome_team(gameInfo.getString(HOME_TEAM));
             games[i].setAway_team(gameInfo.getString(AWAY_TEAM));
+            games[i].setId(gameInfo.getString(ID));
             games[i].setSports(gameInfo.getString(SPORTS));
             games[i].setLeague(gameInfo.getString(LEAGUE));
             games[i].setDate(gameInfo.getString(DATE));

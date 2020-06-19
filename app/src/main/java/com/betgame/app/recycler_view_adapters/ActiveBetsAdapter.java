@@ -16,6 +16,7 @@
 package com.betgame.app.recycler_view_adapters;
 
 import android.content.Context;
+import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,12 +24,16 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.betgame.app.Game;
 import com.betgame.app.R;
+
+import java.util.ArrayList;
 
 
 public class ActiveBetsAdapter extends RecyclerView.Adapter<ActiveBetsAdapter.ForecastAdapterViewHolder> {
 
-    private String[] mWeatherData;
+    private ArrayList<Game> mQueriedGames = new ArrayList<Game>();
+    private Game[] mGameArray;
 
     private final ForecastAdapterOnClickHandler mClickHandler;
 
@@ -36,7 +41,7 @@ public class ActiveBetsAdapter extends RecyclerView.Adapter<ActiveBetsAdapter.Fo
      * The interface that receives onClick messages.
      */
     public interface ForecastAdapterOnClickHandler {
-        void onClick(String weatherForDay);
+        void onClick(Game gameActual);
     }
 
     /**
@@ -53,11 +58,19 @@ public class ActiveBetsAdapter extends RecyclerView.Adapter<ActiveBetsAdapter.Fo
      * Cache of the children views for a forecast list item.
      */
     public class ForecastAdapterViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
-        public final TextView mWeatherTextView;
+        private final TextView mHomeTeamTexView;
+        private final TextView mAwayTeamTextView;
+        private final TextView mDateTextView;
+        private final TextView mTimeTextView;
+        private final TextView mLeagueTextView;
 
         public ForecastAdapterViewHolder(View view) {
             super(view);
-            mWeatherTextView = (TextView) view.findViewById(R.id.tv_rv_active_bets_data);
+            mHomeTeamTexView = (TextView) view.findViewById(R.id.small_game_tv_home_team_name);
+            mAwayTeamTextView = (TextView) view.findViewById(R.id.small_game_tv_away_team_name);
+            mDateTextView = (TextView) view.findViewById(R.id.small_game_tv_date_match);
+            mTimeTextView = (TextView) view.findViewById(R.id.small_game_tv_time_match);
+            mLeagueTextView = (TextView) view.findViewById(R.id.small_game_tv_league_match);
             view.setOnClickListener(this);
         }
 
@@ -69,8 +82,8 @@ public class ActiveBetsAdapter extends RecyclerView.Adapter<ActiveBetsAdapter.Fo
         @Override
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
-            String weatherForDay = mWeatherData[adapterPosition];
-            mClickHandler.onClick(weatherForDay);
+            Game gameActual = mGameArray[adapterPosition];
+            mClickHandler.onClick(gameActual);
         }
     }
 
@@ -108,8 +121,12 @@ public class ActiveBetsAdapter extends RecyclerView.Adapter<ActiveBetsAdapter.Fo
      */
     @Override
     public void onBindViewHolder(ForecastAdapterViewHolder forecastAdapterViewHolder, int position) {
-        String weatherForThisDay = mWeatherData[position];
-        forecastAdapterViewHolder.mWeatherTextView.setText(weatherForThisDay);
+        Game thisGame = mGameArray[position];
+        forecastAdapterViewHolder.mHomeTeamTexView.setText(thisGame.getHome_team());
+        forecastAdapterViewHolder.mAwayTeamTextView.setText(thisGame.getAway_team());
+        forecastAdapterViewHolder.mDateTextView.setText(thisGame.getDate());
+        forecastAdapterViewHolder.mTimeTextView.setText(thisGame.getTime());
+        forecastAdapterViewHolder.mLeagueTextView.setText(thisGame.getLeague());
     }
 
     /**
@@ -120,8 +137,8 @@ public class ActiveBetsAdapter extends RecyclerView.Adapter<ActiveBetsAdapter.Fo
      */
     @Override
     public int getItemCount() {
-        if (null == mWeatherData) return 0;
-        return mWeatherData.length;
+        if (null == mGameArray) return 0;
+        return mGameArray.length;
     }
 
     /**
@@ -129,10 +146,26 @@ public class ActiveBetsAdapter extends RecyclerView.Adapter<ActiveBetsAdapter.Fo
      * created one. This is handy when we get new data from the web but don't want to create a
      * new ForecastAdapter to display it.
      *
-     * @param weatherData The new weather data to be displayed.
+     * The new weather data to be displayed.
      */
-    public void setWeatherData(String[] weatherData) {
-        mWeatherData = weatherData;
-        notifyDataSetChanged();
+    public void setWeatherData(ArrayList<Game> games, String[] idList) {
+        if (games == null){
+            mGameArray = null;
+        }else {
+            for (Game game : games) {
+                for (int i = 0; i < idList.length; i++){
+                    if (game.getId().equals(idList[i])) {
+                        mQueriedGames.add(game);
+                    }
+                }
+            }
+            try {
+                mGameArray = new Game[mQueriedGames.size()];
+                mGameArray = mQueriedGames.toArray(mGameArray);
+            } catch (NullPointerException e) {
+
+            }
+            notifyDataSetChanged();
+        }
     }
 }
