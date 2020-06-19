@@ -7,4 +7,23 @@
     <string name="money_button">Cash</string>
     <string name="schedule_button">All Games</string>
     <string name="home_fragment_display_all_string">See all</string>
+    <string-array name="football_leagues" >
+        <item>Bundesliga</item>
+        <item>Premier League</item>
+        <item>La Liga</item>
+        <item>Ligue 1</item>
+        <item>Swiss League</item>
+        <item>Liga NOS</item>
+        <item>Serie A</item>
+        <item>Champions League</item>
+        <item>Europa League</item>
+    </string-array>
+    <string-array name="basketball_leagues">
+        <item>NBA</item>
+        <item>German Bundesliga</item>
+        <item>Liga ACB</item>
+    </string-array>
+    <string-array name="american_football_leagues">
+        <item>NFL</item>
+    </string-array>
 </resources>

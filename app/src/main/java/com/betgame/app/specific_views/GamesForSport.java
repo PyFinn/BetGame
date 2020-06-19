@@ -18,6 +18,7 @@ public class GamesForSport extends AppCompatActivity implements GameCardsActivit
     private RecyclerView rv_games;
     private GameCardsActivityAdapter mAdapterGames;
     String GameTypeQuery;
+    String LeagueTypeQuery;
     ArrayList<Game> games;
 
     @Override
@@ -31,6 +32,7 @@ public class GamesForSport extends AppCompatActivity implements GameCardsActivit
 
         }
         GameTypeQuery = intent.getStringExtra("SportType");
+        LeagueTypeQuery = intent.getStringExtra("SelectedLeague");
         setContentView(R.layout.explicit_sports_display);
         rv_games = (RecyclerView) findViewById(R.id.rv_explicit_sports_display);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -42,7 +44,7 @@ public class GamesForSport extends AppCompatActivity implements GameCardsActivit
         mAdapterGames = new GameCardsActivityAdapter(this);
         rv_games.setAdapter(mAdapterGames);
 
-        mAdapterGames.setWeatherData(games, GameTypeQuery);
+        mAdapterGames.setWeatherData(games, GameTypeQuery, LeagueTypeQuery);
     }
 
     @Override

@@ -27,6 +27,7 @@ public class ScheduleSpecificSport extends Fragment implements ScheduleFragmentA
     private static final String StringKey = "SelectedSport";
     private ArrayList<Parcelable> mGameArray;
     private String mSportType;
+    private String[] leagues;
 
     public static ScheduleSpecificSport newInstance(ArrayList<Parcelable> games, String selectedSports) {
         ScheduleSpecificSport fragment = new ScheduleSpecificSport();
@@ -51,17 +52,18 @@ public class ScheduleSpecificSport extends Fragment implements ScheduleFragmentA
         rv_explicit_sports_display.setHasFixedSize(true);
         mRvAdapter = new ScheduleFragmentAdapter(this);
         rv_explicit_sports_display.setAdapter(mRvAdapter);
-        String[] strings = {
-                "Bundesliga",
-                "Premier League",
-                "La Liga",
-                "Ligue 1",
-                "Swiss League",
-                "Liga NOS",
-                "Serie A"
-        };
-        mRvAdapter.setWeatherData(strings);
 
+        switch (mSportType){
+            case "Soccer":
+                leagues = getResources().getStringArray(R.array.football_leagues);
+                break;
+            case "Basketball":
+                leagues = getResources().getStringArray(R.array.basketball_leagues);
+                break;
+            case "American Football":
+                leagues = getResources().getStringArray(R.array.american_football_leagues);
+        }
+        mRvAdapter.setWeatherData(leagues);
         return myView;
     }
 
@@ -70,6 +72,7 @@ public class ScheduleSpecificSport extends Fragment implements ScheduleFragmentA
         Intent intent = new Intent(getContext(), GamesForSport.class);
         intent.putParcelableArrayListExtra("Extra", mGameArray);
         intent.putExtra("SportType", mSportType);
+        intent.putExtra("SelectedLeague", weatherForDay);
         startActivity(intent);
     }
 }

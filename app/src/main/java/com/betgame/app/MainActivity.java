@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
 
             // Object contains all tags we're looking for
             JSONObject gameInfo = resultsArray.getJSONObject(i);
-            // Store data in movie object
+            // Store data in game object
             games[i].setHome_team(gameInfo.getString(HOME_TEAM));
             games[i].setAway_team(gameInfo.getString(AWAY_TEAM));
             games[i].setSports(gameInfo.getString(SPORTS));

@@ -157,13 +157,13 @@ public class GameCardsActivityAdapter extends RecyclerView.Adapter<GameCardsActi
      *
      * The new weather data to be displayed.
      */
-    public void setWeatherData(ArrayList<Game> games, String gameTypeQuery) {
+    public void setWeatherData(ArrayList<Game> games, String gameTypeQuery, String leagueTypeQuery) {
         mPreArrayGames = games;
         if (games == null){
             mGameArray = null;
         }else {
             for (Game game : games) {
-                if (game.getSports().equals(gameTypeQuery)) {
+                if (game.getSports().equals(gameTypeQuery) && game.getLeague().equals(leagueTypeQuery)) {
                     mQueriedGames.add(game);
                 }
             }
