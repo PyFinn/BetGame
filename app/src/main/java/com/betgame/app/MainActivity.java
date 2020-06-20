@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.betgame.app.Fragments.CashFragment;
@@ -16,8 +17,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
     Fragment selectedFragment;
@@ -35,54 +39,59 @@ public class MainActivity extends AppCompatActivity {
             "            \"league\": \"Bundesliga\",\n" +
             "            \"date\": \"24.07\",\n" +
             "            \"time\": \"15:30\",\n" +
+            "            \"year\": \"2020\",\n" +
             "            \"odd_home_team\": \"1.57\",\n" +
             "            \"odd_away_team\": \"2.41\",\n" +
             "            \"odd_draw\": \"3.95\"\n" +
             "        },\n" +
             "        {\n" +
-            "            \"home_team\": \"FC Bayern München\",\n" +
-            "            \"away_team\": \"Borussia Dortmund\",\n" +
+            "            \"home_team\": \"Los Angeles Lakers\",\n" +
+            "            \"away_team\": \"Golden State Warriors\",\n" +
             "            \"id\": \"00002\",\n" +
             "            \"sports\": Basketball,\n" +
             "            \"league\": \"NBA\",\n" +
             "            \"date\": \"24.07\",\n" +
             "            \"time\": \"15:30\",\n" +
+            "            \"year\": \"2020\",\n" +
             "            \"odd_home_team\": \"1.57\",\n" +
             "            \"odd_away_team\": \"2.41\",\n" +
             "            \"odd_draw\": \"3.95\"\n" +
             "        },\n" +
             "        {\n" +
-            "            \"home_team\": \"FC Bayern München\",\n" +
-            "            \"away_team\": \"Borussia Dortmund\",\n" +
+            "            \"home_team\": \"Chelsea\",\n" +
+            "            \"away_team\": \"Arsenal\",\n" +
             "            \"id\": \"00003\",\n" +
             "            \"sports\": Soccer,\n" +
             "            \"league\": \"Premier League\",\n" +
-            "            \"date\": \"24.07\",\n" +
+            "            \"date\": \"23.06\",\n" +
             "            \"time\": \"15:30\",\n" +
+            "            \"year\": \"2020\",\n" +
             "            \"odd_home_team\": \"1.57\",\n" +
             "            \"odd_away_team\": \"2.41\",\n" +
             "            \"odd_draw\": \"3.95\"\n" +
             "        },\n" +
             "        {\n" +
-            "            \"home_team\": \"FC Bayern München\",\n" +
-            "            \"away_team\": \"Borussia Dortmund\",\n" +
+            "            \"home_team\": \"Paderborn\",\n" +
+            "            \"away_team\": \"Düsseldorf\",\n" +
             "            \"id\": \"00004\",\n" +
             "            \"sports\": Soccer,\n" +
             "            \"league\": \"Bundesliga\",\n" +
-            "            \"date\": \"24.07\",\n" +
+            "            \"date\": \"23.06\",\n" +
             "            \"time\": \"15:30\",\n" +
+            "            \"year\": \"2020\",\n" +
             "            \"odd_home_team\": \"1.57\",\n" +
             "            \"odd_away_team\": \"2.41\",\n" +
             "            \"odd_draw\": \"3.95\"\n" +
             "        },\n" +
             "        {\n" +
-            "            \"home_team\": \"FC Bayern München\",\n" +
-            "            \"away_team\": \"Borussia Dortmund\",\n" +
+            "            \"home_team\": \"Hoffenheim\",\n" +
+            "            \"away_team\": \"Freiburg\",\n" +
             "            \"id\": \"00005\",\n" +
             "            \"sports\": Soccer,\n" +
             "            \"league\": \"Bundesliga\",\n" +
-            "            \"date\": \"24.07\",\n" +
+            "            \"date\": \"23.07\",\n" +
             "            \"time\": \"15:30\",\n" +
+            "            \"year\": \"2020\",\n" +
             "            \"odd_home_team\": \"1.57\",\n" +
             "            \"odd_away_team\": \"2.41\",\n" +
             "            \"odd_draw\": \"3.95\"\n" +
@@ -93,15 +102,18 @@ public class MainActivity extends AppCompatActivity {
             "            \"id\": \"00006\",\n" +
             "            \"sports\": Soccer,\n" +
             "            \"league\": \"Bundesliga\",\n" +
-            "            \"date\": \"24.07\",\n" +
-            "            \"time\": \"15:30\",\n" +
+            "            \"date\": \"24.06\",\n" +
+            "            \"time\": \"14:30\",\n" +
+            "            \"year\": \"2020\",\n" +
             "            \"odd_home_team\": \"1.57\",\n" +
             "            \"odd_away_team\": \"2.41\",\n" +
             "            \"odd_draw\": \"3.95\"\n" +
             "        }\n" +
             "    ]\n" +
             "}";
-    private String[] games_bet_active = new String[3];
+    private String[] games_bet_active = new String[5];
+    long[] games_upcoming = new long[3];
+    ArrayList<Long> gamesMS = new ArrayList<>();
     Game[] games;
     ArrayList<Game> game_arr;
 
@@ -113,6 +125,8 @@ public class MainActivity extends AppCompatActivity {
         games_bet_active[0] = "00001";
         games_bet_active[1] = "00002";
         games_bet_active[2] = "00003";
+        games_bet_active[3] = "00004";
+        games_bet_active[4] = "00004";
 
         bnbMain = (BottomNavigationView) findViewById(R.id.bottom_navigation_bar);
         bnbMain.setOnNavigationItemSelectedListener(navListener);
@@ -122,7 +136,23 @@ public class MainActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        getSupportFragmentManager().beginTransaction().replace(R.id.sv_home_page, HomeFragment.newInstance(game_arr, games_bet_active)).commit();
+        long largestA = Long.MAX_VALUE, largestB = Long.MAX_VALUE, largestC = Long.MAX_VALUE;
+
+        for(long value : gamesMS) {
+            if(value < largestA) {
+                largestB = largestA;
+                largestA = value;
+            } else if (value < largestB) {
+                largestC = largestB;
+                largestB = value;
+            } else if (value < largestC) {
+                largestC = value;
+            }
+        }
+        games_upcoming[0] = largestA;
+        games_upcoming[1] = largestB;
+        games_upcoming[2] = largestC;
+        getSupportFragmentManager().beginTransaction().replace(R.id.sv_home_page, HomeFragment.newInstance(game_arr, games_bet_active, games_upcoming)).commit();
     }
 
 
@@ -133,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
             String tag = "Home";
             switch (menuItem.getItemId()){
                 case R.id.nav_home:
-                    selectedFragment = HomeFragment.newInstance(game_arr, games_bet_active);
+                    selectedFragment = HomeFragment.newInstance(game_arr, games_bet_active, games_upcoming);
                     tag = "Home";
                     break;
                 case R.id.nav_schedule:
@@ -156,6 +186,20 @@ public class MainActivity extends AppCompatActivity {
     };
 
 
+    public long createDateFromString(String strToConvert){
+        long timeInMilliseconds = 0;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd/HH/mm");
+        format.setLenient(false);
+        try {
+            Date date = format.parse(strToConvert);
+            timeInMilliseconds = date.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return timeInMilliseconds;
+    }
+
+
     public Game[] makeGamesDataToArray(String moviesJsonResults) throws JSONException {
         // JSON filters
         final String RESULTS = "results";
@@ -166,6 +210,7 @@ public class MainActivity extends AppCompatActivity {
         final String LEAGUE = "league";
         final String DATE = "date";
         final String TIME = "time";
+        final String YEAR = "year";
         final String ODD_HOME_TEAM = "odd_home_team";
         final String ODD_AWAY_TEAM = "odd_away_team";
         final String ODD_DRAW = "odd_draw";
@@ -192,9 +237,19 @@ public class MainActivity extends AppCompatActivity {
             games[i].setLeague(gameInfo.getString(LEAGUE));
             games[i].setDate(gameInfo.getString(DATE));
             games[i].setTime(gameInfo.getString(TIME));
+            games[i].setYear(gameInfo.getString(YEAR));
             games[i].setOdd_home_team(gameInfo.getString(ODD_HOME_TEAM));
             games[i].setOdd_away_team(gameInfo.getString(ODD_AWAY_TEAM));
             games[i].setOdd_draw(gameInfo.getString(ODD_DRAW));
+
+            String dateToFormat = games[i].getDate();
+            String timeToFormat = games[i].getTime();
+            String yearToFormat = games[i].getYear();
+            String[] rawDateSplitted = dateToFormat.split("\\.", -1);
+            String[] rawTimeSplitted = timeToFormat.split(":", -1);
+            String convertMe = yearToFormat + "/" + rawDateSplitted[1] + "/" + rawDateSplitted[0] + "/" + rawTimeSplitted[0] + "/" + rawTimeSplitted[1];
+            gamesMS.add(createDateFromString(convertMe));
+            games[i].setDateMS(createDateFromString(convertMe));
         }
         return games;
     }

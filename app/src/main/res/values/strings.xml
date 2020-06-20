@@ -7,6 +7,7 @@
     <string name="money_button">Cash</string>
     <string name="schedule_button">All Games</string>
     <string name="home_fragment_display_all_string">See all</string>
+    <string name="home_fragment_see_more_string">See more</string>
     <string-array name="football_leagues" >
         <item>Bundesliga</item>
         <item>Premier League</item>

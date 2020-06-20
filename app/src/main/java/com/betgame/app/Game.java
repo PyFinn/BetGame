@@ -11,6 +11,8 @@ public class Game implements Parcelable {
     private String league;
     private String date;
     private String time;
+    private String year;
+    private Long dateMS;
     private String odd_home_team;
     private String odd_away_team;
     private String odd_draw;
@@ -18,7 +20,7 @@ public class Game implements Parcelable {
     public Game() {
     }
 
-    public Game(String home_team, String away_team, String id,String sports, String league, String date, String time, String odd_home_team, String odd_away_team, String odd_draw) {
+    public Game(String home_team, String away_team, String id,String sports, String league, String date, String time, String year, Long dateMS, String odd_home_team, String odd_away_team, String odd_draw) {
         this.home_team = home_team;
         this.away_team = away_team;
         this.id = id;
@@ -26,6 +28,8 @@ public class Game implements Parcelable {
         this.league = league;
         this.date = date;
         this.time = time;
+        this.year = year;
+        this.dateMS = dateMS;
         this.odd_home_team = odd_home_team;
         this.odd_away_team = odd_away_team;
         this.odd_draw = odd_draw;
@@ -87,6 +91,22 @@ public class Game implements Parcelable {
         this.time = time;
     }
 
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public Long getDateMS() {
+        return dateMS;
+    }
+
+    public void setDateMS(Long dateMS) {
+        this.dateMS = dateMS;
+    }
+
     public String getOdd_home_team() {
         return odd_home_team;
     }
@@ -125,6 +145,8 @@ public class Game implements Parcelable {
         dest.writeString(league);
         dest.writeString(date);
         dest.writeString(time);
+        dest.writeString(year);
+        dest.writeLong(dateMS);
         dest.writeString(odd_home_team);
         dest.writeString(odd_away_team);
         dest.writeString(odd_draw);
@@ -138,6 +160,8 @@ public class Game implements Parcelable {
         league = parcel.readString();
         date = parcel.readString();
         time = parcel.readString();
+        year = parcel.readString();
+        dateMS = parcel.readLong();
         odd_home_team = parcel.readString();
         odd_away_team = parcel.readString();
         odd_draw = parcel.readString();
