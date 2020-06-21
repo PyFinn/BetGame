@@ -7,4 +7,6 @@
     <color name="colorInnerCards">#FFF8F8</color>
     <color name="backgroundApp">#FCFCFC</color>
     <color name="homeFragmentClickable">#dadada</color>
+    <color name="oddBackground">#9CC9C0</color>
+    <color name="oddDrawBackground">#D0EB94</color>
 </resources>

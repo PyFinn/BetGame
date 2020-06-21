@@ -67,21 +67,27 @@
             android:id="@+id/tv_odd_draw"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_league_match"/>
+            app:layout_constraintTop_toBottomOf="@id/tv_league_match"
+            android:background="@color/oddDrawBackground"
+            android:padding="5sp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tv_odd_home_team"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/tv_odd_draw"
-            app:layout_constraintTop_toTopOf="@id/tv_odd_draw"/>
+            app:layout_constraintTop_toTopOf="@id/tv_odd_draw"
+            android:background="@color/oddBackground"
+            android:padding="5sp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tv_odd_away_team"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toRightOf="@id/tv_odd_draw"
-            app:layout_constraintTop_toTopOf="@id/tv_odd_draw"/>
+            app:layout_constraintTop_toTopOf="@id/tv_odd_draw"
+            android:background="@color/oddBackground"
+            android:padding="5sp"/>
     </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

@@ -57,7 +57,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Acti
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View myView = inflater.inflate(R.layout.fragment_home, container, false);
-
         if (getArguments() != null)
             mGameArray = getArguments().getBundle(GameArrayKey).getParcelableArrayList(GameArrayKey);
         else mGameArray = null;
