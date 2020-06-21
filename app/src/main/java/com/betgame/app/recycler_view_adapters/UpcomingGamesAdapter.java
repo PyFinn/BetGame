@@ -16,11 +16,13 @@
 package com.betgame.app.recycler_view_adapters;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.betgame.app.Game;
@@ -68,6 +70,7 @@ public class UpcomingGamesAdapter extends RecyclerView.Adapter<UpcomingGamesAdap
         private final TextView mOddHomeTeamTextView;
         private final TextView mOddAwayTeamTextView;
         private final TextView mOddDrawTextView;
+        private final CardView wrappingCardView;
 
         public ForecastAdapterViewHolder(View view) {
             super(view);
@@ -79,6 +82,10 @@ public class UpcomingGamesAdapter extends RecyclerView.Adapter<UpcomingGamesAdap
             mOddHomeTeamTextView = (TextView) view.findViewById(R.id.tv_odd_home_team);
             mOddAwayTeamTextView = (TextView) view.findViewById(R.id.tv_odd_away_team);
             mOddDrawTextView = (TextView) view.findViewById(R.id.tv_odd_draw);
+            wrappingCardView = (CardView) view.findViewById(R.id.cv_game_wrapper);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            layoutParams.setMargins(0, 0, 0,0);
+            wrappingCardView.setLayoutParams(layoutParams);
             view.setOnClickListener(this);
         }
 

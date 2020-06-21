@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         games_bet_active[1] = "00002";
         games_bet_active[2] = "00003";
         games_bet_active[3] = "00004";
-        games_bet_active[4] = "00004";
+        games_bet_active[4] = "00005";
 
         bnbMain = (BottomNavigationView) findViewById(R.id.bottom_navigation_bar);
         bnbMain.setOnNavigationItemSelectedListener(navListener);

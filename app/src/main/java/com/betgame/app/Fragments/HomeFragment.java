@@ -120,6 +120,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Acti
 
     @Override
     public void onClick(Game gameActual) {
-
+        boolean isActive = false;
+        for (int i = 0;i < mActiveBets.length;i++){
+            if (gameActual.getId().equals(mActiveBets[i])){
+                isActive = true;
+            }
+        }
+        if (isActive){
+            Intent intent = new Intent(getContext(), ActiveBets.class);
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent(getContext(), UpcomingGames.class);
+            startActivity(intent);
+        }
     }
 }
