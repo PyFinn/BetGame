@@ -10,15 +10,17 @@ import android.support.v7.widget.RecyclerView;
 
 import com.betgame.app.Game;
 import com.betgame.app.R;
+import com.betgame.app.bet_logic.ModalBottomSheet;
 import com.betgame.app.recycler_view_adapters.GameCardsActivityAdapter;
 
 import java.util.ArrayList;
 
-public class GamesForSport extends AppCompatActivity implements GameCardsActivityAdapter.ForecastAdapterOnClickHandler{
+public class GamesForSport extends AppCompatActivity implements GameCardsActivityAdapter.ForecastAdapterOnClickHandler, ModalBottomSheet.BottomSheetListener {
     private RecyclerView rv_games;
     private GameCardsActivityAdapter mAdapterGames;
     String GameTypeQuery;
     String LeagueTypeQuery;
+    private String[] oddsArray;
     ArrayList<Game> games;
 
     @Override
@@ -49,6 +51,20 @@ public class GamesForSport extends AppCompatActivity implements GameCardsActivit
 
     @Override
     public void onClick(Game gameActual) {
+        oddsArray = new String[3];
+        oddsArray[0] = gameActual.getOdd_home_team();
+        oddsArray[1] = gameActual.getOdd_away_team();
+        if (gameActual.getOdd_draw() != null){
+            oddsArray[2] = gameActual.getOdd_draw();
+        }else{
+            oddsArray[2] = "";
+        }
+        ModalBottomSheet bottomSheet = ModalBottomSheet.newInstance(2000, oddsArray);
+        bottomSheet.show(getSupportFragmentManager(), "ModalBottomSheetCreateBet");
+    }
 
+    @Override
+    public void onSubmitted(String text) {
+        
     }
 }
