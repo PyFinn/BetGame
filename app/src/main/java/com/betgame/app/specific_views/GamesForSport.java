@@ -59,12 +59,12 @@ public class GamesForSport extends AppCompatActivity implements GameCardsActivit
         }else{
             oddsArray[2] = "";
         }
-        ModalBottomSheet bottomSheet = ModalBottomSheet.newInstance(2000, oddsArray);
+        ModalBottomSheet bottomSheet = ModalBottomSheet.newInstance(2000, oddsArray, gameActual);
         bottomSheet.show(getSupportFragmentManager(), "ModalBottomSheetCreateBet");
     }
 
     @Override
-    public void onSubmitted(String text) {
-        
+    public void onSubmitted(String bettedOn, int stake, Game game) {
+
     }
 }

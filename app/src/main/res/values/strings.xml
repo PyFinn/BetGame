@@ -12,6 +12,11 @@
     <string name="default_value_place_new_bet">0</string>
     <string name="string_amount_info">Amount:</string>
     <string name="submit_button_text">Submit</string>
+    <string name="confirm_button_text">Confirm</string>
+    <string name="title_confirm_bet">Validate Bet</string>
+    <string name="back_button_bet_activity">Back</string>
+    <string name="bet_placed">Bet placed</string>
+    <string name="draw">Draw</string>
     <string-array name="football_leagues" >
         <item>Bundesliga</item>
         <item>Premier League</item>
