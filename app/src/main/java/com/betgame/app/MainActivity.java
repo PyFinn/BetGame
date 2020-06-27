@@ -1,16 +1,18 @@
 package com.betgame.app;
 
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.betgame.app.Fragments.CashFragment;
 import com.betgame.app.Fragments.HomeFragment;
 import com.betgame.app.Fragments.ScheduleFragment;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,6 +25,8 @@ import java.util.Arrays;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference mGameDatabaseReference;
     Fragment selectedFragment;
     BottomNavigationView bnbMain;
     String makeMeToJSON = "{\n" +
@@ -120,6 +124,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mFirebaseDatabase.getInstance();
+        mGameDatabaseReference = mFirebaseDatabase.getReference().child("games");
+
 
         games_bet_active[0] = "00001";
         games_bet_active[1] = "00002";

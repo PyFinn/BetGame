@@ -2,11 +2,11 @@ package com.betgame.app.specific_views;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.betgame.app.Game;
 import com.betgame.app.R;
@@ -37,7 +37,7 @@ public class GamesForSport extends AppCompatActivity implements GameCardsActivit
         LeagueTypeQuery = intent.getStringExtra("SelectedLeague");
         setContentView(R.layout.explicit_sports_display);
         rv_games = (RecyclerView) findViewById(R.id.rv_explicit_sports_display);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rv_games.getContext(), layoutManager.getOrientation());
         dividerItemDecoration.setDrawable(getResources().getDrawable(R.drawable.rectangle));
         rv_games.addItemDecoration(dividerItemDecoration);
