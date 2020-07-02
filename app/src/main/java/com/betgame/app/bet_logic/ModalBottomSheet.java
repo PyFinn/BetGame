@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.betgame.app.Bet;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -181,7 +183,11 @@ public class ModalBottomSheet extends BottomSheetDialogFragment implements View.
                 fragmentOneVisible();
                 break;
             case R.id.buttonFinalConfirm:
-                mListener.onSubmitted(bettedOn(mSelectedTeam), Integer.parseInt(mCurrentWage.getText().toString()), game);
+                Bet bet = new Bet();
+                bet.setId(game.getId());
+                bet.setAmount(Integer.parseInt(mCurrentWage.getText().toString()));
+                bet.setOdd(oddsForBet(bettedOn(mSelectedTeam), game));
+                mListener.onSubmitted(bet);
                 dismiss();
                 Toast.makeText(getContext(), R.string.bet_placed, Toast.LENGTH_SHORT).show();
             case R.id.buttonSumbit:
@@ -203,7 +209,7 @@ public class ModalBottomSheet extends BottomSheetDialogFragment implements View.
     }
 
     public interface BottomSheetListener {
-        void onSubmitted(String bettedOn, int stake, Game game);
+        void onSubmitted(Bet bet);
     }
 
     @Override
@@ -283,7 +289,7 @@ public class ModalBottomSheet extends BottomSheetDialogFragment implements View.
         mTeamBettedOn.setEnabled(true);
     }
 
-    private String bettedOn(TextView tv){
+    private String bettedOn(TextView tv) {
         switch (tv.getId()){
             case R.id.home_team_odd_bet_fragment:
                 return "Home Team";
@@ -293,6 +299,19 @@ public class ModalBottomSheet extends BottomSheetDialogFragment implements View.
                 return "Draw";
             default:
                 return null;
+        }
+    }
+
+    private double oddsForBet(String bettedOn, Game game) {
+        switch (bettedOn){
+            case "Home Team":
+                return Double.parseDouble(game.getOdd_home_team());
+            case "Away Team":
+                return Double.parseDouble(game.getOdd_away_team());
+            case "Draw":
+                return Double.parseDouble(game.getOdd_draw());
+            default:
+                return 0;
         }
     }
 

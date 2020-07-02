@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.betgame.app.Bet;
 import com.betgame.app.Game;
 import com.betgame.app.R;
 import com.betgame.app.bet_logic.ModalBottomSheet;
@@ -64,7 +65,7 @@ public class GamesForSport extends AppCompatActivity implements GameCardsActivit
     }
 
     @Override
-    public void onSubmitted(String bettedOn, int stake, Game game) {
+    public void onSubmitted(Bet bet) {
 
     }
 }

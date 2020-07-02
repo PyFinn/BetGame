@@ -8,6 +8,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
+        android:id="@+id/click_to_log_out"
         android:textSize="20sp"
-        android:text="How you doin"/>
+        android:text="Logout"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
