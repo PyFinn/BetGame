@@ -20,10 +20,19 @@ import android.widget.Toast;
 
 import com.betgame.app.Game;
 import com.betgame.app.R;
-
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 public class ModalBottomSheet extends BottomSheetDialogFragment implements View.OnClickListener{
+    private FirebaseDatabase mDatabase;
+    private DatabaseReference mReferenceDatabase;
+    private FirebaseUser mUser;
     private TextView mTitlePlaceBet;
     private TextView mTitleConfirmBet;
     private TextView mAmountToBet;
@@ -86,8 +95,25 @@ public class ModalBottomSheet extends BottomSheetDialogFragment implements View.
         mAwayTeamTitle = v.findViewById(R.id.away_team_name_bet_sheet);
         mDrawTitle = v.findViewById(R.id.draw_name_bet_sheet);
 
+        mDatabase = FirebaseDatabase.getInstance();
+        mReferenceDatabase = mDatabase.getReference();
+        mUser = FirebaseAuth.getInstance().getCurrentUser();
+        final String userID = mUser.getUid();
+        mReferenceDatabase.child("users").child(userID).child("balance").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                long longActualBalanceUser = (long) snapshot.getValue();
+                actualBalanceUser = (int) longActualBalanceUser;
+                mSeekBar.setMax(actualBalanceUser);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
         thisGameOdds = getArguments().getBundle(bundleOddsKey).getStringArray("OddsExtra");
-        actualBalanceUser = getArguments().getBundle(bundleBalanceKey).getInt("BalanceExtra");
         game = getArguments().getBundle(bundleGameKey).getParcelable("ThisGame");
         mSeekBar.setMax(actualBalanceUser);
 
@@ -187,7 +213,8 @@ public class ModalBottomSheet extends BottomSheetDialogFragment implements View.
                 bet.setId(game.getId());
                 bet.setAmount(Integer.parseInt(mCurrentWage.getText().toString()));
                 bet.setOdd(oddsForBet(bettedOn(mSelectedTeam), game));
-                mListener.onSubmitted(bet);
+                bet.setTeam(nameForBettedOn(bettedOn(mSelectedTeam), game));
+                mListener.onSubmitted(bet, actualBalanceUser);
                 dismiss();
                 Toast.makeText(getContext(), R.string.bet_placed, Toast.LENGTH_SHORT).show();
             case R.id.buttonSumbit:
@@ -209,7 +236,7 @@ public class ModalBottomSheet extends BottomSheetDialogFragment implements View.
     }
 
     public interface BottomSheetListener {
-        void onSubmitted(Bet bet);
+        void onSubmitted(Bet bet, int balance);
     }
 
     @Override

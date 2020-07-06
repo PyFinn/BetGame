@@ -23,12 +23,15 @@ public class ScheduleFragment extends Fragment implements ScheduleFragmentAdapte
     private RecyclerView rv_schedule_fragment;
     private ScheduleFragmentAdapter mScheduleFragmentAdapter;
     private ArrayList<Parcelable> mGameArray;
+    private ArrayList<String> mActiveBets;
     private static final String GameArrayKey = "GameArray";
+    private static final String ActiveBetsKey = "ActiveBets";
     Fragment LeaguesFragment;
 
-    public static ScheduleFragment newInstance(ArrayList<Game> games) {
+    public static ScheduleFragment newInstance(ArrayList<Game> games, ArrayList<String> activeBets) {
         ScheduleFragment fragment = new ScheduleFragment();
         Bundle bundle = new Bundle();
+        bundle.putStringArrayList(ActiveBetsKey ,activeBets);
         bundle.putParcelableArrayList(GameArrayKey, games);
         fragment.setArguments(bundle);
         return fragment;
@@ -39,8 +42,9 @@ public class ScheduleFragment extends Fragment implements ScheduleFragmentAdapte
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View myView = inflater.inflate(R.layout.fragment_schedule, container, false);
         mGameArray = getArguments() != null ? getArguments().getParcelableArrayList(GameArrayKey) : null;
+        mActiveBets = getArguments() != null ? getArguments().getStringArrayList(ActiveBetsKey) : null;
         rv_schedule_fragment = (RecyclerView) myView.findViewById(R.id.rv_fragment_schedule);
-        LinearLayoutManager schedule_fragment_layout_manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager schedule_fragment_layout_manager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         rv_schedule_fragment.setLayoutManager(schedule_fragment_layout_manager);
         rv_schedule_fragment.setHasFixedSize(true);
         mScheduleFragmentAdapter = new ScheduleFragmentAdapter(this);
@@ -61,7 +65,7 @@ public class ScheduleFragment extends Fragment implements ScheduleFragmentAdapte
 
     @Override
     public void onClick(String weatherForDay) {
-        LeaguesFragment = ScheduleSpecificSport.newInstance(mGameArray, weatherForDay);
+        LeaguesFragment = ScheduleSpecificSport.newInstance(mGameArray, weatherForDay, mActiveBets);
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.addToBackStack(null);
         ft.replace(R.id.sv_home_page, LeaguesFragment);

@@ -148,13 +148,13 @@ public class ActiveBetsAdapter extends RecyclerView.Adapter<ActiveBetsAdapter.Fo
      *
      * The new weather data to be displayed.
      */
-    public void setWeatherData(ArrayList<Game> games, String[] idList) {
-        if (games == null){
+    public void setWeatherData(ArrayList<Game> games, ArrayList<String> idList) {
+        if (games == null || idList == null){
             mGameArray = null;
         }else {
             for (Game game : games) {
-                for (int i = 0; i < idList.length; i++){
-                    if (game.getId().equals(idList[i])) {
+                for (int i = 0; i < idList.size(); i++){
+                    if (game.getId().equals(idList.get(i))) {
                         mQueriedGames.add(game);
                     }
                 }

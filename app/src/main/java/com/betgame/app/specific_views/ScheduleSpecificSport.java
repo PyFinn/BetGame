@@ -3,6 +3,7 @@ package com.betgame.app.specific_views;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -23,19 +24,24 @@ public class ScheduleSpecificSport extends Fragment implements ScheduleFragmentA
     private ScheduleFragmentAdapter mRvAdapter;
     private static final String GameArrayKey = "GameArray";
     private static final String StringKey = "SelectedSport";
+    private static final String ActiveBetsKey = "ActiveBets";
+    private ArrayList<String> mActiveBets;
     private ArrayList<Parcelable> mGameArray;
     private String mSportType;
     private String[] leagues;
 
-    public static ScheduleSpecificSport newInstance(ArrayList<Parcelable> games, String selectedSports) {
+    public static ScheduleSpecificSport newInstance(ArrayList<Parcelable> games, String selectedSports, ArrayList<String> activeBets) {
         ScheduleSpecificSport fragment = new ScheduleSpecificSport();
         Bundle initiativeBundle = new Bundle();
         Bundle bundle1 = new Bundle();
         Bundle bundle2 = new Bundle();
+        Bundle bundle3 = new Bundle();
         bundle1.putParcelableArrayList(GameArrayKey, games);
         bundle2.putString(StringKey, selectedSports);
+        bundle3.putStringArrayList(ActiveBetsKey, activeBets);
         initiativeBundle.putBundle("BundleGameArray", bundle1);
         initiativeBundle.putBundle("BundleSportsName", bundle2);
+        initiativeBundle.putBundle("BundleActiveBets", bundle3 );
         fragment.setArguments(initiativeBundle);
         return fragment;
     }
@@ -44,6 +50,7 @@ public class ScheduleSpecificSport extends Fragment implements ScheduleFragmentA
         View myView = inflater.inflate(R.layout.explicit_sports_display, container, false);
         mGameArray = getArguments() != null ? getArguments().getBundle("BundleGameArray").getParcelableArrayList(GameArrayKey) : null;
         mSportType = getArguments() != null ? getArguments().getBundle("BundleSportsName").getString(StringKey) : null;
+        mActiveBets = getArguments() != null ? getArguments().getBundle("BundleActiveBets").getStringArrayList(ActiveBetsKey) : null;
         rv_explicit_sports_display = (RecyclerView) myView.findViewById(R.id.rv_explicit_sports_display);
         LinearLayoutManager schedule_fragment_layout_manager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         rv_explicit_sports_display.setLayoutManager(schedule_fragment_layout_manager);
@@ -71,6 +78,7 @@ public class ScheduleSpecificSport extends Fragment implements ScheduleFragmentA
         intent.putParcelableArrayListExtra("Extra", mGameArray);
         intent.putExtra("SportType", mSportType);
         intent.putExtra("SelectedLeague", weatherForDay);
+        intent.putExtra("ActiveBets", mActiveBets);
         startActivity(intent);
     }
 }

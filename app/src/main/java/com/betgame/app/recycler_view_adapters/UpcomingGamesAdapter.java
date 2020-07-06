@@ -172,7 +172,8 @@ public class UpcomingGamesAdapter extends RecyclerView.Adapter<UpcomingGamesAdap
         }else {
             for (Game game : games) {
                 for (int i = 0; i < longList.length; i++){
-                    if (game.getDateMS() == longList[i]) {
+                    long dateMS = game.getDateMS();
+                    if (dateMS == longList[i]) {
                         if (mQueriedGames.size() >= 3){
                             break;
                         }

@@ -17,6 +17,7 @@
     <string name="back_button_bet_activity">Back</string>
     <string name="bet_placed">Bet placed</string>
     <string name="draw">Draw</string>
+    <string name="balance">Balance:</string>
     <string-array name="football_leagues" >
         <item>Bundesliga</item>
         <item>Premier League</item>

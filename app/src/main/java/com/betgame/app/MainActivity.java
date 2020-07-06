@@ -10,6 +10,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -34,59 +35,77 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mGameDatabaseReference;
+    private DatabaseReference mUserActiveBetsReference;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mStateListener;
     Fragment selectedFragment;
     BottomNavigationView bnbMain;
-    private String[] games_bet_active = new String[5];
+    private ArrayList<String> games_bet_active;
     long[] games_upcoming = new long[3];
     ArrayList<Long> gamesMS = new ArrayList<>();
     Game[] games;
     ArrayList<Game> game_arr;
+    private DatabaseReference mUsersChild;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-            }
-        });
-
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mGameDatabaseReference = mFirebaseDatabase.getReference();
         mFirebaseAuth = FirebaseAuth.getInstance();
-        final DatabaseReference mUsersChild = mGameDatabaseReference.child("users");
+        mUsersChild = mGameDatabaseReference.child("users");
+        mUserActiveBetsReference = mGameDatabaseReference.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("active_bets");
         final DatabaseReference mGamesChild = mGameDatabaseReference.child("games");
 
 
-        games_bet_active[0] = "00001";
-        games_bet_active[1] = "00002";
-        games_bet_active[2] = "00003";
-        games_bet_active[3] = "00004";
-        games_bet_active[4] = "00005";
+        mUserActiveBetsReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                games_bet_active = new ArrayList<>();
+                for (DataSnapshot shot : snapshot.getChildren()){
+                    games_bet_active.add(shot.getKey());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        mGamesChild.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                game_arr = new ArrayList<Game>(Arrays.asList(makeGamesDataToArray(snapshot)));
+                long largestA = Long.MAX_VALUE, largestB = Long.MAX_VALUE, largestC = Long.MAX_VALUE;
+                for(long value : gamesMS) {
+                    if(value < largestA) {
+                        largestB = largestA;
+                        largestA = value;
+                    } else if (value < largestB) {
+                        largestC = largestB;
+                        largestB = value;
+                    } else if (value < largestC) {
+                        largestC = value;
+                    }
+                }
+                games_upcoming[0] = largestA;
+                games_upcoming[1] = largestB;
+                games_upcoming[2] = largestC;
+                getSupportFragmentManager().beginTransaction().replace(R.id.sv_home_page, HomeFragment.newInstance(game_arr, games_bet_active, games_upcoming)).commit();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         bnbMain = findViewById(R.id.bottom_navigation_bar);
         bnbMain.setOnNavigationItemSelectedListener(navListener);
         bnbMain.setSelectedItemId(R.id.nav_home);
-        long largestA = Long.MAX_VALUE, largestB = Long.MAX_VALUE, largestC = Long.MAX_VALUE;
-
-        for(long value : gamesMS) {
-            if(value < largestA) {
-                largestB = largestA;
-                largestA = value;
-            } else if (value < largestB) {
-                largestC = largestB;
-                largestB = value;
-            } else if (value < largestC) {
-                largestC = value;
-            }
-        }
-        games_upcoming[0] = largestA;
-        games_upcoming[1] = largestB;
-        games_upcoming[2] = largestC;
 
         mStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -95,25 +114,13 @@ public class MainActivity extends AppCompatActivity {
                 if (user != null){
                     Log.e("Tag", "I am executed right now");
                     final String uid = user.getUid();
-                    mUsersChild.child(uid).child("balance").addValueEventListener(new ValueEventListener() {
+                    mUsersChild.child(uid).child("balance").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if (snapshot.getValue() != null){
-                                Log.e("Tag", "" + snapshot.getValue());
                             } else {
                                 mUsersChild.child(uid).child("balance").setValue(500);
                             }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
-                    mGamesChild.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            game_arr = new ArrayList<Game>(Arrays.asList(makeGamesDataToArray(snapshot)));
                         }
 
                         @Override
@@ -135,7 +142,6 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.sv_home_page, HomeFragment.newInstance(game_arr, games_bet_active, games_upcoming)).commit();
     }
 
 
@@ -150,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
                     tag = "Home";
                     break;
                 case R.id.nav_schedule:
-                    selectedFragment = ScheduleFragment.newInstance(game_arr);
+                    selectedFragment = ScheduleFragment.newInstance(game_arr, games_bet_active);
                     tag = "Schedule";
                     break;
                 case R.id.nav_money:
