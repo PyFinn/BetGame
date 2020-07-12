@@ -54,9 +54,11 @@ public class ModalBottomSheet extends BottomSheetDialogFragment implements View.
     private int actualBalanceUser;
     private String[] thisGameOdds;
     private Game game;
+    private ValueEventListener mValueEventListener;
     private static final String bundleOddsKey = "BUNDLEODDS";
     private static final String bundleBalanceKey = "BUNDLEBALANCE";
     private static final String bundleGameKey = "BUNDLEGAME";
+    private String userID;
 
     public static ModalBottomSheet newInstance(int currentBalance, String[] odds, Game currentGame){
         ModalBottomSheet bottomSheet = new ModalBottomSheet();
@@ -98,8 +100,8 @@ public class ModalBottomSheet extends BottomSheetDialogFragment implements View.
         mDatabase = FirebaseDatabase.getInstance();
         mReferenceDatabase = mDatabase.getReference();
         mUser = FirebaseAuth.getInstance().getCurrentUser();
-        final String userID = mUser.getUid();
-        mReferenceDatabase.child("users").child(userID).child("balance").addListenerForSingleValueEvent(new ValueEventListener() {
+        userID = mUser.getUid();
+        mValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 long longActualBalanceUser = (long) snapshot.getValue();
@@ -111,7 +113,8 @@ public class ModalBottomSheet extends BottomSheetDialogFragment implements View.
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        });
+        };
+        mReferenceDatabase.child("users").child(userID).child("balance").addListenerForSingleValueEvent(mValueEventListener);
 
         thisGameOdds = getArguments().getBundle(bundleOddsKey).getStringArray("OddsExtra");
         game = getArguments().getBundle(bundleGameKey).getParcelable("ThisGame");
@@ -182,6 +185,12 @@ public class ModalBottomSheet extends BottomSheetDialogFragment implements View.
             }
         });
         return v;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mReferenceDatabase.child("users").child(userID).child("balance").removeEventListener(mValueEventListener);
     }
 
     @Override

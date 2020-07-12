@@ -37,9 +37,7 @@ public class CashFragment extends Fragment implements View.OnClickListener {
         View myView = inflater.inflate(R.layout.fragment_cash, container, false);
         mLogout = (TextView) myView.findViewById(R.id.click_to_log_out);
         FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (mUser.getUid() != null){
-            mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(mUser.getUid()).child("balance");
-        }
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(mUser.getUid()).child("balance");
         mLogout.setOnClickListener(this);
         if (getContext() != null){
             rewardedVideoAd = new RewardedAd(getContext(), "ca-app-pub-3940256099942544/5224354917");

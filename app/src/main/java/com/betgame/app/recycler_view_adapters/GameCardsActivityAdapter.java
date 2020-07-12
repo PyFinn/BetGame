@@ -161,8 +161,10 @@ public class GameCardsActivityAdapter extends RecyclerView.Adapter<GameCardsActi
             mGameArray = null;
         }else {
             for (Game game : games) {
-                if (game.getSports().equals(gameTypeQuery) && game.getLeague().equals(leagueTypeQuery)) {
-                    mQueriedGames.add(game);
+                if (!game.getStarted() && !game.getFinished()){
+                    if (game.getSports().equals(gameTypeQuery) && game.getLeague().equals(leagueTypeQuery)) {
+                        mQueriedGames.add(game);
+                    }
                 }
             }
             try {

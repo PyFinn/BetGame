@@ -3,9 +3,6 @@ package com.betgame.app;
 import androidx.annotation.NonNull;
 
 import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -36,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mGameDatabaseReference;
     private DatabaseReference mUserActiveBetsReference;
+    private DatabaseReference mUsersChild;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mStateListener;
     Fragment selectedFragment;
@@ -44,8 +42,9 @@ public class MainActivity extends AppCompatActivity {
     long[] games_upcoming = new long[3];
     ArrayList<Long> gamesMS = new ArrayList<>();
     Game[] games;
+    ArrayList<Game> mFinishedGames;
     ArrayList<Game> game_arr;
-    private DatabaseReference mUsersChild;
+    private ArrayList<Bet> mBetArray = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +63,21 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 games_bet_active = new ArrayList<>();
+                mBetArray = new ArrayList<>();
                 for (DataSnapshot shot : snapshot.getChildren()){
-                    games_bet_active.add(shot.getKey());
+                    for (DataSnapshot dataSnapshot : shot.getChildren()){
+                        Bet newBet = new Bet();
+                        long sipsnap = (long) dataSnapshot.child("amount").getValue();
+                        Double oddToSet = (Double) dataSnapshot.child("odd").getValue();
+                        newBet.setId(shot.getKey());
+                        newBet.setTeam((String) dataSnapshot.child("team").getValue());
+                        if (oddToSet != null){
+                            newBet.setOdd(oddToSet);
+                        }
+                        newBet.setAmount((int) sipsnap);
+                        newBet.setBetId(dataSnapshot.getKey());
+                        mBetArray.add(newBet);
+                    }
                 }
             }
 
@@ -79,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 game_arr = new ArrayList<Game>(Arrays.asList(makeGamesDataToArray(snapshot)));
+                mFinishedGames = gameArrayToFinishedGameArray(game_arr);
                 long largestA = Long.MAX_VALUE, largestB = Long.MAX_VALUE, largestC = Long.MAX_VALUE;
                 for(long value : gamesMS) {
                     if(value < largestA) {
@@ -94,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
                 games_upcoming[0] = largestA;
                 games_upcoming[1] = largestB;
                 games_upcoming[2] = largestC;
-                getSupportFragmentManager().beginTransaction().replace(R.id.sv_home_page, HomeFragment.newInstance(game_arr, games_bet_active, games_upcoming)).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.sv_home_page, HomeFragment.newInstance(game_arr, mBetArray, games_upcoming, mFinishedGames)).commit();
             }
 
             @Override
@@ -152,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
             String tag = "Home";
             switch (menuItem.getItemId()){
                 case R.id.nav_home:
-                    selectedFragment = HomeFragment.newInstance(game_arr, games_bet_active, games_upcoming);
+                    selectedFragment = HomeFragment.newInstance(game_arr, mBetArray, games_upcoming, mFinishedGames);
                     tag = "Home";
                     break;
                 case R.id.nav_schedule:
@@ -199,6 +212,16 @@ public class MainActivity extends AppCompatActivity {
         return timeInMilliseconds;
     }
 
+    public ArrayList<Game> gameArrayToFinishedGameArray(ArrayList<Game> games){
+        ArrayList<Game> mFinishedGameArray = new ArrayList<>();
+        for (Game game : games){
+            if (game.getFinished()){
+                mFinishedGameArray.add(game);
+            }
+        }
+        return mFinishedGameArray;
+    }
+
 
     public Game[] makeGamesDataToArray(DataSnapshot snapshotToConvert) {
         // filters
@@ -213,6 +236,8 @@ public class MainActivity extends AppCompatActivity {
         final String ODD_HOME_TEAM = "odd_home_team";
         final String ODD_AWAY_TEAM = "odd_away_team";
         final String ODD_DRAW = "odd_draw";
+        final String STARTED = "started";
+        final String FINSIHED = "finished";
         int counter = 0;
 
 
@@ -234,6 +259,8 @@ public class MainActivity extends AppCompatActivity {
             games[counter].setOdd_home_team(dSnap.child(RESULTS).child(ODD_HOME_TEAM).getValue().toString());
             games[counter].setOdd_away_team(dSnap.child(RESULTS).child(ODD_AWAY_TEAM).getValue().toString());
             games[counter].setOdd_draw(dSnap.child(RESULTS).child(ODD_DRAW).getValue().toString());
+            games[counter].setStarted((Boolean) dSnap.child(RESULTS).child(STARTED).getValue());
+            games[counter].setFinished((Boolean) dSnap.child(RESULTS).child(FINSIHED).getValue());
 
 
             String dateToFormat = games[counter].getDate();

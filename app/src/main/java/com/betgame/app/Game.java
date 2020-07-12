@@ -16,11 +16,13 @@ public class Game implements Parcelable {
     private String odd_home_team;
     private String odd_away_team;
     private String odd_draw;
+    private Boolean finished;
+    private Boolean started;
 
     public Game() {
     }
 
-    public Game(String home_team, String away_team, String id,String sports, String league, String date, String time, String year, Long dateMS, String odd_home_team, String odd_away_team, String odd_draw) {
+    public Game(String home_team, String away_team, String id,String sports, String league, String date, String time, String year, Long dateMS, String odd_home_team, String odd_away_team, String odd_draw, Boolean finished, Boolean started) {
         this.home_team = home_team;
         this.away_team = away_team;
         this.id = id;
@@ -33,6 +35,8 @@ public class Game implements Parcelable {
         this.odd_home_team = odd_home_team;
         this.odd_away_team = odd_away_team;
         this.odd_draw = odd_draw;
+        this.finished = finished;
+        this.started = started;
     }
 
     public String getHome_team() {
@@ -131,6 +135,22 @@ public class Game implements Parcelable {
         this.odd_draw = odd_draw;
     }
 
+    public Boolean getFinished() {
+        return finished;
+    }
+
+    public void setFinished(Boolean finished) {
+        this.finished = finished;
+    }
+
+    public Boolean getStarted() {
+        return started;
+    }
+
+    public void setStarted(Boolean started) {
+        this.started = started;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -150,6 +170,9 @@ public class Game implements Parcelable {
         dest.writeString(odd_home_team);
         dest.writeString(odd_away_team);
         dest.writeString(odd_draw);
+        dest.writeValue(finished);
+        dest.writeValue(started);
+
     }
 
     private Game(Parcel parcel) {
@@ -165,6 +188,8 @@ public class Game implements Parcelable {
         odd_home_team = parcel.readString();
         odd_away_team = parcel.readString();
         odd_draw = parcel.readString();
+        finished = (Boolean) parcel.readValue(null);
+        started = (Boolean) parcel.readValue(null);
     }
 
     public static final Parcelable.Creator<Game> CREATOR = new Parcelable.Creator<Game>() {

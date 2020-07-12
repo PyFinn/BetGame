@@ -9,6 +9,7 @@ public class Bet implements Parcelable {
     private int amount;
     private double odd;
     private String team;
+    private String betId;
 
     public Bet() {
 
@@ -46,11 +47,20 @@ public class Bet implements Parcelable {
         this.team = team;
     }
 
+    public String getBetId() {
+        return betId;
+    }
+
+    public void setBetId(String betId) {
+        this.betId = betId;
+    }
+
     public Bet(Parcel in) {
         id = in.readString();
         amount = in.readInt();
         odd = in.readDouble();
         team = in.readString();
+        betId = in.readString();
     }
 
     public static final Creator<Bet> CREATOR = new Creator<Bet>() {
@@ -76,5 +86,6 @@ public class Bet implements Parcelable {
         dest.writeInt(amount);
         dest.writeDouble(odd);
         dest.writeString(team);
+        dest.writeString(betId);
     }
 }

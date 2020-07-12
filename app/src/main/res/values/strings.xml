@@ -18,6 +18,9 @@
     <string name="bet_placed">Bet placed</string>
     <string name="draw">Draw</string>
     <string name="balance">Balance:</string>
+    <string name="finished_bet">Finished Bet</string>
+    <string name="claim_reward">Claim</string>
+    <string name="your_reward">Your Reward:</string>
     <string-array name="football_leagues" >
         <item>Bundesliga</item>
         <item>Premier League</item>

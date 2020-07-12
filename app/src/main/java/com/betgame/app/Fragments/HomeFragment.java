@@ -11,14 +11,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.betgame.app.Bet;
 import com.betgame.app.Game;
 import com.betgame.app.R;
+import com.betgame.app.bet_logic.FinishedBetsDialog;
 import com.betgame.app.recycler_view_adapters.ActiveBetsAdapter;
 import com.betgame.app.recycler_view_adapters.UpcomingGamesAdapter;
 import com.betgame.app.specific_views.ActiveBets;
@@ -40,28 +41,37 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Acti
     private static final String GameArrayKey = "GameArray";
     private static final String ActiveBetsKey = "ActiveBets";
     private static final String DateMSKey = "dateMS";
-    private ArrayList<String> mActiveBets;
-    ArrayList<Game> mGameArray;
+    private static final String FinishedGamesKey = "FinishedGames";
+    private ArrayList<Bet> mActiveBets;
+    private ArrayList<Game> mGameArray;
+    private ArrayList<String> mActiveBetsString = new ArrayList<>();
     private long[] dateMSList;
     private TextView mBalanceDisplay;
     private int mBalance;
     private FirebaseDatabase mDatabase;
     private DatabaseReference mDatabaseReference;
+    private ValueEventListener mBalanceEventListener;
+    private ArrayList<Game> mFinishedGameArray;
+    private ArrayList<Game> mActveFinishedGameArray = new ArrayList<>();
+    private ArrayList<Bet> mActiveFinsihedGameArray2 = new ArrayList<>();
 
 
-    public static HomeFragment newInstance(ArrayList<Game> games, ArrayList<String> activeBets, long[] dateMSList) {
+    public static HomeFragment newInstance(ArrayList<Game> games, ArrayList<Bet> activeBets, long[] dateMSList, ArrayList<Game> finishedGames) {
         HomeFragment fragment = new HomeFragment();
         Bundle parentBundle = new Bundle();
         Bundle bundle1 = new Bundle();
         Bundle bundle2 = new Bundle();
         Bundle bundle3 = new Bundle();
+        Bundle bundle4 = new Bundle();
         bundle1.putParcelableArrayList(GameArrayKey, games);
-        bundle2.putStringArrayList(ActiveBetsKey, activeBets);
+        bundle2.putParcelableArrayList(ActiveBetsKey, activeBets);
         bundle3.putLongArray(DateMSKey, dateMSList);
+        bundle4.putParcelableArrayList(FinishedGamesKey, finishedGames);
 
         parentBundle.putBundle(GameArrayKey,bundle1);
         parentBundle.putBundle(ActiveBetsKey, bundle2);
         parentBundle.putBundle(DateMSKey, bundle3);
+        parentBundle.putBundle(FinishedGamesKey, bundle4);
         fragment.setArguments(parentBundle);
         return fragment;
     }
@@ -73,7 +83,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Acti
 
         mDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mDatabase.getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("balance");
-        mDatabaseReference.addValueEventListener(new ValueEventListener() {
+        mBalanceEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 long dataSnap = (long) snapshot.getValue();
@@ -85,13 +95,34 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Acti
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        });
+        };
+        mDatabaseReference.addValueEventListener(mBalanceEventListener);
 
         if (getArguments() != null)
             mGameArray = getArguments().getBundle(GameArrayKey).getParcelableArrayList(GameArrayKey);
         else mGameArray = null;
-        mActiveBets = getArguments() != null ? getArguments().getBundle(ActiveBetsKey).getStringArrayList(ActiveBetsKey) : null;
+        mActiveBets = getArguments() != null ? getArguments().getBundle(ActiveBetsKey).<Bet>getParcelableArrayList(ActiveBetsKey) : null;
         dateMSList = getArguments() != null ? getArguments().getBundle(DateMSKey).getLongArray(DateMSKey) : null;
+        mFinishedGameArray = getArguments() != null ? getArguments().getBundle(FinishedGamesKey).<Game>getParcelableArrayList(FinishedGamesKey) : null;
+        for (Bet bet : mActiveBets){
+            mActiveBetsString.add(bet.getId());
+        }
+        if (mFinishedGameArray != null){
+            for (Game game : mFinishedGameArray){
+                for (Bet activeGame : mActiveBets){
+                    if (game.getId().equals(activeGame.getId())){
+                        mActveFinishedGameArray.add(game);
+                        mActiveFinsihedGameArray2.add(activeGame);
+                    }
+                }
+            }
+        }
+        if (mActveFinishedGameArray != null){
+            Game[] gamesToPass = mActveFinishedGameArray.toArray(new Game[mActveFinishedGameArray.size()]);
+            Bet[] betToPass = mActiveFinsihedGameArray2.toArray(new Bet[mActiveFinsihedGameArray2.size()]);
+            FinishedBetsDialog finishedBetsDialog = FinishedBetsDialog.newInstance(gamesToPass, betToPass);
+            finishedBetsDialog.show(getFragmentManager(), "Finished Bet Dialog");
+        }
 
         mBalanceDisplay = (TextView) myView.findViewById(R.id.home_balance_display);
 
@@ -110,7 +141,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Acti
         mActiveBetsAdapter = new ActiveBetsAdapter(this);
         rv_active_bets.addItemDecoration(dividerItemDecoration);
         rv_active_bets.setAdapter(mActiveBetsAdapter);
-        mActiveBetsAdapter.setWeatherData(mGameArray, mActiveBets);
+        mActiveBetsAdapter.setWeatherData(mGameArray, mActiveBetsString);
 
         // Second RecyclerView UpcomingGames
 
@@ -130,6 +161,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Acti
         cv_upcoming_matches.setOnClickListener(this);
         cv_active_bets.setOnClickListener(this);
         return myView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mDatabaseReference.removeEventListener(mBalanceEventListener);
     }
 
     @Override
