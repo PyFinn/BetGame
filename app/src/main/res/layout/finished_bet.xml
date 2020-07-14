@@ -6,21 +6,11 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/finished_bet"
-        android:id="@+id/reward_bet_title"
+        android:id="@+id/home_team_name_reward_sheet"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:textColor="#FAA3A3"
-        app:elevation="10dp"
-        android:textSize="20sp"
-        android:fontFamily="monospace"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/home_team_name_reward_sheet"
-        app:layout_constraintTop_toBottomOf="@id/reward_bet_title"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/vs_tv_reward_bet"/>
+        app:layout_constraintRight_toLeftOf="@id/vs_tv_reward_bet"
+        android:fontFamily="@font/roboto_regular"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,27 +18,31 @@
         android:text="@string/vs"
         app:layout_constraintTop_toTopOf="@id/home_team_name_reward_sheet"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        android:fontFamily="@font/roboto_regular"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/away_team_name_reward_sheet"
         app:layout_constraintTop_toTopOf="@id/home_team_name_reward_sheet"
         app:layout_constraintLeft_toRightOf="@id/vs_tv_reward_bet"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        android:fontFamily="@font/roboto_regular"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/away_team_name_reward_sheet"
         app:layout_constraintRight_toLeftOf="@+id/away_team_name_reward_sheet"
         android:text="@string/your_reward"
+        android:fontFamily="@font/roboto_regular"
         />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/reward_text_view_reward_sheet"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/away_team_name_reward_sheet"/>
+        app:layout_constraintTop_toBottomOf="@id/away_team_name_reward_sheet"
+        android:fontFamily="@font/roboto_regular"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -57,6 +51,7 @@
         android:text="@string/claim_reward"
         app:layout_constraintTop_toBottomOf="@id/home_team_name_reward_sheet"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="16sp"/>
+        android:layout_marginTop="16sp"
+        android:fontFamily="@font/roboto_regular"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

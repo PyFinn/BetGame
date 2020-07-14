@@ -59,6 +59,15 @@ public class FinishedBetFragment extends Fragment {
                 onClaimButtonClicked();
             }
         });
+        mButtonClaim.setBackgroundResource(R.drawable.black_rectangle);
+        if (thisBet.getTeam().equals(thisGame.getHome_team())){
+            mHomeTeamName.setBackgroundColor(getResources().getColor(R.color.oddDrawBackground));
+        } else if (thisBet.getTeam().equals(thisGame.getAway_team())){
+            mAwayTeamName.setBackgroundColor(getResources().getColor(R.color.oddDrawBackground));
+        } else {
+            mHomeTeamName.setBackgroundColor(getResources().getColor(R.color.oddBackground));
+            mAwayTeamName.setBackgroundColor(getResources().getColor(R.color.oddBackground));
+        }
         return myView;
     }
 

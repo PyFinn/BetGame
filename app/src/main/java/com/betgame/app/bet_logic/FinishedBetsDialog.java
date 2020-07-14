@@ -47,6 +47,7 @@ public class FinishedBetsDialog extends AppCompatDialogFragment implements Finis
         inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.bet_payout_dialog, container, false);
         getDialog().setTitle("Claim Reward");
+        getDialog().setCanceledOnTouchOutside(false);
         counter = 0;
         games = (Game[]) getArguments().getBundle(mActualGameKey).getParcelableArray(mActualGameKey);
         bets = (Bet[]) getArguments().getBundle(mActualBetKey).getParcelableArray(mActualBetKey);
