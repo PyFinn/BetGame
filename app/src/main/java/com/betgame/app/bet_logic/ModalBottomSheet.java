@@ -53,6 +53,7 @@ public class ModalBottomSheet extends BottomSheetDialogFragment implements View.
     private Button mConfirmButton;
     private int actualBalanceUser;
     private String[] thisGameOdds;
+    private static boolean hasDraw = true;
     private Game game;
     private ValueEventListener mValueEventListener;
     private static final String bundleOddsKey = "BUNDLEODDS";
@@ -125,7 +126,14 @@ public class ModalBottomSheet extends BottomSheetDialogFragment implements View.
         mDrawTitle.setText(R.string.draw);
         mOddHomeTeam.setText(thisGameOdds[0]);
         mOddAwayTeam.setText(thisGameOdds[1]);
-        mOddDraw.setText(thisGameOdds[2]);
+        if (Double.valueOf(thisGameOdds[2]) != 0){
+            mOddDraw.setText(thisGameOdds[2]);
+        } else {
+            mOddDraw.setVisibility(View.INVISIBLE);
+            mOddDraw.setEnabled(false);
+            mDrawTitle.setVisibility(View.INVISIBLE);
+            hasDraw = false;
+        }
 
         mOddHomeTeam.setOnClickListener(this);
         mOddAwayTeam.setOnClickListener(this);
@@ -215,7 +223,7 @@ public class ModalBottomSheet extends BottomSheetDialogFragment implements View.
                 mSelectedTeam = mOddDraw;
                 break;
             case R.id.back_button_bet_fragment:
-                fragmentOneVisible();
+                fragmentOneVisible(hasDraw);
                 break;
             case R.id.buttonFinalConfirm:
                 Bet bet = new Bet();
@@ -258,12 +266,16 @@ public class ModalBottomSheet extends BottomSheetDialogFragment implements View.
         }
     }
 
-    public void fragmentOneVisible(){
+    public void fragmentOneVisible(boolean hasDraw){
         mTitlePlaceBet.setVisibility(View.VISIBLE);
         mOddHomeTeam.setVisibility(View.VISIBLE);
         mOddHomeTeam.setEnabled(true);
-        mOddDraw.setVisibility(View.VISIBLE);
-        mOddDraw.setEnabled(true);
+        if (hasDraw){
+            mOddDraw.setVisibility(View.VISIBLE);
+            mOddDraw.setEnabled(true);
+            mDrawTitle.setVisibility(View.VISIBLE);
+            mDrawTitle.setEnabled(true);
+        }
         mOddAwayTeam.setVisibility(View.VISIBLE);
         mOddAwayTeam.setEnabled(true);
         mSeekBar.setVisibility(View.VISIBLE);
@@ -278,8 +290,6 @@ public class ModalBottomSheet extends BottomSheetDialogFragment implements View.
         mHomeTeamTitle.setEnabled(true);
         mAwayTeamTitle.setVisibility(View.VISIBLE);
         mAwayTeamTitle.setEnabled(true);
-        mDrawTitle.setVisibility(View.VISIBLE);
-        mDrawTitle.setEnabled(true);
 
         mBackButton.setVisibility(View.INVISIBLE);
         mBackButton.setEnabled(false);

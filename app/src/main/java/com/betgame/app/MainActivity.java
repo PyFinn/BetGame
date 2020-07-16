@@ -238,6 +238,8 @@ public class MainActivity extends AppCompatActivity {
         final String ODD_DRAW = "odd_draw";
         final String STARTED = "started";
         final String FINSIHED = "finished";
+        final String HOME_TEAM_SCORE = "home_team_score";
+        final String AWAY_TEAM_SCORE = "away_team_score";
         int counter = 0;
 
 
@@ -247,20 +249,72 @@ public class MainActivity extends AppCompatActivity {
         for (DataSnapshot dSnap : snapshotToConvert.getChildren()){
             Log.e("Tag", dSnap.child("game").child("date").getValue().toString());
             games[counter] = new Game();
+            DataSnapshot dbRef = dSnap.child(RESULTS);
 
-            games[counter].setHome_team(dSnap.child(RESULTS).child(HOME_TEAM).getValue().toString());
-            games[counter].setAway_team(dSnap.child(RESULTS).child(AWAY_TEAM).getValue().toString());
+            if (dbRef.hasChild(HOME_TEAM)){
+                games[counter].setHome_team((String) dbRef.child(HOME_TEAM).getValue());
+            }
+
+            if (dbRef.hasChild(AWAY_TEAM)){
+                games[counter].setAway_team((String) dbRef.child(AWAY_TEAM).getValue());
+            }
+
+            if (dbRef.hasChild(SPORTS)){
+                games[counter].setSports((String) dbRef.child(SPORTS).getValue());
+            }
+
+            if (dbRef.hasChild(LEAGUE)){
+                games[counter].setLeague((String) dbRef.child(LEAGUE).getValue());
+            }
+
+            if (dbRef.hasChild(DATE)){
+                games[counter].setDate((String) dbRef.child(DATE).getValue());
+            }
+
+            if (dbRef.hasChild(TIME)){
+                games[counter].setTime((String) dbRef.child(TIME).getValue());
+            }
+
+            if (dbRef.hasChild(YEAR)){
+                games[counter].setYear((String) dbRef.child(YEAR).getValue());
+            }
+
+            if (dbRef.hasChild(ODD_HOME_TEAM)){
+                games[counter].setOdd_home_team((String) dbRef.child(ODD_HOME_TEAM).getValue());
+            }
+
+            if (dbRef.hasChild(ODD_AWAY_TEAM)){
+                games[counter].setOdd_away_team((String) dbRef.child(ODD_AWAY_TEAM).getValue());
+            }
+
+            if (dbRef.hasChild(ODD_DRAW)){
+                games[counter].setOdd_draw((String) dbRef.child(ODD_DRAW).getValue());
+            } else {
+                games[counter].setOdd_draw("0");
+            }
+
+            if (dbRef.hasChild(STARTED)){
+                games[counter].setStarted((Boolean) dbRef.child(STARTED).getValue());
+            }
+
+            if (dbRef.hasChild(FINSIHED)){
+                games[counter].setFinished((Boolean) dbRef.child(FINSIHED).getValue());
+            }
+
+            if (dbRef.hasChild(HOME_TEAM_SCORE)){
+                long home_team_score = (long) dbRef.child(HOME_TEAM_SCORE).getValue();
+                games[counter].setHome_team_score((int) home_team_score);
+            }else {
+                games[counter].setHome_team_score(0);
+            }
+
+            if (dbRef.hasChild(AWAY_TEAM_SCORE)){
+                games[counter].setAway_team_score((int) ((long) dbRef.child(AWAY_TEAM_SCORE).getValue()));
+            } else {
+                games[counter].setAway_team_score(0);
+            }
+
             games[counter].setId(dSnap.getKey());
-            games[counter].setSports(dSnap.child(RESULTS).child(SPORTS).getValue().toString());
-            games[counter].setLeague(dSnap.child(RESULTS).child(LEAGUE).getValue().toString());
-            games[counter].setDate(dSnap.child(RESULTS).child(DATE).getValue().toString());
-            games[counter].setTime(dSnap.child(RESULTS).child(TIME).getValue().toString());
-            games[counter].setYear(dSnap.child(RESULTS).child(YEAR).getValue().toString());
-            games[counter].setOdd_home_team(dSnap.child(RESULTS).child(ODD_HOME_TEAM).getValue().toString());
-            games[counter].setOdd_away_team(dSnap.child(RESULTS).child(ODD_AWAY_TEAM).getValue().toString());
-            games[counter].setOdd_draw(dSnap.child(RESULTS).child(ODD_DRAW).getValue().toString());
-            games[counter].setStarted((Boolean) dSnap.child(RESULTS).child(STARTED).getValue());
-            games[counter].setFinished((Boolean) dSnap.child(RESULTS).child(FINSIHED).getValue());
 
 
             String dateToFormat = games[counter].getDate();
@@ -269,7 +323,9 @@ public class MainActivity extends AppCompatActivity {
             String[] rawDateSplitted = dateToFormat.split("\\.", -1);
             String[] rawTimeSplitted = timeToFormat.split(":", -1);
             String convertMe = yearToFormat + "/" + rawDateSplitted[1] + "/" + rawDateSplitted[0] + "/" + rawTimeSplitted[0] + "/" + rawTimeSplitted[1];
-            gamesMS.add(createDateFromString(convertMe));
+            if (!games[counter].getFinished()){
+                gamesMS.add(createDateFromString(convertMe));
+            }
             games[counter].setDateMS(createDateFromString(convertMe));
 
             counter++;

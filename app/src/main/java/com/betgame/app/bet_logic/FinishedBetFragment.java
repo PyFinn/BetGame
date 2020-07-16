@@ -24,6 +24,8 @@ public class FinishedBetFragment extends Fragment {
     private TextView mAwayTeamName;
     private Game thisGame;
     private Bet thisBet;
+    private TextView mHomeTeamScore;
+    private TextView mAwayTeamScore;
 
     public static FinishedBetFragment newInstance(Game game, Bet bet) {
         FinishedBetFragment finishedBetFragment = new FinishedBetFragment();
@@ -47,12 +49,16 @@ public class FinishedBetFragment extends Fragment {
         thisGame = getArguments().getBundle(mActualGameKey).getParcelable(mActualGameKey);
         thisBet = getArguments().getBundle(mActualBetKey).getParcelable(mActualBetKey);
 
+        mHomeTeamScore = (TextView) myView.findViewById(R.id.home_team_score_display);
+        mAwayTeamScore = (TextView) myView.findViewById(R.id.away_team_score_display);
         mButtonClaim = (Button) myView.findViewById(R.id.claim_reward_button);
         mHomeTeamName = (TextView) myView.findViewById(R.id.home_team_name_reward_sheet);
         mAwayTeamName = (TextView) myView.findViewById(R.id.away_team_name_reward_sheet);
 
         mHomeTeamName.setText(thisGame.getHome_team());
         mAwayTeamName.setText(thisGame.getAway_team());
+        mHomeTeamScore.setText(String.valueOf(thisGame.getHome_team_score()));
+        mAwayTeamScore.setText(String.valueOf(thisGame.getAway_team_score()));
         mButtonClaim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -177,8 +177,10 @@ public class UpcomingGamesAdapter extends RecyclerView.Adapter<UpcomingGamesAdap
                         if (mQueriedGames.size() >= 3){
                             break;
                         }
-                        mQueriedGames.add(game);
-                        break;
+                        else if (!game.getFinished()){
+                            mQueriedGames.add(game);
+                            break;
+                        }
                     }
                 }
             }

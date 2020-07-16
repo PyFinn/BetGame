@@ -2,6 +2,7 @@
     <string name="app_name">BetGame</string>
     <string name="active_bets">Active Bets</string>
     <string name="vs">vs</string>
+    <string name="semicolon">:</string>
     <string name="upcoming_games">Upcoming Games</string>
     <string name="home_button">Home</string>
     <string name="money_button">Cash</string>
@@ -21,6 +22,7 @@
     <string name="finished_bet">Finished Bet</string>
     <string name="claim_reward">Claim</string>
     <string name="your_reward">Your Reward:</string>
+    <string name="no_bets_placed">You have no active bets</string>
     <string-array name="football_leagues" >
         <item>Bundesliga</item>
         <item>Premier League</item>

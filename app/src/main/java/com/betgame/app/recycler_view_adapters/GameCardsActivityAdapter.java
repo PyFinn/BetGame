@@ -134,7 +134,11 @@ public class GameCardsActivityAdapter extends RecyclerView.Adapter<GameCardsActi
         forecastAdapterViewHolder.mLeagueTextView.setText(thisGame.getLeague());
         forecastAdapterViewHolder.mOddHomeTeamTextView.setText(thisGame.getOdd_home_team());
         forecastAdapterViewHolder.mOddAwayTeamTextView.setText(thisGame.getOdd_away_team());
-        forecastAdapterViewHolder.mOddDrawTextView.setText(thisGame.getOdd_draw());
+        if (Double.valueOf(thisGame.getOdd_draw()) != 0) {
+            forecastAdapterViewHolder.mOddDrawTextView.setText(thisGame.getOdd_draw());
+        } else {
+            forecastAdapterViewHolder.mOddDrawTextView.setVisibility(View.INVISIBLE);
+        }
     }
 
     /**

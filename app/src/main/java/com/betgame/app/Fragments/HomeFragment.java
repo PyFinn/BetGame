@@ -14,6 +14,7 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.betgame.app.Bet;
@@ -33,7 +34,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class HomeFragment extends Fragment implements View.OnClickListener, ActiveBetsAdapter.ForecastAdapterOnClickHandler, UpcomingGamesAdapter.ForecastAdapterOnClickHandler {
+        public class HomeFragment extends Fragment implements View.OnClickListener, ActiveBetsAdapter.ForecastAdapterOnClickHandler, UpcomingGamesAdapter.ForecastAdapterOnClickHandler {
     private RecyclerView rv_active_bets;
     private RecyclerView rv_upcoming_games;
     private ActiveBetsAdapter mActiveBetsAdapter;
@@ -47,13 +48,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Acti
     private ArrayList<String> mActiveBetsString = new ArrayList<>();
     private long[] dateMSList;
     private TextView mBalanceDisplay;
-    private int mBalance;
+    private int mBalance = 0;
     private FirebaseDatabase mDatabase;
     private DatabaseReference mDatabaseReference;
     private ValueEventListener mBalanceEventListener;
     private ArrayList<Game> mFinishedGameArray;
     private ArrayList<Game> mActveFinishedGameArray = new ArrayList<>();
     private ArrayList<Bet> mActiveFinsihedGameArray2 = new ArrayList<>();
+    private ProgressBar mProgressActiveBets;
+    private TextView mNoBetsPlacedTextView;
 
 
     public static HomeFragment newInstance(ArrayList<Game> games, ArrayList<Bet> activeBets, long[] dateMSList, ArrayList<Game> finishedGames) {
@@ -89,6 +92,24 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Acti
                 long dataSnap = (long) snapshot.getValue();
                 mBalance = (int) dataSnap;
                 mBalanceDisplay.setText(String.valueOf(mBalance));
+                mProgressActiveBets.setVisibility(View.INVISIBLE);
+                mFinishedGameArray = getArguments() != null ? getArguments().getBundle(FinishedGamesKey).<Game>getParcelableArrayList(FinishedGamesKey) : null;
+                if (mFinishedGameArray != null){
+                    for (Game game : mFinishedGameArray){
+                        for (Bet activeGame : mActiveBets){
+                            if (game.getId().equals(activeGame.getId())){
+                                mActveFinishedGameArray.add(game);
+                                mActiveFinsihedGameArray2.add(activeGame);
+                            }
+                        }
+                    }
+                }
+                if (mActveFinishedGameArray != null){
+                    Game[] gamesToPass = mActveFinishedGameArray.toArray(new Game[mActveFinishedGameArray.size()]);
+                    Bet[] betToPass = mActiveFinsihedGameArray2.toArray(new Bet[mActiveFinsihedGameArray2.size()]);
+                    FinishedBetsDialog finishedBetsDialog = FinishedBetsDialog.newInstance(gamesToPass, betToPass, mBalance);
+                    finishedBetsDialog.show(getFragmentManager(), "Finished Bet Dialog");
+                }
             }
 
             @Override
@@ -96,32 +117,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Acti
 
             }
         };
-        mDatabaseReference.addValueEventListener(mBalanceEventListener);
+        mDatabaseReference.addListenerForSingleValueEvent(mBalanceEventListener);
 
         if (getArguments() != null)
             mGameArray = getArguments().getBundle(GameArrayKey).getParcelableArrayList(GameArrayKey);
         else mGameArray = null;
         mActiveBets = getArguments() != null ? getArguments().getBundle(ActiveBetsKey).<Bet>getParcelableArrayList(ActiveBetsKey) : null;
         dateMSList = getArguments() != null ? getArguments().getBundle(DateMSKey).getLongArray(DateMSKey) : null;
-        mFinishedGameArray = getArguments() != null ? getArguments().getBundle(FinishedGamesKey).<Game>getParcelableArrayList(FinishedGamesKey) : null;
         for (Bet bet : mActiveBets){
             mActiveBetsString.add(bet.getId());
-        }
-        if (mFinishedGameArray != null){
-            for (Game game : mFinishedGameArray){
-                for (Bet activeGame : mActiveBets){
-                    if (game.getId().equals(activeGame.getId())){
-                        mActveFinishedGameArray.add(game);
-                        mActiveFinsihedGameArray2.add(activeGame);
-                    }
-                }
-            }
-        }
-        if (mActveFinishedGameArray != null){
-            Game[] gamesToPass = mActveFinishedGameArray.toArray(new Game[mActveFinishedGameArray.size()]);
-            Bet[] betToPass = mActiveFinsihedGameArray2.toArray(new Bet[mActiveFinsihedGameArray2.size()]);
-            FinishedBetsDialog finishedBetsDialog = FinishedBetsDialog.newInstance(gamesToPass, betToPass);
-            finishedBetsDialog.show(getFragmentManager(), "Finished Bet Dialog");
         }
 
         mBalanceDisplay = (TextView) myView.findViewById(R.id.home_balance_display);
@@ -129,6 +133,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Acti
         // First RecyclerView ActiveBets
 
         rv_active_bets = (RecyclerView) myView.findViewById(R.id.rv_active_bets);
+        mProgressActiveBets = (ProgressBar) myView.findViewById(R.id.progress_bar_active_bets);
+        mNoBetsPlacedTextView = (TextView) myView.findViewById(R.id.no_bets_placed);
         LinearLayoutManager active_bets_layout_manager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL,false);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rv_active_bets.getContext(), active_bets_layout_manager.getOrientation());
         dividerItemDecoration.setDrawable(getResources().getDrawable(R.drawable.black_rectangle));
@@ -142,7 +148,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Acti
         rv_active_bets.addItemDecoration(dividerItemDecoration);
         rv_active_bets.setAdapter(mActiveBetsAdapter);
         mActiveBetsAdapter.setWeatherData(mGameArray, mActiveBetsString);
-
+        int itemCount = mActiveBetsAdapter.getItemCount();
+        if (itemCount > 0){
+            mNoBetsPlacedTextView.setVisibility(View.INVISIBLE);
+            rv_active_bets.setVisibility(View.VISIBLE);
+        }
         // Second RecyclerView UpcomingGames
 
         rv_upcoming_games = (RecyclerView) myView.findViewById(R.id.rv_upcoming_games);

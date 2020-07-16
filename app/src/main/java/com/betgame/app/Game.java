@@ -18,11 +18,13 @@ public class Game implements Parcelable {
     private String odd_draw;
     private Boolean finished;
     private Boolean started;
+    private Integer home_team_score;
+    private Integer away_team_score;
 
     public Game() {
     }
 
-    public Game(String home_team, String away_team, String id,String sports, String league, String date, String time, String year, Long dateMS, String odd_home_team, String odd_away_team, String odd_draw, Boolean finished, Boolean started) {
+    public Game(String home_team, String away_team, String id,String sports, String league, String date, String time, String year, Long dateMS, String odd_home_team, String odd_away_team, String odd_draw, Boolean finished, Boolean started, Integer home_team_score, Integer away_team_score) {
         this.home_team = home_team;
         this.away_team = away_team;
         this.id = id;
@@ -37,6 +39,8 @@ public class Game implements Parcelable {
         this.odd_draw = odd_draw;
         this.finished = finished;
         this.started = started;
+        this.home_team_score = home_team_score;
+        this.away_team_score = away_team_score;
     }
 
     public String getHome_team() {
@@ -151,6 +155,22 @@ public class Game implements Parcelable {
         this.started = started;
     }
 
+    public Integer getHome_team_score() {
+        return home_team_score;
+    }
+
+    public void setHome_team_score(Integer home_team_score) {
+        this.home_team_score = home_team_score;
+    }
+
+    public Integer getAway_team_score() {
+        return away_team_score;
+    }
+
+    public void setAway_team_score(Integer away_team_score) {
+        this.away_team_score = away_team_score;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -172,6 +192,8 @@ public class Game implements Parcelable {
         dest.writeString(odd_draw);
         dest.writeValue(finished);
         dest.writeValue(started);
+        dest.writeInt(home_team_score);
+        dest.writeInt(away_team_score);
 
     }
 
@@ -190,6 +212,8 @@ public class Game implements Parcelable {
         odd_draw = parcel.readString();
         finished = (Boolean) parcel.readValue(null);
         started = (Boolean) parcel.readValue(null);
+        home_team_score = parcel.readInt();
+        away_team_score = parcel.readInt();
     }
 
     public static final Parcelable.Creator<Game> CREATOR = new Parcelable.Creator<Game>() {
