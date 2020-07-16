@@ -1,5 +1,6 @@
 package com.betgame.app.bet_logic;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -30,6 +31,7 @@ public class FinishedBetsDialog extends AppCompatDialogFragment implements Finis
     private static Integer counter = 0;
     private static Integer gamesLength;
     private DialogInterface.OnDismissListener dismissListener;
+    public static Integer REQUEST_CODE = 1;
 
     public static FinishedBetsDialog newInstance(Game[] game, Bet[] bet, Integer currentBalance) {
         FinishedBetsDialog finishedBetFragment = new FinishedBetsDialog();
@@ -53,7 +55,6 @@ public class FinishedBetsDialog extends AppCompatDialogFragment implements Finis
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.bet_payout_dialog, container, false);
-
         getDialog().setTitle("Claim Reward");
         getDialog().setCanceledOnTouchOutside(false);
         counter = 0;
@@ -87,6 +88,7 @@ public class FinishedBetsDialog extends AppCompatDialogFragment implements Finis
             counter++;
         }
         else {
+            getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, getActivity().getIntent());
             dismiss();
         }
     }
@@ -100,18 +102,6 @@ public class FinishedBetsDialog extends AppCompatDialogFragment implements Finis
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         getDialog().getWindow().setAttributes(lp);
     }
-
-//    public void setOnDismissListener(DialogInterface.OnDismissListener onDismissListener) {
-//        this.dismissListener = onDismissListener;
-//    }
-//
-//    @Override
-//    public void onDismiss(@NonNull DialogInterface dialog) {
-//        super.onDismiss(dialog);
-//        if (dismissListener != null){
-//            dismissListener.onDismiss(dialog);
-//        }
-//    }
 
     private boolean betWon(String winner, Bet actBet) {
         if (winner.equals(actBet.getTeam())){

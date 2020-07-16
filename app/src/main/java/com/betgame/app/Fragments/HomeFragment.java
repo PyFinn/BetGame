@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-        public class HomeFragment extends Fragment implements View.OnClickListener, ActiveBetsAdapter.ForecastAdapterOnClickHandler, UpcomingGamesAdapter.ForecastAdapterOnClickHandler {
+public class HomeFragment extends Fragment implements View.OnClickListener, ActiveBetsAdapter.ForecastAdapterOnClickHandler, UpcomingGamesAdapter.ForecastAdapterOnClickHandler {
     private RecyclerView rv_active_bets;
     private RecyclerView rv_upcoming_games;
     private ActiveBetsAdapter mActiveBetsAdapter;
@@ -57,7 +58,7 @@ import java.util.ArrayList;
     private ArrayList<Bet> mActiveFinsihedGameArray2 = new ArrayList<>();
     private ProgressBar mProgressActiveBets;
     private TextView mNoBetsPlacedTextView;
-
+    private boolean claimedAllRewards = false;
 
     public static HomeFragment newInstance(ArrayList<Game> games, ArrayList<Bet> activeBets, long[] dateMSList, ArrayList<Game> finishedGames) {
         HomeFragment fragment = new HomeFragment();
@@ -86,6 +87,7 @@ import java.util.ArrayList;
 
         mDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mDatabase.getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("balance");
+        final Fragment actFrag = this;
         mBalanceEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -93,31 +95,6 @@ import java.util.ArrayList;
                 mBalance = (int) dataSnap;
                 mBalanceDisplay.setText(String.valueOf(mBalance));
                 mProgressActiveBets.setVisibility(View.INVISIBLE);
-                mFinishedGameArray = getArguments() != null ? getArguments().getBundle(FinishedGamesKey).<Game>getParcelableArrayList(FinishedGamesKey) : null;
-                if (mFinishedGameArray != null){
-                    for (Game game : mFinishedGameArray){
-                        for (Bet activeGame : mActiveBets){
-                            if (game.getId().equals(activeGame.getId())){
-                                mActveFinishedGameArray.add(game);
-                                mActiveFinsihedGameArray2.add(activeGame);
-                            }
-                        }
-                    }
-                }
-                if (mActveFinishedGameArray != null){
-                    Game[] gamesToPass = mActveFinishedGameArray.toArray(new Game[mActveFinishedGameArray.size()]);
-                    Bet[] betToPass = mActiveFinsihedGameArray2.toArray(new Bet[mActiveFinsihedGameArray2.size()]);
-                    FinishedBetsDialog finishedBetsDialog = FinishedBetsDialog.newInstance(gamesToPass, betToPass, mBalance);
-//                    finishedBetsDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-//                        @Override
-//                        public void onDismiss(DialogInterface dialog) {
-//                            getActivity().getSupportFragmentManager().beginTransaction().detach(HomeFragment.this).attach(HomeFragment.this).commit();
-//                        }
-//                    });
-                    if (getFragmentManager() != null){
-                        finishedBetsDialog.show(getFragmentManager(), "Finished Bet Dialog");
-                    }
-                }
             }
 
             @Override
@@ -134,6 +111,27 @@ import java.util.ArrayList;
         dateMSList = getArguments() != null ? getArguments().getBundle(DateMSKey).getLongArray(DateMSKey) : null;
         for (Bet bet : mActiveBets){
             mActiveBetsString.add(bet.getId());
+        }
+
+        mFinishedGameArray = getArguments() != null ? getArguments().getBundle(FinishedGamesKey).<Game>getParcelableArrayList(FinishedGamesKey) : null;
+        if (mFinishedGameArray != null && mFinishedGameArray.size() != 0 && mActiveBets != null && !claimedAllRewards){
+            for (Game game : mFinishedGameArray){
+                for (Bet activeGame : mActiveBets){
+                    if (game.getId().equals(activeGame.getId())){
+                        mActveFinishedGameArray.add(game);
+                        mActiveFinsihedGameArray2.add(activeGame);
+                    }
+                }
+            }
+        }
+        if (!claimedAllRewards && mActveFinishedGameArray != null){
+            Game[] gamesToPass = mActveFinishedGameArray.toArray(new Game[mActveFinishedGameArray.size()]);
+            Bet[] betToPass = mActiveFinsihedGameArray2.toArray(new Bet[mActiveFinsihedGameArray2.size()]);
+            FinishedBetsDialog finishedBetsDialog = FinishedBetsDialog.newInstance(gamesToPass, betToPass, mBalance);
+            if (getFragmentManager() != null){
+                finishedBetsDialog.setTargetFragment(actFrag, 1);
+                finishedBetsDialog.show(getFragmentManager(), "Finished Bet Dialog");
+            }
         }
 
         mBalanceDisplay = (TextView) myView.findViewById(R.id.home_balance_display);
@@ -155,7 +153,9 @@ import java.util.ArrayList;
         mActiveBetsAdapter = new ActiveBetsAdapter(this);
         rv_active_bets.addItemDecoration(dividerItemDecoration);
         rv_active_bets.setAdapter(mActiveBetsAdapter);
-        mActiveBetsAdapter.setWeatherData(mGameArray, mActiveBetsString);
+        if (!claimedAllRewards){
+            mActiveBetsAdapter.setWeatherData(mGameArray, mActiveBetsString);
+        }
         int itemCount = mActiveBetsAdapter.getItemCount();
         if (itemCount > 0){
             mNoBetsPlacedTextView.setVisibility(View.INVISIBLE);
@@ -218,6 +218,14 @@ import java.util.ArrayList;
         } else {
             Intent intent = new Intent(getContext(), UpcomingGames.class);
             startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == 1){
+            claimedAllRewards = true;
+            getActivity().getSupportFragmentManager().beginTransaction().detach(HomeFragment.this).attach(HomeFragment.this).commit();
         }
     }
 }
