@@ -108,7 +108,15 @@ import java.util.ArrayList;
                     Game[] gamesToPass = mActveFinishedGameArray.toArray(new Game[mActveFinishedGameArray.size()]);
                     Bet[] betToPass = mActiveFinsihedGameArray2.toArray(new Bet[mActiveFinsihedGameArray2.size()]);
                     FinishedBetsDialog finishedBetsDialog = FinishedBetsDialog.newInstance(gamesToPass, betToPass, mBalance);
-                    finishedBetsDialog.show(getFragmentManager(), "Finished Bet Dialog");
+//                    finishedBetsDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+//                        @Override
+//                        public void onDismiss(DialogInterface dialog) {
+//                            getActivity().getSupportFragmentManager().beginTransaction().detach(HomeFragment.this).attach(HomeFragment.this).commit();
+//                        }
+//                    });
+                    if (getFragmentManager() != null){
+                        finishedBetsDialog.show(getFragmentManager(), "Finished Bet Dialog");
+                    }
                 }
             }
 

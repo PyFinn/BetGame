@@ -1,5 +1,6 @@
 package com.betgame.app.bet_logic;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,7 @@ public class FinishedBetsDialog extends AppCompatDialogFragment implements Finis
     private Integer mBalance;
     private static Integer counter = 0;
     private static Integer gamesLength;
+    private DialogInterface.OnDismissListener dismissListener;
 
     public static FinishedBetsDialog newInstance(Game[] game, Bet[] bet, Integer currentBalance) {
         FinishedBetsDialog finishedBetFragment = new FinishedBetsDialog();
@@ -77,7 +79,7 @@ public class FinishedBetsDialog extends AppCompatDialogFragment implements Finis
         if (betWon(determineWinner(games[counter - 1]), bets[counter - 1])){
             dbRef.child("balance").setValue(mBalance + amountToAddOnBalance(bets[counter - 1]));
         }
-//        dbRef.child("active_bets").child(bets[counter - 1].getId()).child(bets[counter - 1].getBetId()).removeValue();
+        dbRef.child("active_bets").child(bets[counter - 1].getId()).child(bets[counter - 1].getBetId()).removeValue();
         if (counter < gamesLength){
             FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
             FinishedBetFragment finishedBetFragment = FinishedBetFragment.newInstance(games[counter], bets[counter]);
@@ -98,13 +100,27 @@ public class FinishedBetsDialog extends AppCompatDialogFragment implements Finis
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         getDialog().getWindow().setAttributes(lp);
     }
-    public boolean betWon(String winner, Bet actBet) {
+
+//    public void setOnDismissListener(DialogInterface.OnDismissListener onDismissListener) {
+//        this.dismissListener = onDismissListener;
+//    }
+//
+//    @Override
+//    public void onDismiss(@NonNull DialogInterface dialog) {
+//        super.onDismiss(dialog);
+//        if (dismissListener != null){
+//            dismissListener.onDismiss(dialog);
+//        }
+//    }
+
+    private boolean betWon(String winner, Bet actBet) {
         if (winner.equals(actBet.getTeam())){
             return true;
         }
         return false;
     }
-    public String determineWinner(Game actGame) {
+
+    private String determineWinner(Game actGame) {
         int scoreHome = actGame.getHome_team_score();
         int scoreAway = actGame.getAway_team_score();
         if (scoreHome > scoreAway){
@@ -115,7 +131,8 @@ public class FinishedBetsDialog extends AppCompatDialogFragment implements Finis
             return "Draw";
         }
     }
-    public int amountToAddOnBalance(Bet bet) {
+
+    private int amountToAddOnBalance(Bet bet) {
         double dbResult = (double) bet.getAmount() * bet.getOdd();
         int intResult = (int) dbResult;
         return intResult;
