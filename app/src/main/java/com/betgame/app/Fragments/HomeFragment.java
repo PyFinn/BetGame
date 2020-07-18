@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -146,8 +145,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Acti
         dividerItemDecoration.setDrawable(getResources().getDrawable(R.drawable.black_rectangle));
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int deviceheight = displayMetrics.heightPixels / 3;
-        rv_active_bets.getLayoutParams().height = deviceheight;
+        rv_active_bets.getLayoutParams().height = displayMetrics.heightPixels / 3;
         rv_active_bets.setLayoutManager(active_bets_layout_manager);
         rv_active_bets.setHasFixedSize(true);
         mActiveBetsAdapter = new ActiveBetsAdapter(this);
@@ -192,10 +190,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Acti
         switch (v.getId()){
             case R.id.cv_active_bets:
                 Intent intent_active_bets = new Intent(getActivity(), ActiveBets.class);
+                intent_active_bets.putExtra(ActiveBetsKey, mActiveBets);
                 startActivity(intent_active_bets);
                 break;
             case R.id.cv_upcoming_games:
                 Intent intent_upcoming_games = new Intent(getActivity(), UpcomingGames.class);
+                intent_upcoming_games.putExtra(DateMSKey, dateMSList);
                 startActivity(intent_upcoming_games);
                 break;
             case R.id.tv_see_all_home_fragment:

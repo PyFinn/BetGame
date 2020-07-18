@@ -23,6 +23,8 @@
     <string name="claim_reward">Claim</string>
     <string name="your_reward">Your Reward:</string>
     <string name="no_bets_placed">You have no active bets</string>
+    <string name="view_add_get_reward">Earn Cash for watching an Ad</string>
+    <string name="ad_reward">+100$</string>
     <string-array name="football_leagues" >
         <item>Bundesliga</item>
         <item>Premier League</item>

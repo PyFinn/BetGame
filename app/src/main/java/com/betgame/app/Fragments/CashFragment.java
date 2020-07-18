@@ -3,6 +3,7 @@ package com.betgame.app.Fragments;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -30,15 +31,15 @@ public class CashFragment extends Fragment implements View.OnClickListener {
     private RewardedAd rewardedVideoAd;
     private DatabaseReference mDatabaseReference;
 
-    TextView mLogout;
+    CardView mWacthAdForReward;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View myView = inflater.inflate(R.layout.fragment_cash, container, false);
-        mLogout = (TextView) myView.findViewById(R.id.click_to_log_out);
+        mWacthAdForReward = (CardView) myView.findViewById(R.id.card_view_watch_ad);
         FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(mUser.getUid()).child("balance");
-        mLogout.setOnClickListener(this);
+        mWacthAdForReward.setOnClickListener(this);
         if (getContext() != null){
             rewardedVideoAd = new RewardedAd(getContext(), "ca-app-pub-3940256099942544/5224354917");
         }
