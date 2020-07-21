@@ -34,7 +34,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class HomeFragment extends Fragment implements View.OnClickListener, ActiveBetsAdapter.ForecastAdapterOnClickHandler, UpcomingGamesAdapter.ForecastAdapterOnClickHandler {
+public class HomeFragment extends Fragment implements ActiveBetsAdapter.ForecastAdapterOnClickHandler, UpcomingGamesAdapter.ForecastAdapterOnClickHandler {
     private RecyclerView rv_active_bets;
     private RecyclerView rv_upcoming_games;
     private ActiveBetsAdapter mActiveBetsAdapter;
@@ -57,6 +57,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Acti
     private ArrayList<Bet> mActiveFinsihedGameArray2 = new ArrayList<>();
     private ProgressBar mProgressActiveBets;
     private TextView mNoBetsPlacedTextView;
+    private TextView mSeeAllTextView;
     private boolean claimedAllRewards = false;
 
     public static HomeFragment newInstance(ArrayList<Game> games, ArrayList<Bet> activeBets, long[] dateMSList, ArrayList<Game> finishedGames) {
@@ -134,6 +135,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Acti
         }
 
         mBalanceDisplay = (TextView) myView.findViewById(R.id.home_balance_display);
+        mSeeAllTextView = (TextView) myView.findViewById(R.id.tv_see_all_home_fragment);
 
         // First RecyclerView ActiveBets
 
@@ -148,11 +150,28 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Acti
         rv_active_bets.getLayoutParams().height = displayMetrics.heightPixels / 3;
         rv_active_bets.setLayoutManager(active_bets_layout_manager);
         rv_active_bets.setHasFixedSize(true);
-        mActiveBetsAdapter = new ActiveBetsAdapter(this);
+        mActiveBetsAdapter = new ActiveBetsAdapter(new ActiveBetsAdapter.ForecastAdapterOnClickHandler() {
+            @Override
+            public void onClick(Game gameActual) {
+                Intent intent_active_bets = new Intent(getActivity(), ActiveBets.class);
+                intent_active_bets.putParcelableArrayListExtra("ActiveBets", mGameArray);
+                intent_active_bets.putStringArrayListExtra("IdList", mActiveBetsString);
+                startActivity(intent_active_bets);
+            }
+        });
+        mSeeAllTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent_active_bets2 = new Intent(getActivity(), ActiveBets.class);
+                intent_active_bets2.putParcelableArrayListExtra("ActiveBets", mGameArray);
+                intent_active_bets2.putStringArrayListExtra("IdList", mActiveBetsString);
+                startActivity(intent_active_bets2);
+            }
+        });
         rv_active_bets.addItemDecoration(dividerItemDecoration);
         rv_active_bets.setAdapter(mActiveBetsAdapter);
         if (!claimedAllRewards){
-            mActiveBetsAdapter.setWeatherData(mGameArray, mActiveBetsString);
+            mActiveBetsAdapter.setWeatherData(mGameArray, mActiveBetsString, false);
         }
         int itemCount = mActiveBetsAdapter.getItemCount();
         if (itemCount > 0){
@@ -174,8 +193,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Acti
 
         CardView cv_active_bets = (CardView) myView.findViewById(R.id.cv_active_bets);
         CardView cv_upcoming_matches = (CardView) myView.findViewById(R.id.cv_upcoming_games);
-        cv_upcoming_matches.setOnClickListener(this);
-        cv_active_bets.setOnClickListener(this);
+        cv_active_bets.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent_active_bets2 = new Intent(getActivity(), ActiveBets.class);
+                startActivity(intent_active_bets2);
+            }
+        });
         return myView;
     }
 
@@ -183,25 +207,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Acti
     public void onDestroyView() {
         super.onDestroyView();
         mDatabaseReference.removeEventListener(mBalanceEventListener);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.cv_active_bets:
-                Intent intent_active_bets = new Intent(getActivity(), ActiveBets.class);
-                intent_active_bets.putExtra(ActiveBetsKey, mActiveBets);
-                startActivity(intent_active_bets);
-                break;
-            case R.id.cv_upcoming_games:
-                Intent intent_upcoming_games = new Intent(getActivity(), UpcomingGames.class);
-                intent_upcoming_games.putExtra(DateMSKey, dateMSList);
-                startActivity(intent_upcoming_games);
-                break;
-            case R.id.tv_see_all_home_fragment:
-                Intent intent_active_bets2 = new Intent(getActivity(), ActiveBets.class);
-                startActivity(intent_active_bets2);
-        }
     }
 
     @Override
@@ -214,6 +219,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Acti
         }
         if (isActive){
             Intent intent = new Intent(getContext(), ActiveBets.class);
+            intent.putParcelableArrayListExtra("ActiveBets", mGameArray);
+            intent.putStringArrayListExtra("IdList", mActiveBetsString);
             startActivity(intent);
         } else {
             Intent intent = new Intent(getContext(), UpcomingGames.class);

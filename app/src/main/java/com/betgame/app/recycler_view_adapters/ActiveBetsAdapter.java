@@ -17,7 +17,10 @@ package com.betgame.app.recycler_view_adapters;
 
 import android.content.Context;
 
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -34,6 +37,7 @@ public class ActiveBetsAdapter extends RecyclerView.Adapter<ActiveBetsAdapter.Fo
 
     private ArrayList<Game> mQueriedGames = new ArrayList<Game>();
     private Game[] mGameArray;
+    private static boolean isExplicit = false;
 
     private final ForecastAdapterOnClickHandler mClickHandler;
 
@@ -63,6 +67,7 @@ public class ActiveBetsAdapter extends RecyclerView.Adapter<ActiveBetsAdapter.Fo
         private final TextView mDateTextView;
         private final TextView mTimeTextView;
         private final TextView mLeagueTextView;
+        private final CardView mParentCardView;
 
         public ForecastAdapterViewHolder(View view) {
             super(view);
@@ -71,6 +76,10 @@ public class ActiveBetsAdapter extends RecyclerView.Adapter<ActiveBetsAdapter.Fo
             mDateTextView = (TextView) view.findViewById(R.id.small_game_tv_date_match);
             mTimeTextView = (TextView) view.findViewById(R.id.small_game_tv_time_match);
             mLeagueTextView = (TextView) view.findViewById(R.id.small_game_tv_league_match);
+            mParentCardView = (CardView) view.findViewById(R.id.card_view_active_bets_item);
+            if (isExplicit){
+                mParentCardView.setBackgroundColor(Color.rgb(238, 252, 251));
+            }
             view.setOnClickListener(this);
         }
 
@@ -148,7 +157,8 @@ public class ActiveBetsAdapter extends RecyclerView.Adapter<ActiveBetsAdapter.Fo
      *
      * The new weather data to be displayed.
      */
-    public void setWeatherData(ArrayList<Game> games, ArrayList<String> idList) {
+    public void setWeatherData(ArrayList<Game> games, ArrayList<String> idList, boolean explicit) {
+        isExplicit = explicit;
         if (games == null || idList == null){
             mGameArray = null;
         }else {

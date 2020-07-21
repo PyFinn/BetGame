@@ -46,12 +46,12 @@
             app:cardElevation="5sp"
             app:cardCornerRadius="5sp"
             android:id="@+id/cv_active_bets">
-
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="3dp"
-                app:cardBackgroundColor="@color/colorInnerCards">
+                app:cardBackgroundColor="@color/colorInnerCards"
+                android:id="@+id/cv_act_bets">
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
@@ -133,16 +133,6 @@
                         android:layoutAnimation="@anim/layout_home_fragment_recycler_view_animator"
                         app:layout_constraintTop_toTopOf="parent"
                         />
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/tv_see_more_home_fragment"
-                        android:text="@string/home_fragment_see_more_string"
-                        android:textSize="17sp"
-                        app:layout_constraintTop_toBottomOf="@id/rv_upcoming_games"
-                        android:gravity="center"
-                        android:background="@color/homeFragmentClickable"
-                        android:padding="10sp"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
         </androidx.cardview.widget.CardView>
