@@ -110,7 +110,7 @@ public class FinishedBetsDialog extends AppCompatDialogFragment implements Finis
         return false;
     }
 
-    private String determineWinner(Game actGame) {
+    public static String determineWinner(Game actGame) {
         int scoreHome = actGame.getHome_team_score();
         int scoreAway = actGame.getAway_team_score();
         if (scoreHome > scoreAway){

@@ -68,7 +68,13 @@ public class MainActivity extends AppCompatActivity {
                     for (DataSnapshot dataSnapshot : shot.getChildren()){
                         Bet newBet = new Bet();
                         long sipsnap = (long) dataSnapshot.child("amount").getValue();
-                        Double oddToSet = (Double) dataSnapshot.child("odd").getValue();
+                        Double oddToSet;
+                        try {
+                            oddToSet = (Double) dataSnapshot.child("odd").getValue();
+                        } catch (ClassCastException e) {
+                            long dblOddToSet = (long) dataSnapshot.child("odd").getValue();
+                            oddToSet = (double) dblOddToSet;
+                        }
                         newBet.setId(shot.getKey());
                         newBet.setTeam((String) dataSnapshot.child("team").getValue());
                         if (oddToSet != null){

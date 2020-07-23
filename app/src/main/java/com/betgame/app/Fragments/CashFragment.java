@@ -1,5 +1,6 @@
 package com.betgame.app.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -10,10 +11,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.betgame.app.R;
+import com.betgame.app.specific_views.LuckyWheel;
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
 import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewarded.RewardedAd;
@@ -31,15 +32,25 @@ public class CashFragment extends Fragment implements View.OnClickListener {
     private RewardedAd rewardedVideoAd;
     private DatabaseReference mDatabaseReference;
 
-    CardView mWacthAdForReward;
+    private CardView mWacthAdForReward;
+    private CardView mSpinWheel;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View myView = inflater.inflate(R.layout.fragment_cash, container, false);
         mWacthAdForReward = (CardView) myView.findViewById(R.id.card_view_watch_ad);
+        mSpinWheel = (CardView) myView.findViewById(R.id.card_view_daily_spin);
         FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(mUser.getUid()).child("balance");
         mWacthAdForReward.setOnClickListener(this);
+        mSpinWheel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), LuckyWheel.class);
+                startActivity(intent);
+            }
+        });
         if (getContext() != null){
             rewardedVideoAd = new RewardedAd(getContext(), "ca-app-pub-3940256099942544/5224354917");
         }

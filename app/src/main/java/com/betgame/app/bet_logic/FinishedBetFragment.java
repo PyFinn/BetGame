@@ -26,6 +26,7 @@ public class FinishedBetFragment extends Fragment {
     private Bet thisBet;
     private TextView mHomeTeamScore;
     private TextView mAwayTeamScore;
+    private TextView mRewardDisplay;
 
     public static FinishedBetFragment newInstance(Game game, Bet bet) {
         FinishedBetFragment finishedBetFragment = new FinishedBetFragment();
@@ -54,6 +55,7 @@ public class FinishedBetFragment extends Fragment {
         mButtonClaim = (Button) myView.findViewById(R.id.claim_reward_button);
         mHomeTeamName = (TextView) myView.findViewById(R.id.home_team_name_reward_sheet);
         mAwayTeamName = (TextView) myView.findViewById(R.id.away_team_name_reward_sheet);
+        mRewardDisplay = (TextView) myView.findViewById(R.id.reward_text_view_reward_sheet);
 
         mHomeTeamName.setText(thisGame.getHome_team());
         mAwayTeamName.setText(thisGame.getAway_team());
@@ -74,6 +76,13 @@ public class FinishedBetFragment extends Fragment {
             mHomeTeamName.setBackgroundColor(getResources().getColor(R.color.oddBackground));
             mAwayTeamName.setBackgroundColor(getResources().getColor(R.color.oddBackground));
         }
+
+        if (FinishedBetsDialog.determineWinner(thisGame).equals(thisBet.getTeam())){
+            mRewardDisplay.setText(String.valueOf(thisBet.getAmount() * thisBet.getOdd()));
+        } else {
+            mRewardDisplay.setText("0");
+        }
+
         return myView;
     }
 
