@@ -28,6 +28,7 @@
     <string name="all_active_bets">All active bets</string>
     <string name="spin">Daily Spin</string>
     <string name="daily_spin">Spin the lucky wheel for nice rewards</string>
+    <string name="no_games">There are no Games for this Event, please try again later.</string>
     <string-array name="football_leagues" >
         <item>Bundesliga</item>
         <item>Premier League</item>

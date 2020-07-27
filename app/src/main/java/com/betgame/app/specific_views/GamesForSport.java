@@ -3,7 +3,9 @@ package com.betgame.app.specific_views;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,6 +35,7 @@ public class GamesForSport extends AppCompatActivity implements GameCardsActivit
     private DatabaseReference mDatabaseReference;
     private DatabaseReference mDatabaseReferenceActiveBets;
     private ArrayList<String> mActiveBets;
+    private TextView mNoGamesTextView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,6 +57,7 @@ public class GamesForSport extends AppCompatActivity implements GameCardsActivit
         mActiveBets = intent.getStringArrayListExtra("ActiveBets");
         setContentView(R.layout.explicit_sports_display);
         rv_games = (RecyclerView) findViewById(R.id.rv_explicit_sports_display);
+        mNoGamesTextView = (TextView) findViewById(R.id.no_games_tv);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rv_games.getContext(), layoutManager.getOrientation());
         dividerItemDecoration.setDrawable(getResources().getDrawable(R.drawable.rectangle));
@@ -64,6 +68,9 @@ public class GamesForSport extends AppCompatActivity implements GameCardsActivit
         rv_games.setAdapter(mAdapterGames);
 
         mAdapterGames.setWeatherData(games, GameTypeQuery, LeagueTypeQuery);
+        if (mAdapterGames.getItemCount() == 0){
+            mNoGamesTextView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

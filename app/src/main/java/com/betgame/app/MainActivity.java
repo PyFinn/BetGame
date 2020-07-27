@@ -139,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
                             if (snapshot.getValue() != null){
                             } else {
                                 mUsersChild.child(uid).child("balance").setValue(500);
+                                mUsersChild.child(uid).child("spinned").setValue(false);
                             }
                         }
 
