@@ -24,7 +24,6 @@ import com.betgame.app.bet_logic.FinishedBetsDialog;
 import com.betgame.app.recycler_view_adapters.ActiveBetsAdapter;
 import com.betgame.app.recycler_view_adapters.UpcomingGamesAdapter;
 import com.betgame.app.specific_views.ActiveBets;
-import com.betgame.app.specific_views.UpcomingGames;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -91,7 +90,12 @@ public class HomeFragment extends Fragment implements ActiveBetsAdapter.Forecast
         mBalanceEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                long dataSnap = (long) snapshot.getValue();
+                long dataSnap = 0;
+                try {
+                    dataSnap = (long) snapshot.getValue();
+                } catch (Exception e) {
+
+                }
                 mBalance = (int) dataSnap;
                 mBalanceDisplay.setText(String.valueOf(mBalance));
                 mProgressActiveBets.setVisibility(View.INVISIBLE);
@@ -221,9 +225,6 @@ public class HomeFragment extends Fragment implements ActiveBetsAdapter.Forecast
             Intent intent = new Intent(getContext(), ActiveBets.class);
             intent.putParcelableArrayListExtra("ActiveBets", mGameArray);
             intent.putStringArrayListExtra("IdList", mActiveBetsString);
-            startActivity(intent);
-        } else {
-            Intent intent = new Intent(getContext(), UpcomingGames.class);
             startActivity(intent);
         }
     }
