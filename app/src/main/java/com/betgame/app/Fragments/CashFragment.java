@@ -52,7 +52,7 @@ public class CashFragment extends Fragment implements View.OnClickListener {
             }
         });
         if (getContext() != null){
-            rewardedVideoAd = new RewardedAd(getContext(), "ca-app-pub-3940256099942544/5224354917");
+            rewardedVideoAd = new RewardedAd(getContext(), "ca-app-pub-8505961705640879/6973071148");
         }
         RewardedAdLoadCallback adLoadCallback = new RewardedAdLoadCallback() {
             @Override

@@ -14,8 +14,8 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <meta-data
-            android:name="com.google.android.gms.ads.ca-app-pub-8505961705640879~3416969513"
-            android:value="ca-app-pub-3940256099942544~3347511713"/>
+            android:name="com.google.android.gms.ads.ca-app-pub-8505961705640879/6973071148"
+            android:value="ca-app-pub-8505961705640879/6973071148"/>
         <meta-data
             android:name="com.google.android.gms.ads.AD_MANAGER_APP"
             android:value="true"/>
