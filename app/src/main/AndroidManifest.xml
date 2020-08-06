@@ -28,7 +28,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".specific_views.ActiveBets"/>
-        <activity android:name=".specific_views.UpcomingGames"/>
         <activity android:name=".specific_views.GamesForSport"/>
         <activity android:name=".specific_views.LuckyWheel"/>
     </application>

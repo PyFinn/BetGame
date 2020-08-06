@@ -57,21 +57,17 @@ public class ModalBottomSheet extends BottomSheetDialogFragment implements View.
     private Game game;
     private ValueEventListener mValueEventListener;
     private static final String bundleOddsKey = "BUNDLEODDS";
-    private static final String bundleBalanceKey = "BUNDLEBALANCE";
     private static final String bundleGameKey = "BUNDLEGAME";
     private String userID;
 
-    public static ModalBottomSheet newInstance(int currentBalance, String[] odds, Game currentGame){
+    public static ModalBottomSheet newInstance(String[] odds, Game currentGame){
         ModalBottomSheet bottomSheet = new ModalBottomSheet();
         Bundle parentBundle = new Bundle();
         Bundle currentGameBundle = new Bundle();
         Bundle argumentBundleOdds = new Bundle();
-        Bundle argumentBundleBalance = new Bundle();
         currentGameBundle.putParcelable("ThisGame", currentGame);
         argumentBundleOdds.putStringArray("OddsExtra", odds);
-        argumentBundleBalance.putInt("BalanceExtra", currentBalance);
         parentBundle.putBundle(bundleOddsKey, argumentBundleOdds);
-        parentBundle.putBundle(bundleBalanceKey, argumentBundleBalance);
         parentBundle.putBundle(bundleGameKey, currentGameBundle);
         bottomSheet.setArguments(parentBundle);
         return bottomSheet;

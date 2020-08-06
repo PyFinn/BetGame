@@ -2,9 +2,7 @@ package com.betgame.app.specific_views;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -83,7 +81,7 @@ public class GamesForSport extends AppCompatActivity implements GameCardsActivit
         }else{
             oddsArray[2] = "0";
         }
-        ModalBottomSheet bottomSheet = ModalBottomSheet.newInstance(2000, oddsArray, gameActual);
+        ModalBottomSheet bottomSheet = ModalBottomSheet.newInstance(oddsArray, gameActual);
         bottomSheet.show(getSupportFragmentManager(), "ModalBottomSheetCreateBet");
     }
 

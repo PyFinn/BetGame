@@ -57,12 +57,10 @@ public class CashFragment extends Fragment implements View.OnClickListener {
         RewardedAdLoadCallback adLoadCallback = new RewardedAdLoadCallback() {
             @Override
             public void onRewardedAdLoaded() {
-                Log.e("Tag", "Sucess");
             }
 
             @Override
             public void onRewardedAdFailedToLoad(int i) {
-                Log.e("Tag", "Failed" + i);
             }
         };
         rewardedVideoAd.loadAd(new PublisherAdRequest.Builder().build(), adLoadCallback);
@@ -79,7 +77,6 @@ public class CashFragment extends Fragment implements View.OnClickListener {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             Integer currentBalance = snapshot.getValue(Integer.class);
-                            Log.e("tag", "User rewarded");
                             if (currentBalance != null){
                                 mDatabaseReference.setValue(currentBalance + 100);
                             } else {

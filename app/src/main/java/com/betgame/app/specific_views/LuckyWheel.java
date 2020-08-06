@@ -91,7 +91,7 @@ public class LuckyWheel extends AppCompatActivity {
                         @Override
                         public void onAnimationEnd(Animation animation) {
                             mButtonRotation = true;
-                            mButtonStartWheel.setEnabled(true);
+                            mButtonStartWheel.setEnabled(false);
                             currentNumber(360 - (mDegrees % 360));
                             mDbReference.child("spinned").setValue(true);
 

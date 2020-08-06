@@ -21,6 +21,7 @@ import com.betgame.app.Bet;
 import com.betgame.app.Game;
 import com.betgame.app.R;
 import com.betgame.app.bet_logic.FinishedBetsDialog;
+import com.betgame.app.bet_logic.ModalBottomSheet;
 import com.betgame.app.recycler_view_adapters.ActiveBetsAdapter;
 import com.betgame.app.recycler_view_adapters.UpcomingGamesAdapter;
 import com.betgame.app.specific_views.ActiveBets;
@@ -33,7 +34,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class HomeFragment extends Fragment implements ActiveBetsAdapter.ForecastAdapterOnClickHandler, UpcomingGamesAdapter.ForecastAdapterOnClickHandler {
+public class HomeFragment extends Fragment {
     private RecyclerView rv_active_bets;
     private RecyclerView rv_upcoming_games;
     private ActiveBetsAdapter mActiveBetsAdapter;
@@ -191,7 +192,21 @@ public class HomeFragment extends Fragment implements ActiveBetsAdapter.Forecast
         rv_upcoming_games.setLayoutManager(upcoming_games_layout_manager);
         rv_upcoming_games.setHasFixedSize(true);
         rv_upcoming_games.addItemDecoration(dividerItemDecoration1);
-        mUpcomingGamesAdapter = new UpcomingGamesAdapter(this);
+        mUpcomingGamesAdapter = new UpcomingGamesAdapter(new UpcomingGamesAdapter.ForecastAdapterOnClickHandler() {
+            @Override
+            public void onClick(Game gameActual) {
+                String[] oddsArray = new String[3];
+                oddsArray[0] = gameActual.getOdd_home_team();
+                oddsArray[1] = gameActual.getOdd_away_team();
+                if (Double.valueOf(gameActual.getOdd_draw()) != 0){
+                    oddsArray[2] = gameActual.getOdd_draw();
+                }else{
+                    oddsArray[2] = "0";
+                }
+                ModalBottomSheet bottomSheet = ModalBottomSheet.newInstance(oddsArray, gameActual);
+                bottomSheet.show(getFragmentManager(), "ModalBottomSheetCreateBet");
+            }
+        });
         rv_upcoming_games.setAdapter(mUpcomingGamesAdapter);
         mUpcomingGamesAdapter.setWeatherData(mGameArray, dateMSList);
 
@@ -211,22 +226,6 @@ public class HomeFragment extends Fragment implements ActiveBetsAdapter.Forecast
     public void onDestroyView() {
         super.onDestroyView();
         mDatabaseReference.removeEventListener(mBalanceEventListener);
-    }
-
-    @Override
-    public void onClick(Game gameActual) {
-        boolean isActive = false;
-        for (int i = 0;i < mActiveBets.size();i++){
-            if (gameActual.getId().equals(mActiveBets.get(i))){
-                isActive = true;
-            }
-        }
-        if (isActive){
-            Intent intent = new Intent(getContext(), ActiveBets.class);
-            intent.putParcelableArrayListExtra("ActiveBets", mGameArray);
-            intent.putStringArrayListExtra("IdList", mActiveBetsString);
-            startActivity(intent);
-        }
     }
 
     @Override

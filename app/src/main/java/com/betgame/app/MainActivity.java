@@ -130,7 +130,6 @@ public class MainActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null){
-                    Log.e("Tag", "I am executed right now");
                     final String uid = user.getUid();
                     mUsersChild.child(uid).child("balance").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -254,7 +253,6 @@ public class MainActivity extends AppCompatActivity {
         games = new Game[(int) snapshotToConvert.getChildrenCount()];
 
         for (DataSnapshot dSnap : snapshotToConvert.getChildren()){
-            Log.e("Tag", dSnap.child("game").child("date").getValue().toString());
             games[counter] = new Game();
             DataSnapshot dbRef = dSnap.child(RESULTS);
 
