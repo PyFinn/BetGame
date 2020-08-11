@@ -27,7 +27,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseDatabase mFirebaseDatabase;
@@ -218,6 +220,26 @@ public class MainActivity extends AppCompatActivity {
         return timeInMilliseconds;
     }
 
+    public String adaptToTimeZone(String strToConvert) {
+        Date date = null;
+        Calendar cal = Calendar.getInstance();
+        TimeZone tz = cal.getTimeZone();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd/HH/mm");
+        format.setTimeZone(TimeZone.getTimeZone("Europe/Berlin"));
+        format.setLenient(false);
+        try {
+            date = format.parse(strToConvert);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        TimeZone tz2 = TimeZone.getDefault();
+        SimpleDateFormat format2 = new SimpleDateFormat("yyyy/MM/dd/HH/mm");
+        format.setTimeZone(tz);
+        return format2.format(date);
+
+    }
+
     public ArrayList<Game> gameArrayToFinishedGameArray(ArrayList<Game> games){
         ArrayList<Game> mFinishedGameArray = new ArrayList<>();
         for (Game game : games){
@@ -328,6 +350,11 @@ public class MainActivity extends AppCompatActivity {
             String[] rawDateSplitted = dateToFormat.split("\\.", -1);
             String[] rawTimeSplitted = timeToFormat.split(":", -1);
             String convertMe = yearToFormat + "/" + rawDateSplitted[1] + "/" + rawDateSplitted[0] + "/" + rawTimeSplitted[0] + "/" + rawTimeSplitted[1];
+            String timeZoneBasedDateTimeYear = adaptToTimeZone(convertMe);
+            String[] times = timeZoneBasedDateTimeYear.split("/");
+            games[counter].setYear(times[0]);
+            games[counter].setDate(times[1] + "." + times[2]);
+            games[counter].setTime(times[3] + ":" + times[4]);
             if (!games[counter].getFinished()){
                 gamesMS.add(createDateFromString(convertMe));
             }
