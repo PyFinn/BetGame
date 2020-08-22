@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.betgame.app.recycler_view_adapters;
+package com.betgame.perhapps.recycler_view_adapters;
 
 import android.content.Context;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,12 +23,16 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.betgame.app.R;
+import com.betgame.perhapps.Game;
+import com.betgame.perhapps.R;
+
+import java.util.ArrayList;
 
 
-public class ScheduleFragmentAdapter extends RecyclerView.Adapter<ScheduleFragmentAdapter.ForecastAdapterViewHolder> {
+public class GameCardsActivityAdapter extends RecyclerView.Adapter<GameCardsActivityAdapter.ForecastAdapterViewHolder> {
 
-    private String[] mWeatherData;
+    private ArrayList<Game> mQueriedGames = new ArrayList<Game>();
+    private Game[] mGameArray;
 
     private final ForecastAdapterOnClickHandler mClickHandler;
 
@@ -36,7 +40,7 @@ public class ScheduleFragmentAdapter extends RecyclerView.Adapter<ScheduleFragme
      * The interface that receives onClick messages.
      */
     public interface ForecastAdapterOnClickHandler {
-        void onClick(String weatherForDay);
+        void onClick(Game gameActual);
     }
 
     /**
@@ -45,7 +49,7 @@ public class ScheduleFragmentAdapter extends RecyclerView.Adapter<ScheduleFragme
      * @param clickHandler The on-click handler for this adapter. This single handler is called
      *                     when an item is clicked.
      */
-    public ScheduleFragmentAdapter(ForecastAdapterOnClickHandler clickHandler) {
+    public GameCardsActivityAdapter(ForecastAdapterOnClickHandler clickHandler) {
         mClickHandler = clickHandler;
     }
 
@@ -53,11 +57,25 @@ public class ScheduleFragmentAdapter extends RecyclerView.Adapter<ScheduleFragme
      * Cache of the children views for a forecast list item.
      */
     public class ForecastAdapterViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
-        public final TextView mWeatherTextView;
+        private final TextView mHomeTeamTexView;
+        private final TextView mAwayTeamTextView;
+        private final TextView mDateTextView;
+        private final TextView mTimeTextView;
+        private final TextView mLeagueTextView;
+        private final TextView mOddHomeTeamTextView;
+        private final TextView mOddAwayTeamTextView;
+        private final TextView mOddDrawTextView;
 
         public ForecastAdapterViewHolder(View view) {
             super(view);
-            mWeatherTextView = (TextView) view.findViewById(R.id.tv_schedule_fragment);
+            mHomeTeamTexView = (TextView) view.findViewById(R.id.tv_home_team_name);
+            mAwayTeamTextView = (TextView) view.findViewById(R.id.tv_away_team_name);
+            mDateTextView = (TextView) view.findViewById(R.id.tv_date_match);
+            mTimeTextView = (TextView) view.findViewById(R.id.tv_time_match);
+            mLeagueTextView = (TextView) view.findViewById(R.id.tv_league_match);
+            mOddHomeTeamTextView = (TextView) view.findViewById(R.id.tv_odd_home_team);
+            mOddAwayTeamTextView = (TextView) view.findViewById(R.id.tv_odd_away_team);
+            mOddDrawTextView = (TextView) view.findViewById(R.id.tv_odd_draw);
             view.setOnClickListener(this);
         }
 
@@ -69,8 +87,8 @@ public class ScheduleFragmentAdapter extends RecyclerView.Adapter<ScheduleFragme
         @Override
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
-            String weatherForDay = mWeatherData[adapterPosition];
-            mClickHandler.onClick(weatherForDay);
+            Game gameActual = mGameArray[adapterPosition];
+            mClickHandler.onClick(gameActual);
         }
     }
 
@@ -88,7 +106,7 @@ public class ScheduleFragmentAdapter extends RecyclerView.Adapter<ScheduleFragme
     @Override
     public ForecastAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         Context context = viewGroup.getContext();
-        int layoutIdForListItem = R.layout.fragment_schedule_rv_item;
+        int layoutIdForListItem = R.layout.game_display_rv_item;
         LayoutInflater inflater = LayoutInflater.from(context);
         boolean shouldAttachToParentImmediately = false;
 
@@ -108,8 +126,19 @@ public class ScheduleFragmentAdapter extends RecyclerView.Adapter<ScheduleFragme
      */
     @Override
     public void onBindViewHolder(ForecastAdapterViewHolder forecastAdapterViewHolder, int position) {
-        String weatherForThisDay = mWeatherData[position];
-        forecastAdapterViewHolder.mWeatherTextView.setText(weatherForThisDay);
+        Game thisGame = mGameArray[position];
+        forecastAdapterViewHolder.mHomeTeamTexView.setText(thisGame.getHome_team());
+        forecastAdapterViewHolder.mAwayTeamTextView.setText(thisGame.getAway_team());
+        forecastAdapterViewHolder.mDateTextView.setText(thisGame.getDate());
+        forecastAdapterViewHolder.mTimeTextView.setText(thisGame.getTime());
+        forecastAdapterViewHolder.mLeagueTextView.setText(thisGame.getLeague());
+        forecastAdapterViewHolder.mOddHomeTeamTextView.setText(thisGame.getOdd_home_team());
+        forecastAdapterViewHolder.mOddAwayTeamTextView.setText(thisGame.getOdd_away_team());
+        if (Double.valueOf(thisGame.getOdd_draw()) != 0) {
+            forecastAdapterViewHolder.mOddDrawTextView.setText(thisGame.getOdd_draw());
+        } else {
+            forecastAdapterViewHolder.mOddDrawTextView.setVisibility(View.INVISIBLE);
+        }
     }
 
     /**
@@ -120,8 +149,8 @@ public class ScheduleFragmentAdapter extends RecyclerView.Adapter<ScheduleFragme
      */
     @Override
     public int getItemCount() {
-        if (null == mWeatherData) return 0;
-        return mWeatherData.length;
+        if (null == mGameArray) return 0;
+        return mGameArray.length;
     }
 
     /**
@@ -129,10 +158,26 @@ public class ScheduleFragmentAdapter extends RecyclerView.Adapter<ScheduleFragme
      * created one. This is handy when we get new data from the web but don't want to create a
      * new ForecastAdapter to display it.
      *
-     * @param weatherData The new weather data to be displayed.
+     * The new weather data to be displayed.
      */
-    public void setWeatherData(String[] weatherData) {
-        mWeatherData = weatherData;
-        notifyDataSetChanged();
+    public void setWeatherData(ArrayList<Game> games, String gameTypeQuery, String leagueTypeQuery) {
+        if (games == null){
+            mGameArray = null;
+        }else {
+            for (Game game : games) {
+                if (!game.getStarted() && !game.getFinished()){
+                    if (game.getSports().equals(gameTypeQuery) && game.getLeague().equals(leagueTypeQuery)) {
+                        mQueriedGames.add(game);
+                    }
+                }
+            }
+            try {
+                mGameArray = new Game[mQueriedGames.size()];
+                mGameArray = mQueriedGames.toArray(mGameArray);
+            } catch (NullPointerException e) {
+
+            }
+            notifyDataSetChanged();
+        }
     }
 }

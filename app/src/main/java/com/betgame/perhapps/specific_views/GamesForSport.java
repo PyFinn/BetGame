@@ -1,4 +1,4 @@
-package com.betgame.app.specific_views;
+package com.betgame.perhapps.specific_views;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,11 +11,11 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.betgame.app.Bet;
-import com.betgame.app.Game;
-import com.betgame.app.R;
-import com.betgame.app.bet_logic.ModalBottomSheet;
-import com.betgame.app.recycler_view_adapters.GameCardsActivityAdapter;
+import com.betgame.perhapps.Bet;
+import com.betgame.perhapps.Game;
+import com.betgame.perhapps.R;
+import com.betgame.perhapps.bet_logic.ModalBottomSheet;
+import com.betgame.perhapps.recycler_view_adapters.GameCardsActivityAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;

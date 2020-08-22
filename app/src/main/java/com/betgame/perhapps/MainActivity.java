@@ -1,7 +1,8 @@
-package com.betgame.app;
+package com.betgame.perhapps;
 
 import androidx.annotation.NonNull;
 
+import com.betgame.perhapps.R;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.fragment.app.Fragment;
@@ -9,12 +10,12 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
-import com.betgame.app.Fragments.CashFragment;
-import com.betgame.app.Fragments.HomeFragment;
-import com.betgame.app.Fragments.ScheduleFragment;
+import com.betgame.perhapps.Fragments.CashFragment;
+import com.betgame.perhapps.Fragments.HomeFragment;
+import com.betgame.perhapps.Fragments.ScheduleFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -56,43 +57,46 @@ public class MainActivity extends AppCompatActivity {
         mGameDatabaseReference = mFirebaseDatabase.getReference();
         mFirebaseAuth = FirebaseAuth.getInstance();
         mUsersChild = mGameDatabaseReference.child("users");
-        mUserActiveBetsReference = mGameDatabaseReference.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("active_bets");
-        final DatabaseReference mGamesChild = mGameDatabaseReference.child("games");
-
-
-        mUserActiveBetsReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                games_bet_active = new ArrayList<>();
-                mBetArray = new ArrayList<>();
-                for (DataSnapshot shot : snapshot.getChildren()){
-                    for (DataSnapshot dataSnapshot : shot.getChildren()){
-                        Bet newBet = new Bet();
-                        long sipsnap = (long) dataSnapshot.child("amount").getValue();
-                        Double oddToSet;
-                        try {
-                            oddToSet = (Double) dataSnapshot.child("odd").getValue();
-                        } catch (ClassCastException e) {
-                            long dblOddToSet = (long) dataSnapshot.child("odd").getValue();
-                            oddToSet = (double) dblOddToSet;
+        try {
+            mUserActiveBetsReference = mGameDatabaseReference.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("active_bets");
+            mUserActiveBetsReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    games_bet_active = new ArrayList<>();
+                    mBetArray = new ArrayList<>();
+                    for (DataSnapshot shot : snapshot.getChildren()){
+                        for (DataSnapshot dataSnapshot : shot.getChildren()){
+                            Bet newBet = new Bet();
+                            long sipsnap = (long) dataSnapshot.child("amount").getValue();
+                            Double oddToSet;
+                            try {
+                                oddToSet = (Double) dataSnapshot.child("odd").getValue();
+                            } catch (ClassCastException e) {
+                                long dblOddToSet = (long) dataSnapshot.child("odd").getValue();
+                                oddToSet = (double) dblOddToSet;
+                            }
+                            newBet.setId(shot.getKey());
+                            newBet.setTeam((String) dataSnapshot.child("team").getValue());
+                            if (oddToSet != null){
+                                newBet.setOdd(oddToSet);
+                            }
+                            newBet.setAmount((int) sipsnap);
+                            newBet.setBetId(dataSnapshot.getKey());
+                            mBetArray.add(newBet);
                         }
-                        newBet.setId(shot.getKey());
-                        newBet.setTeam((String) dataSnapshot.child("team").getValue());
-                        if (oddToSet != null){
-                            newBet.setOdd(oddToSet);
-                        }
-                        newBet.setAmount((int) sipsnap);
-                        newBet.setBetId(dataSnapshot.getKey());
-                        mBetArray.add(newBet);
                     }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
+                }
+            });
+        } catch (NullPointerException e) {
+            Toast.makeText(this, "You are currently not signed in.", Toast.LENGTH_LONG);
+        }
+
+        final DatabaseReference mGamesChild = mGameDatabaseReference.child("games");
 
         mGamesChild.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

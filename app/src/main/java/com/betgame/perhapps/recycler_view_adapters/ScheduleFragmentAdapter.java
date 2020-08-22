@@ -13,31 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.betgame.app.recycler_view_adapters;
+package com.betgame.perhapps.recycler_view_adapters;
 
 import android.content.Context;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.betgame.app.Game;
-import com.betgame.app.R;
-
-import java.util.ArrayList;
+import com.betgame.perhapps.R;
 
 
-public class UpcomingGamesAdapter extends RecyclerView.Adapter<UpcomingGamesAdapter.ForecastAdapterViewHolder> {
+public class ScheduleFragmentAdapter extends RecyclerView.Adapter<ScheduleFragmentAdapter.ForecastAdapterViewHolder> {
 
-    private ArrayList<Game> mQueriedGames = new ArrayList<Game>();
-    private Game[] mGameArray;
-    private boolean found1 = false;
-    private boolean found2 = false;
-    private boolean found3 = false;
+    private String[] mWeatherData;
 
     private final ForecastAdapterOnClickHandler mClickHandler;
 
@@ -45,7 +36,7 @@ public class UpcomingGamesAdapter extends RecyclerView.Adapter<UpcomingGamesAdap
      * The interface that receives onClick messages.
      */
     public interface ForecastAdapterOnClickHandler {
-        void onClick(Game gameActual);
+        void onClick(String weatherForDay);
     }
 
     /**
@@ -54,7 +45,7 @@ public class UpcomingGamesAdapter extends RecyclerView.Adapter<UpcomingGamesAdap
      * @param clickHandler The on-click handler for this adapter. This single handler is called
      *                     when an item is clicked.
      */
-    public UpcomingGamesAdapter(ForecastAdapterOnClickHandler clickHandler) {
+    public ScheduleFragmentAdapter(ForecastAdapterOnClickHandler clickHandler) {
         mClickHandler = clickHandler;
     }
 
@@ -62,30 +53,11 @@ public class UpcomingGamesAdapter extends RecyclerView.Adapter<UpcomingGamesAdap
      * Cache of the children views for a forecast list item.
      */
     public class ForecastAdapterViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
-        private final TextView mHomeTeamTexView;
-        private final TextView mAwayTeamTextView;
-        private final TextView mDateTextView;
-        private final TextView mTimeTextView;
-        private final TextView mLeagueTextView;
-        private final TextView mOddHomeTeamTextView;
-        private final TextView mOddAwayTeamTextView;
-        private final TextView mOddDrawTextView;
-        private final CardView wrappingCardView;
+        public final TextView mWeatherTextView;
 
         public ForecastAdapterViewHolder(View view) {
             super(view);
-            mHomeTeamTexView = (TextView) view.findViewById(R.id.tv_home_team_name);
-            mAwayTeamTextView = (TextView) view.findViewById(R.id.tv_away_team_name);
-            mDateTextView = (TextView) view.findViewById(R.id.tv_date_match);
-            mTimeTextView = (TextView) view.findViewById(R.id.tv_time_match);
-            mLeagueTextView = (TextView) view.findViewById(R.id.tv_league_match);
-            mOddHomeTeamTextView = (TextView) view.findViewById(R.id.tv_odd_home_team);
-            mOddAwayTeamTextView = (TextView) view.findViewById(R.id.tv_odd_away_team);
-            mOddDrawTextView = (TextView) view.findViewById(R.id.tv_odd_draw);
-            wrappingCardView = (CardView) view.findViewById(R.id.cv_game_wrapper);
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            layoutParams.setMargins(0, 0, 0,0);
-            wrappingCardView.setLayoutParams(layoutParams);
+            mWeatherTextView = (TextView) view.findViewById(R.id.tv_schedule_fragment);
             view.setOnClickListener(this);
         }
 
@@ -97,8 +69,8 @@ public class UpcomingGamesAdapter extends RecyclerView.Adapter<UpcomingGamesAdap
         @Override
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
-            Game gameActual = mGameArray[adapterPosition];
-            mClickHandler.onClick(gameActual);
+            String weatherForDay = mWeatherData[adapterPosition];
+            mClickHandler.onClick(weatherForDay);
         }
     }
 
@@ -116,7 +88,7 @@ public class UpcomingGamesAdapter extends RecyclerView.Adapter<UpcomingGamesAdap
     @Override
     public ForecastAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         Context context = viewGroup.getContext();
-        int layoutIdForListItem = R.layout.game_display_rv_item;
+        int layoutIdForListItem = R.layout.fragment_schedule_rv_item;
         LayoutInflater inflater = LayoutInflater.from(context);
         boolean shouldAttachToParentImmediately = false;
 
@@ -136,15 +108,8 @@ public class UpcomingGamesAdapter extends RecyclerView.Adapter<UpcomingGamesAdap
      */
     @Override
     public void onBindViewHolder(ForecastAdapterViewHolder forecastAdapterViewHolder, int position) {
-        Game thisGame = mGameArray[position];
-        forecastAdapterViewHolder.mHomeTeamTexView.setText(thisGame.getHome_team());
-        forecastAdapterViewHolder.mAwayTeamTextView.setText(thisGame.getAway_team());
-        forecastAdapterViewHolder.mDateTextView.setText(thisGame.getDate());
-        forecastAdapterViewHolder.mTimeTextView.setText(thisGame.getTime());
-        forecastAdapterViewHolder.mLeagueTextView.setText(thisGame.getLeague());
-        forecastAdapterViewHolder.mOddHomeTeamTextView.setText(thisGame.getOdd_home_team());
-        forecastAdapterViewHolder.mOddAwayTeamTextView.setText(thisGame.getOdd_away_team());
-        forecastAdapterViewHolder.mOddDrawTextView.setText(thisGame.getOdd_draw());
+        String weatherForThisDay = mWeatherData[position];
+        forecastAdapterViewHolder.mWeatherTextView.setText(weatherForThisDay);
     }
 
     /**
@@ -155,8 +120,8 @@ public class UpcomingGamesAdapter extends RecyclerView.Adapter<UpcomingGamesAdap
      */
     @Override
     public int getItemCount() {
-        if (null == mGameArray) return 0;
-        return mGameArray.length;
+        if (null == mWeatherData) return 0;
+        return mWeatherData.length;
     }
 
     /**
@@ -164,33 +129,10 @@ public class UpcomingGamesAdapter extends RecyclerView.Adapter<UpcomingGamesAdap
      * created one. This is handy when we get new data from the web but don't want to create a
      * new ForecastAdapter to display it.
      *
-     * The new weather data to be displayed.
+     * @param weatherData The new weather data to be displayed.
      */
-    public void setWeatherData(ArrayList<Game> games, long[] longList) {
-        if (games == null){
-            mGameArray = null;
-        }else {
-            for (Game game : games) {
-                for (int i = 0; i < longList.length; i++){
-                    long dateMS = game.getDateMS();
-                    if (dateMS == longList[i]) {
-                        if (mQueriedGames.size() >= 3){
-                            break;
-                        }
-                        else if (!game.getFinished()){
-                            mQueriedGames.add(game);
-                            break;
-                        }
-                    }
-                }
-            }
-            try {
-                mGameArray = new Game[mQueriedGames.size()];
-                mGameArray = mQueriedGames.toArray(mGameArray);
-            } catch (NullPointerException e) {
-
-            }
-            notifyDataSetChanged();
-        }
+    public void setWeatherData(String[] weatherData) {
+        mWeatherData = weatherData;
+        notifyDataSetChanged();
     }
 }

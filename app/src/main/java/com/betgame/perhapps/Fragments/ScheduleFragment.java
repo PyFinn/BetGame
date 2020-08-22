@@ -1,4 +1,4 @@
-package com.betgame.app.Fragments;
+package com.betgame.perhapps.Fragments;
 
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -12,10 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.betgame.app.Game;
-import com.betgame.app.R;
-import com.betgame.app.recycler_view_adapters.ScheduleFragmentAdapter;
-import com.betgame.app.specific_views.ScheduleSpecificSport;
+import com.betgame.perhapps.Game;
+import com.betgame.perhapps.R;
+import com.betgame.perhapps.recycler_view_adapters.ScheduleFragmentAdapter;
+import com.betgame.perhapps.specific_views.ScheduleSpecificSport;
 
 import java.util.ArrayList;
 

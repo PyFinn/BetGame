@@ -1,4 +1,4 @@
-package com.betgame.app;
+package com.betgame.perhapps;
 
 import org.junit.Test;
 

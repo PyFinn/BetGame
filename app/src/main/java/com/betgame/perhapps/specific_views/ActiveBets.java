@@ -1,4 +1,4 @@
-package com.betgame.app.specific_views;
+package com.betgame.perhapps.specific_views;
 
 import android.os.Bundle;
 import androidx.annotation.Nullable;
@@ -7,13 +7,13 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.betgame.app.Game;
-import com.betgame.app.R;
-import com.betgame.app.recycler_view_adapters.ActiveBetsAdapter;
+import com.betgame.perhapps.Game;
+import com.betgame.perhapps.R;
+import com.betgame.perhapps.recycler_view_adapters.ActiveBetsAdapter;
 
 import java.util.ArrayList;
 
-public class ActiveBets extends AppCompatActivity implements ActiveBetsAdapter.ForecastAdapterOnClickHandler{
+public class ActiveBets extends AppCompatActivity implements ActiveBetsAdapter.ForecastAdapterOnClickHandler {
     private RecyclerView rv_main;
     private ActiveBetsAdapter mActiveBetsAdapter;
     private ArrayList<Game> games;

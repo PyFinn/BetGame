@@ -42,6 +42,35 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:291644288502:android:27bd5b91f7da7c37172bd7",
+        "android_client_info": {
+          "package_name": "com.betgame.perhapps"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "291644288502-77bl3tl0l473mkm2soj0rjs96gsh2g18.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClpJDHHGL7GRUVIp8QgYxt9jY-NmtYV04"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "291644288502-77bl3tl0l473mkm2soj0rjs96gsh2g18.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"

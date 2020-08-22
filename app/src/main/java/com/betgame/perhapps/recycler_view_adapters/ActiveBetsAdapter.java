@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.betgame.app.recycler_view_adapters;
+package com.betgame.perhapps.recycler_view_adapters;
 
 import android.content.Context;
 
@@ -27,8 +27,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.betgame.app.Game;
-import com.betgame.app.R;
+import com.betgame.perhapps.Game;
+import com.betgame.perhapps.R;
 
 import java.util.ArrayList;
 

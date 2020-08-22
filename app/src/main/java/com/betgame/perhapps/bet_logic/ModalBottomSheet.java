@@ -1,11 +1,11 @@
-package com.betgame.app.bet_logic;
+package com.betgame.perhapps.bet_logic;
 
 import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.betgame.app.Bet;
+import com.betgame.perhapps.Bet;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,8 +18,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.betgame.app.Game;
-import com.betgame.app.R;
+import com.betgame.perhapps.Game;
+import com.betgame.perhapps.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;

@@ -1,4 +1,4 @@
-package com.betgame.app;
+package com.betgame.perhapps;
 
 import android.os.Parcel;
 import android.os.Parcelable;

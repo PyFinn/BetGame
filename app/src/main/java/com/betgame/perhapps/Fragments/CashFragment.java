@@ -1,4 +1,4 @@
-package com.betgame.app.Fragments;
+package com.betgame.perhapps.Fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,14 +7,13 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.betgame.app.R;
-import com.betgame.app.specific_views.LuckyWheel;
+import com.betgame.perhapps.R;
+import com.betgame.perhapps.specific_views.LuckyWheel;
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
 import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewarded.RewardedAd;

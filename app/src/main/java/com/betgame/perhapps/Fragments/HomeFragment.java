@@ -1,4 +1,4 @@
-package com.betgame.app.Fragments;
+package com.betgame.perhapps.Fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,15 +16,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.betgame.app.Bet;
-import com.betgame.app.Game;
-import com.betgame.app.R;
-import com.betgame.app.bet_logic.FinishedBetsDialog;
-import com.betgame.app.bet_logic.ModalBottomSheet;
-import com.betgame.app.recycler_view_adapters.ActiveBetsAdapter;
-import com.betgame.app.recycler_view_adapters.UpcomingGamesAdapter;
-import com.betgame.app.specific_views.ActiveBets;
+import com.betgame.perhapps.Bet;
+import com.betgame.perhapps.Game;
+import com.betgame.perhapps.R;
+import com.betgame.perhapps.bet_logic.FinishedBetsDialog;
+import com.betgame.perhapps.bet_logic.ModalBottomSheet;
+import com.betgame.perhapps.recycler_view_adapters.ActiveBetsAdapter;
+import com.betgame.perhapps.recycler_view_adapters.UpcomingGamesAdapter;
+import com.betgame.perhapps.specific_views.ActiveBets;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -86,8 +87,6 @@ public class HomeFragment extends Fragment {
         View myView = inflater.inflate(R.layout.fragment_home, container, false);
 
         mDatabase = FirebaseDatabase.getInstance();
-        mDatabaseReference = mDatabase.getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("balance");
-        final Fragment actFrag = this;
         mBalanceEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -107,7 +106,13 @@ public class HomeFragment extends Fragment {
 
             }
         };
-        mDatabaseReference.addListenerForSingleValueEvent(mBalanceEventListener);
+        try {
+            mDatabaseReference = mDatabase.getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("balance");
+            mDatabaseReference.addListenerForSingleValueEvent(mBalanceEventListener);
+        } catch (NullPointerException e) {
+            Toast.makeText(getContext(), "You are currently not signed in.", Toast.LENGTH_LONG);
+        }
+        final Fragment actFrag = this;
 
         if (getArguments() != null)
             mGameArray = getArguments().getBundle(GameArrayKey).getParcelableArrayList(GameArrayKey);

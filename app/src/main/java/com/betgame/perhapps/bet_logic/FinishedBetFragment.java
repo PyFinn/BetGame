@@ -1,4 +1,4 @@
-package com.betgame.app.bet_logic;
+package com.betgame.perhapps.bet_logic;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,9 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.betgame.app.Bet;
-import com.betgame.app.Game;
-import com.betgame.app.R;
+import com.betgame.perhapps.Bet;
+import com.betgame.perhapps.Game;
+import com.betgame.perhapps.R;
 
 public class FinishedBetFragment extends Fragment {
 

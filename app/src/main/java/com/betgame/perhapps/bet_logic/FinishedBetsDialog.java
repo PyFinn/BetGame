@@ -1,4 +1,4 @@
-package com.betgame.app.bet_logic;
+package com.betgame.perhapps.bet_logic;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -13,9 +13,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.betgame.app.Bet;
-import com.betgame.app.Game;
-import com.betgame.app.R;
+import com.betgame.perhapps.Bet;
+import com.betgame.perhapps.Game;
+import com.betgame.perhapps.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;

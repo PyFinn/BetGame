@@ -1,4 +1,4 @@
-package com.betgame.app;
+package com.betgame.perhapps;
 
 import android.content.Context;
 import androidx.test.InstrumentationRegistry;

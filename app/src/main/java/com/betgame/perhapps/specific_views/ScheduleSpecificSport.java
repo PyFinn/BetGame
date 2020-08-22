@@ -1,4 +1,4 @@
-package com.betgame.app.specific_views;
+package com.betgame.perhapps.specific_views;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,8 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.betgame.app.R;
-import com.betgame.app.recycler_view_adapters.ScheduleFragmentAdapter;
+import com.betgame.perhapps.R;
+import com.betgame.perhapps.recycler_view_adapters.ScheduleFragmentAdapter;
 
 import java.util.ArrayList;
 

@@ -13,26 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.betgame.app.recycler_view_adapters;
+package com.betgame.perhapps.recycler_view_adapters;
 
 import android.content.Context;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.betgame.app.Game;
-import com.betgame.app.R;
+import com.betgame.perhapps.Game;
+import com.betgame.perhapps.R;
 
 import java.util.ArrayList;
 
 
-public class GameCardsActivityAdapter extends RecyclerView.Adapter<GameCardsActivityAdapter.ForecastAdapterViewHolder> {
+public class UpcomingGamesAdapter extends RecyclerView.Adapter<UpcomingGamesAdapter.ForecastAdapterViewHolder> {
 
     private ArrayList<Game> mQueriedGames = new ArrayList<Game>();
     private Game[] mGameArray;
+    private boolean found1 = false;
+    private boolean found2 = false;
+    private boolean found3 = false;
 
     private final ForecastAdapterOnClickHandler mClickHandler;
 
@@ -49,7 +54,7 @@ public class GameCardsActivityAdapter extends RecyclerView.Adapter<GameCardsActi
      * @param clickHandler The on-click handler for this adapter. This single handler is called
      *                     when an item is clicked.
      */
-    public GameCardsActivityAdapter(ForecastAdapterOnClickHandler clickHandler) {
+    public UpcomingGamesAdapter(ForecastAdapterOnClickHandler clickHandler) {
         mClickHandler = clickHandler;
     }
 
@@ -65,6 +70,7 @@ public class GameCardsActivityAdapter extends RecyclerView.Adapter<GameCardsActi
         private final TextView mOddHomeTeamTextView;
         private final TextView mOddAwayTeamTextView;
         private final TextView mOddDrawTextView;
+        private final CardView wrappingCardView;
 
         public ForecastAdapterViewHolder(View view) {
             super(view);
@@ -76,6 +82,10 @@ public class GameCardsActivityAdapter extends RecyclerView.Adapter<GameCardsActi
             mOddHomeTeamTextView = (TextView) view.findViewById(R.id.tv_odd_home_team);
             mOddAwayTeamTextView = (TextView) view.findViewById(R.id.tv_odd_away_team);
             mOddDrawTextView = (TextView) view.findViewById(R.id.tv_odd_draw);
+            wrappingCardView = (CardView) view.findViewById(R.id.cv_game_wrapper);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            layoutParams.setMargins(0, 0, 0,0);
+            wrappingCardView.setLayoutParams(layoutParams);
             view.setOnClickListener(this);
         }
 
@@ -134,11 +144,7 @@ public class GameCardsActivityAdapter extends RecyclerView.Adapter<GameCardsActi
         forecastAdapterViewHolder.mLeagueTextView.setText(thisGame.getLeague());
         forecastAdapterViewHolder.mOddHomeTeamTextView.setText(thisGame.getOdd_home_team());
         forecastAdapterViewHolder.mOddAwayTeamTextView.setText(thisGame.getOdd_away_team());
-        if (Double.valueOf(thisGame.getOdd_draw()) != 0) {
-            forecastAdapterViewHolder.mOddDrawTextView.setText(thisGame.getOdd_draw());
-        } else {
-            forecastAdapterViewHolder.mOddDrawTextView.setVisibility(View.INVISIBLE);
-        }
+        forecastAdapterViewHolder.mOddDrawTextView.setText(thisGame.getOdd_draw());
     }
 
     /**
@@ -160,14 +166,21 @@ public class GameCardsActivityAdapter extends RecyclerView.Adapter<GameCardsActi
      *
      * The new weather data to be displayed.
      */
-    public void setWeatherData(ArrayList<Game> games, String gameTypeQuery, String leagueTypeQuery) {
+    public void setWeatherData(ArrayList<Game> games, long[] longList) {
         if (games == null){
             mGameArray = null;
         }else {
             for (Game game : games) {
-                if (!game.getStarted() && !game.getFinished()){
-                    if (game.getSports().equals(gameTypeQuery) && game.getLeague().equals(leagueTypeQuery)) {
-                        mQueriedGames.add(game);
+                for (int i = 0; i < longList.length; i++){
+                    long dateMS = game.getDateMS();
+                    if (dateMS == longList[i]) {
+                        if (mQueriedGames.size() >= 3){
+                            break;
+                        }
+                        else if (!game.getFinished()){
+                            mQueriedGames.add(game);
+                            break;
+                        }
                     }
                 }
             }
