@@ -230,7 +230,11 @@ public class HomeFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mDatabaseReference.removeEventListener(mBalanceEventListener);
+        try {
+            mDatabaseReference.removeEventListener(mBalanceEventListener);
+        } catch (NullPointerException e) {
+
+        }
     }
 
     @Override

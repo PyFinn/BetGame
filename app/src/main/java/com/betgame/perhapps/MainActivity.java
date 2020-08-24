@@ -2,7 +2,6 @@ package com.betgame.perhapps;
 
 import androidx.annotation.NonNull;
 
-import com.betgame.perhapps.R;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.fragment.app.Fragment;
@@ -93,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         } catch (NullPointerException e) {
-            Toast.makeText(this, "You are currently not signed in.", Toast.LENGTH_LONG);
+            Toast.makeText(this, "You are currently not signed in.", Toast.LENGTH_LONG).show();
         }
 
         final DatabaseReference mGamesChild = mGameDatabaseReference.child("games");
@@ -118,7 +117,8 @@ public class MainActivity extends AppCompatActivity {
                 games_upcoming[0] = largestA;
                 games_upcoming[1] = largestB;
                 games_upcoming[2] = largestC;
-                getSupportFragmentManager().beginTransaction().replace(R.id.sv_home_page, HomeFragment.newInstance(game_arr, mBetArray, games_upcoming, mFinishedGames)).commit();
+
+                getSupportFragmentManager().beginTransaction().replace(R.id.sv_home_page, HomeFragment.newInstance(game_arr, mBetArray, games_upcoming, mFinishedGames)).commitAllowingStateLoss();
             }
 
             @Override

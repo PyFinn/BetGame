@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.betgame.perhapps.R;
@@ -30,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 public class CashFragment extends Fragment implements View.OnClickListener {
     private RewardedAd rewardedVideoAd;
     private DatabaseReference mDatabaseReference;
+    private TextView tvLogout;
 
     private CardView mWacthAdForReward;
     private CardView mSpinWheel;
