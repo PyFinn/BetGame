@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.betgame.perhapps.Game;
 import com.betgame.perhapps.R;
 import com.betgame.perhapps.recycler_view_adapters.ActiveBetsAdapter;
+import com.r0adkll.slidr.Slidr;
+import com.r0adkll.slidr.model.SlidrInterface;
 
 import java.util.ArrayList;
 
@@ -18,12 +20,14 @@ public class ActiveBets extends AppCompatActivity implements ActiveBetsAdapter.F
     private ActiveBetsAdapter mActiveBetsAdapter;
     private ArrayList<Game> games;
     private ArrayList<String> idList;
+    private SlidrInterface slidr;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.explicit_view_active_bets);
 
+        slidr = Slidr.attach(this);
         games = getIntent().getParcelableArrayListExtra("ActiveBets");
         idList = getIntent().getStringArrayListExtra("IdList");
         rv_main = (RecyclerView) findViewById(R.id.act_bets_rv_main);

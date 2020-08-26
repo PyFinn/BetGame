@@ -19,6 +19,8 @@ import com.betgame.perhapps.recycler_view_adapters.GameCardsActivityAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.r0adkll.slidr.Slidr;
+import com.r0adkll.slidr.model.SlidrInterface;
 
 import java.util.ArrayList;
 
@@ -34,11 +36,12 @@ public class GamesForSport extends AppCompatActivity implements GameCardsActivit
     private DatabaseReference mDatabaseReferenceActiveBets;
     private ArrayList<String> mActiveBets;
     private TextView mNoGamesTextView;
+    private SlidrInterface slidr;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        slidr = Slidr.attach(this);
         mDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mDatabase.getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("balance");
         mDatabaseReferenceActiveBets = mDatabase.getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("active_bets");

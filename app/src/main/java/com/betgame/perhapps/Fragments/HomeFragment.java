@@ -23,6 +23,7 @@ import com.betgame.perhapps.Game;
 import com.betgame.perhapps.R;
 import com.betgame.perhapps.bet_logic.FinishedBetsDialog;
 import com.betgame.perhapps.bet_logic.ModalBottomSheet;
+import com.betgame.perhapps.gesture_detection.OnSwipeTouchListener;
 import com.betgame.perhapps.recycler_view_adapters.ActiveBetsAdapter;
 import com.betgame.perhapps.recycler_view_adapters.UpcomingGamesAdapter;
 import com.betgame.perhapps.specific_views.ActiveBets;
@@ -106,6 +107,24 @@ public class HomeFragment extends Fragment {
 
             }
         };
+
+        OnSwipeTouchListener tListener = new OnSwipeTouchListener(getContext()) {
+            public void onSwipeTop() {
+                Toast.makeText(getContext(), "Top", Toast.LENGTH_LONG).show();
+            }
+            public void onSwipeLeft() {
+                Toast.makeText(getContext(), "Left", Toast.LENGTH_LONG).show();
+            }
+            public void onSwipeBottom() {
+                Toast.makeText(getContext(), "Bottom", Toast.LENGTH_LONG).show();
+            }
+            public void onSwipeRight() {
+                Toast.makeText(getContext(), "Right", Toast.LENGTH_LONG).show();
+            }
+            };
+
+        myView.setOnTouchListener(tListener);
+
         try {
             mDatabaseReference = mDatabase.getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("balance");
             mDatabaseReference.addListenerForSingleValueEvent(mBalanceEventListener);

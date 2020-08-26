@@ -27,9 +27,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.betgame.perhapps.specific_views.ActiveBets"/>
-        <activity android:name="com.betgame.perhapps.specific_views.GamesForSport"/>
-        <activity android:name="com.betgame.perhapps.specific_views.LuckyWheel"/>
+        <activity android:name="com.betgame.perhapps.specific_views.ActiveBets"
+            android:theme="@style/AppTheme.SlidrActivityTheme"/>
+        <activity android:name="com.betgame.perhapps.specific_views.GamesForSport"
+            android:theme="@style/AppTheme.SlidrActivityTheme"/>
+        <activity android:name="com.betgame.perhapps.specific_views.LuckyWheel"
+            android:theme="@style/AppTheme.SlidrActivityTheme"/>
     </application>
 
 </manifest>

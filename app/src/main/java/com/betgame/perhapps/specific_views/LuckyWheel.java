@@ -18,11 +18,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.r0adkll.slidr.Slidr;
+import com.r0adkll.slidr.model.SlidrInterface;
 
 import java.util.Random;
 
 public class LuckyWheel extends AppCompatActivity {
     boolean mButtonRotation = true;
+    private SlidrInterface slidr;
     private static final float number = 30f;
     int mDegrees = 0, mOldDegrees = 0;
     Button mButtonStartWheel;
@@ -37,6 +40,7 @@ public class LuckyWheel extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().addFlags(1024);
         requestWindowFeature(1);
+        slidr = Slidr.attach(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lucky_wheel);
 
