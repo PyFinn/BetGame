@@ -117,8 +117,10 @@ public class MainActivity extends AppCompatActivity {
                 games_upcoming[0] = largestA;
                 games_upcoming[1] = largestB;
                 games_upcoming[2] = largestC;
-
-                getSupportFragmentManager().beginTransaction().replace(R.id.sv_home_page, HomeFragment.newInstance(game_arr, mBetArray, games_upcoming, mFinishedGames)).commitAllowingStateLoss();
+                try {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.sv_home_page, HomeFragment.newInstance(game_arr, mBetArray, games_upcoming, mFinishedGames)).commitAllowingStateLoss();
+                }catch (Exception e) {
+                }
             }
 
             @Override
