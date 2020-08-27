@@ -21,11 +21,6 @@
             android:value="true"/>
         <activity android:name="com.betgame.perhapps.MainActivity"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name="com.betgame.perhapps.specific_views.ActiveBets"
             android:theme="@style/AppTheme.SlidrActivityTheme"/>
@@ -33,6 +28,15 @@
             android:theme="@style/AppTheme.SlidrActivityTheme"/>
         <activity android:name="com.betgame.perhapps.specific_views.LuckyWheel"
             android:theme="@style/AppTheme.SlidrActivityTheme"/>
+        <activity android:name=".SplashScreen"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
