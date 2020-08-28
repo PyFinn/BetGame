@@ -5,7 +5,6 @@ import androidx.annotation.NonNull;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -47,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Game> mFinishedGames;
     ArrayList<Game> game_arr;
     private ArrayList<Bet> mBetArray = new ArrayList<>();
+    String tag = "Home";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,29 +176,42 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
             selectedFragment = null;
-            String tag = "Home";
+            String previousTag = null;
             switch (menuItem.getItemId()){
                 case R.id.nav_home:
                     selectedFragment = HomeFragment.newInstance(game_arr, mBetArray, games_upcoming, mFinishedGames);
+                    previousTag = tag;
                     tag = "Home";
                     break;
                 case R.id.nav_schedule:
                     selectedFragment = ScheduleFragment.newInstance(game_arr, games_bet_active);
+                    previousTag = tag;
                     tag = "Schedule";
                     break;
                 case R.id.nav_money:
                     selectedFragment = new CashFragment();
+                    previousTag = tag;
                     tag = "Cash";
                     break;
             }
-            /*if (!tag.equals("Cash")){
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
-                ft.replace(R.id.sv_home_page, selectedFragment);
-                ft.commitAllowingStateLoss();
-            }*/
-            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right, R.anim.slide_in_left, R.anim.slide_out_left).replace(R.id.sv_home_page, selectedFragment, tag)
-                    .commitAllowingStateLoss();
+            if (previousTag.equals("Schedule") && !tag.equals("Schedule")) {
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.sv_home_page, selectedFragment, tag)
+                        .commitAllowingStateLoss();
+            }
+            else if (previousTag.equals("Cash") && !tag.equals("Cash")) {
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right).replace(R.id.sv_home_page, selectedFragment, tag)
+                        .commitAllowingStateLoss();
+            }
+            else if (previousTag.equals("Home")) {
+                if (tag.equals("Schedule")){
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right).replace(R.id.sv_home_page, selectedFragment, tag)
+                            .commitAllowingStateLoss();
+                }
+                else if (tag.equals("Cash")) {
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.sv_home_page, selectedFragment, tag)
+                            .commitAllowingStateLoss();
+                }
+            }
             return true;
         }
     };
