@@ -68,7 +68,8 @@ public class ScheduleFragment extends Fragment implements ScheduleFragmentAdapte
         LeaguesFragment = ScheduleSpecificSport.newInstance(mGameArray, weatherForDay, mActiveBets);
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.addToBackStack(null);
+        ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
         ft.replace(R.id.sv_home_page, LeaguesFragment);
-        ft.commit();
+        ft.commitAllowingStateLoss();
     }
 }

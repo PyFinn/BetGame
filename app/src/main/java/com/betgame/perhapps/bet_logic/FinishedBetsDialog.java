@@ -66,7 +66,7 @@ public class FinishedBetsDialog extends AppCompatDialogFragment implements Finis
             FinishedBetFragment finishedBetFragment = FinishedBetFragment.newInstance(games[counter], bets[counter]);
             counter++;
             gamesLength = games.length;
-            transaction.replace(R.id.bet_payout_container, finishedBetFragment).commit();
+            transaction.replace(R.id.bet_payout_container, finishedBetFragment).commitAllowingStateLoss();
         } catch (ArrayIndexOutOfBoundsException e){
             dismiss();
         }
@@ -84,7 +84,7 @@ public class FinishedBetsDialog extends AppCompatDialogFragment implements Finis
         if (counter < gamesLength){
             FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
             FinishedBetFragment finishedBetFragment = FinishedBetFragment.newInstance(games[counter], bets[counter]);
-            transaction.replace(R.id.bet_payout_container, finishedBetFragment).commit();
+            transaction.replace(R.id.bet_payout_container, finishedBetFragment).commitAllowingStateLoss();
             counter++;
         }
         else {

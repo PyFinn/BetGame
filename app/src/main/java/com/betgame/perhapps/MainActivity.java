@@ -191,12 +191,14 @@ public class MainActivity extends AppCompatActivity {
                     tag = "Cash";
                     break;
             }
-            if (!tag.equals("Cash")){
+            /*if (!tag.equals("Cash")){
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
                 ft.replace(R.id.sv_home_page, selectedFragment);
-                ft.commit();
-            }
-            getSupportFragmentManager().beginTransaction().replace(R.id.sv_home_page, selectedFragment, tag).commit();
+                ft.commitAllowingStateLoss();
+            }*/
+            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right, R.anim.slide_in_left, R.anim.slide_out_left).replace(R.id.sv_home_page, selectedFragment, tag)
+                    .commitAllowingStateLoss();
             return true;
         }
     };
