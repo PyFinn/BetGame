@@ -2,6 +2,7 @@ package com.betgame.perhapps;
 
 import androidx.annotation.NonNull;
 
+import com.betgame.perhapps.bet_logic.ModalBottomSheet;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.fragment.app.Fragment;
@@ -30,7 +31,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ModalBottomSheet.BottomSheetListener {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mGameDatabaseReference;
     private DatabaseReference mUserActiveBetsReference;
@@ -47,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Game> game_arr;
     private ArrayList<Bet> mBetArray = new ArrayList<>();
     String tag = "Home";
+    private DatabaseReference mDatabaseReferenceActiveBets;
+    private DatabaseReference mBalanceReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,9 @@ public class MainActivity extends AppCompatActivity {
         mGameDatabaseReference = mFirebaseDatabase.getReference();
         mFirebaseAuth = FirebaseAuth.getInstance();
         mUsersChild = mGameDatabaseReference.child("users");
+        mDatabaseReferenceActiveBets = mFirebaseDatabase.getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("active_bets");
+        mBalanceReference = mFirebaseDatabase.getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("balance");
+
         try {
             mUserActiveBetsReference = mGameDatabaseReference.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("active_bets");
             mUserActiveBetsReference.addValueEventListener(new ValueEventListener() {
@@ -209,6 +215,10 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else if (tag.equals("Cash")) {
                     getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.sv_home_page, selectedFragment, tag)
+                            .commitAllowingStateLoss();
+                }
+                else {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.sv_home_page, selectedFragment, tag)
                             .commitAllowingStateLoss();
                 }
             }
@@ -376,7 +386,7 @@ public class MainActivity extends AppCompatActivity {
             games[counter].setYear(times[0]);
             games[counter].setDate(times[1] + "." + times[2]);
             games[counter].setTime(times[3] + ":" + times[4]);
-            if (!games[counter].getFinished()){
+            if (!games[counter].getStarted()){
                 gamesMS.add(createDateFromString(convertMe));
             }
             games[counter].setDateMS(createDateFromString(convertMe));
@@ -384,5 +394,18 @@ public class MainActivity extends AppCompatActivity {
             counter++;
         }
         return games;
+    }
+
+    @Override
+    public void onSubmitted(Bet bet, int balance) {
+        mBalanceReference.setValue(balance - bet.getAmount());
+        String key = mDatabaseReferenceActiveBets.child(bet.getId()).push().getKey();
+        mDatabaseReferenceActiveBets.child(bet.getId()).child(key).child("amount").setValue(bet.getAmount());
+        mDatabaseReferenceActiveBets.child(bet.getId()).child(key).child("team").setValue(bet.getTeam());
+        mDatabaseReferenceActiveBets.child(bet.getId()).child(key).child("odd").setValue(bet.getOdd());
+        mBetArray.add(bet);
+        Fragment homeAct = HomeFragment.newInstance(game_arr, mBetArray, games_upcoming, mFinishedGames);
+        getSupportFragmentManager().beginTransaction().replace(R.id.sv_home_page, homeAct)
+                .commitAllowingStateLoss();
     }
 }
