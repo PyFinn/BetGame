@@ -29,6 +29,7 @@ import android.widget.TextView;
 
 import com.betgame.perhapps.Game;
 import com.betgame.perhapps.R;
+import com.betgame.perhapps.databinding.HighlightActiveBetsRvItemBinding;
 
 import java.util.ArrayList;
 

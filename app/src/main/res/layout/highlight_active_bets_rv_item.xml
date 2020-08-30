@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+<androidx.cardview.widget.CardView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/outline_cardview">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/small_game_tv_home_team_name"
+            tools:text="Home Team"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/small_game_tv_time_match"
+            app:layout_constraintRight_toLeftOf="@id/small_game_tv_vs"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/small_game_tv_vs"
+            android:text="@string/vs"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/small_game_tv_home_team_name"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/small_game_tv_away_team_name"
+            tools:text="Away Team"
+            app:layout_constraintLeft_toRightOf="@id/small_game_tv_vs"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/small_game_tv_home_team_name"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/small_game_tv_date_match"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:text="21.07"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/small_game_tv_time_match"
+            app:layout_constraintLeft_toLeftOf="@id/small_game_tv_vs"
+            app:layout_constraintRight_toRightOf="@id/small_game_tv_vs"
+            app:layout_constraintTop_toBottomOf="@id/small_game_tv_date_match"
+            tools:text="15:30"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/small_game_tv_league_match"
+            app:layout_constraintTop_toBottomOf="@id/small_game_tv_vs"
+            app:layout_constraintLeft_toLeftOf="@id/small_game_tv_vs"
+            app:layout_constraintRight_toRightOf="@id/small_game_tv_vs"
+            tools:text="League"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black"
+            android:id="@+id/divider"
+            app:layout_constraintTop_toBottomOf="@id/small_game_tv_league_match"
+            android:layout_marginLeft="20sp"
+            android:layout_marginRight="20sp"
+            android:layout_marginTop="20sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/divider"
+            app:layout_constraintLeft_toLeftOf="@id/small_game_tv_home_team_name"
+            app:layout_constraintRight_toRightOf="@id/small_game_tv_home_team_name"
+            android:text="@string/active_bets_bet_amount"
+            android:layout_marginTop="20sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_bet_amount"
+            app:layout_constraintTop_toBottomOf="@id/divider"
+            app:layout_constraintLeft_toLeftOf="@id/small_game_tv_away_team_name"
+            app:layout_constraintRight_toRightOf="@id/small_game_tv_away_team_name"
+            tools:text="Bet Amount"
+            android:layout_marginTop="20sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/active_bets_team_selected"
+            app:layout_constraintLeft_toLeftOf="@id/small_game_tv_home_team_name"
+            app:layout_constraintRight_toRightOf="@id/small_game_tv_home_team_name"
+            app:layout_constraintTop_toTopOf="@id/tv_selected_team" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Selected Team"
+            android:id="@+id/tv_selected_team"
+            app:layout_constraintTop_toBottomOf="@id/tv_bet_amount"
+            app:layout_constraintLeft_toLeftOf="@id/small_game_tv_away_team_name"
+            app:layout_constraintRight_toRightOf="@id/small_game_tv_away_team_name"
+            android:layout_marginTop="10sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/active_bets_possible_revenue"
+            app:layout_constraintLeft_toLeftOf="@id/small_game_tv_home_team_name"
+            app:layout_constraintRight_toRightOf="@id/small_game_tv_home_team_name"
+            app:layout_constraintTop_toTopOf="@id/tv_possible_revenue"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Possible revenue"
+            android:id="@+id/tv_possible_revenue"
+            app:layout_constraintTop_toBottomOf="@id/tv_selected_team"
+            app:layout_constraintLeft_toLeftOf="@id/small_game_tv_away_team_name"
+            app:layout_constraintRight_toRightOf="@id/small_game_tv_away_team_name"
+            android:layout_marginTop="10sp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
+</layout>

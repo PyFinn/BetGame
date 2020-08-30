@@ -31,6 +31,9 @@
     <string name="no_games">There are no Games for this Event, please try again later.</string>
     <string name="splash_screen_welcome_msg">Free sports betting</string>
     <string name="splash_screen_title">BetGame</string>
+    <string name="active_bets_bet_amount">Amount placed:</string>
+    <string name="active_bets_team_selected">Selected team:</string>
+    <string name="active_bets_possible_revenue">Possible revenue:</string>
     <string-array name="football_leagues" >
         <item>Bundesliga</item>
         <item>Premier League</item>
