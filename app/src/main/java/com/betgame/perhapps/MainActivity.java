@@ -5,11 +5,16 @@ import androidx.annotation.NonNull;
 import com.betgame.perhapps.bet_logic.ModalBottomSheet;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.betgame.perhapps.Fragments.CashFragment;
@@ -38,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements ModalBottomSheet.
     private DatabaseReference mUsersChild;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mStateListener;
+    private TextView tv_amount;
     Fragment selectedFragment;
     BottomNavigationView bnbMain;
     private ArrayList<String> games_bet_active;
@@ -50,17 +56,51 @@ public class MainActivity extends AppCompatActivity implements ModalBottomSheet.
     String tag = "Home";
     private DatabaseReference mDatabaseReferenceActiveBets;
     private DatabaseReference mBalanceReference;
+    private ValueEventListener mBalanceEventListener;
+    public static int mBalance = 0;
+    public static boolean loadedBalance = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Toolbar toolbar = findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
+
+        tv_amount = (TextView) findViewById(R.id.tv_balance_display);
+
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mGameDatabaseReference = mFirebaseDatabase.getReference();
         mFirebaseAuth = FirebaseAuth.getInstance();
         mUsersChild = mGameDatabaseReference.child("users");
         mDatabaseReferenceActiveBets = mFirebaseDatabase.getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("active_bets");
         mBalanceReference = mFirebaseDatabase.getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("balance");
+
+        mBalanceEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                long dataSnap = 0;
+                try {
+                    dataSnap = (long) snapshot.getValue();
+                } catch (Exception e) {}
+                mBalance = (int) dataSnap;
+                String balance = "" + mBalance + getString(R.string.dollar_sign);
+                tv_amount.setText(balance);
+                loadedBalance = true;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+
+        try {
+            mBalanceReference.addValueEventListener(mBalanceEventListener);
+        } catch (NullPointerException e) {
+            Toast.makeText(this, "You are currently not signed in.", Toast.LENGTH_LONG).show();
+        }
 
         try {
             mUserActiveBetsReference = mGameDatabaseReference.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("active_bets");

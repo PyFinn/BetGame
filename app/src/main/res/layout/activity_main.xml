@@ -7,11 +7,13 @@
     tools:context="com.betgame.perhapps.MainActivity"
     android:background="@drawable/background_main"
     android:orientation="vertical">
+    <include android:id="@+id/main_toolbar"
+        layout="@layout/toolbar_main" />
     <FrameLayout
         android:id="@+id/sv_home_page"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_below="@id/main_toolbar"
         android:layout_above="@id/bottom_navigation_bar">
     </FrameLayout>
     <com.google.android.material.bottomnavigation.BottomNavigationView

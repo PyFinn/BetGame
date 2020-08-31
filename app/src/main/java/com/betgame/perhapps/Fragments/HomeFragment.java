@@ -16,22 +16,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.betgame.perhapps.Bet;
 import com.betgame.perhapps.Game;
+import com.betgame.perhapps.MainActivity;
 import com.betgame.perhapps.R;
 import com.betgame.perhapps.bet_logic.FinishedBetsDialog;
 import com.betgame.perhapps.bet_logic.ModalBottomSheet;
 import com.betgame.perhapps.recycler_view_adapters.ActiveBetsAdapter;
 import com.betgame.perhapps.recycler_view_adapters.UpcomingGamesAdapter;
 import com.betgame.perhapps.specific_views.ActiveBets;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -48,18 +42,13 @@ public class HomeFragment extends Fragment {
     private ArrayList<Game> mGameArray;
     private ArrayList<String> mActiveBetsString = new ArrayList<>();
     private long[] dateMSList;
-    private TextView mBalanceDisplay;
-    private int mBalance = 0;
-    private FirebaseDatabase mDatabase;
-    private DatabaseReference mDatabaseReference;
-    private ValueEventListener mBalanceEventListener;
     private ArrayList<Game> mFinishedGameArray;
     private ArrayList<Game> mActveFinishedGameArray = new ArrayList<>();
     private ArrayList<Bet> mActiveFinsihedGameArray2 = new ArrayList<>();
-    private ProgressBar mProgressActiveBets;
     private TextView mNoBetsPlacedTextView;
     private TextView mSeeAllTextView;
     private boolean claimedAllRewards = false;
+    private static ProgressBar mProgressActiveBets;
 
     public static HomeFragment newInstance(ArrayList<Game> games, ArrayList<Bet> activeBets, long[] dateMSList, ArrayList<Game> finishedGames) {
         HomeFragment fragment = new HomeFragment();
@@ -86,33 +75,8 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View myView = inflater.inflate(R.layout.fragment_home, container, false);
 
-        mDatabase = FirebaseDatabase.getInstance();
-        mBalanceEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                long dataSnap = 0;
-                try {
-                    dataSnap = (long) snapshot.getValue();
-                } catch (Exception e) {
+        mProgressActiveBets = (ProgressBar) myView.findViewById(R.id.progress_bar_active_bets);
 
-                }
-                mBalance = (int) dataSnap;
-                mBalanceDisplay.setText(String.valueOf(mBalance));
-                mProgressActiveBets.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        };
-
-        try {
-            mDatabaseReference = mDatabase.getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("balance");
-            mDatabaseReference.addListenerForSingleValueEvent(mBalanceEventListener);
-        } catch (NullPointerException e) {
-            Toast.makeText(getContext(), "You are currently not signed in.", Toast.LENGTH_LONG);
-        }
         final Fragment actFrag = this;
 
         if (getArguments() != null)
@@ -138,20 +102,18 @@ public class HomeFragment extends Fragment {
         if (!claimedAllRewards && mActveFinishedGameArray != null){
             Game[] gamesToPass = mActveFinishedGameArray.toArray(new Game[mActveFinishedGameArray.size()]);
             Bet[] betToPass = mActiveFinsihedGameArray2.toArray(new Bet[mActiveFinsihedGameArray2.size()]);
-            FinishedBetsDialog finishedBetsDialog = FinishedBetsDialog.newInstance(gamesToPass, betToPass, mBalance);
+            FinishedBetsDialog finishedBetsDialog = FinishedBetsDialog.newInstance(gamesToPass, betToPass, MainActivity.mBalance);
             if (getFragmentManager() != null){
                 finishedBetsDialog.setTargetFragment(actFrag, 1);
                 finishedBetsDialog.show(getFragmentManager(), "Finished Bet Dialog");
             }
         }
 
-        mBalanceDisplay = (TextView) myView.findViewById(R.id.home_balance_display);
         mSeeAllTextView = (TextView) myView.findViewById(R.id.tv_see_all_home_fragment);
 
         // First RecyclerView ActiveBets
 
         rv_active_bets = (RecyclerView) myView.findViewById(R.id.rv_active_bets);
-        mProgressActiveBets = (ProgressBar) myView.findViewById(R.id.progress_bar_active_bets);
         mNoBetsPlacedTextView = (TextView) myView.findViewById(R.id.no_bets_placed);
         LinearLayoutManager active_bets_layout_manager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL,false);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rv_active_bets.getContext(), active_bets_layout_manager.getOrientation());
@@ -216,6 +178,10 @@ public class HomeFragment extends Fragment {
         rv_upcoming_games.setAdapter(mUpcomingGamesAdapter);
         mUpcomingGamesAdapter.setWeatherData(mGameArray, dateMSList);
 
+        if (MainActivity.loadedBalance) {
+            mProgressActiveBets.setVisibility(View.INVISIBLE);
+        }
+
         CardView cv_active_bets = (CardView) myView.findViewById(R.id.cv_active_bets);
         CardView cv_upcoming_matches = (CardView) myView.findViewById(R.id.cv_upcoming_games);
         cv_active_bets.setOnClickListener(new View.OnClickListener() {
@@ -226,16 +192,6 @@ public class HomeFragment extends Fragment {
             }
         });
         return myView;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        try {
-            mDatabaseReference.removeEventListener(mBalanceEventListener);
-        } catch (NullPointerException e) {
-
-        }
     }
 
     @Override
