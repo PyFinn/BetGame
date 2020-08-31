@@ -3,6 +3,7 @@ package com.betgame.perhapps;
 import androidx.annotation.NonNull;
 
 import com.betgame.perhapps.bet_logic.ModalBottomSheet;
+import com.betgame.perhapps.specific_views.Profile;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -10,10 +11,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements ModalBottomSheet.
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mStateListener;
     private TextView tv_amount;
+    private ImageView iv_profile_icon;
     Fragment selectedFragment;
     BottomNavigationView bnbMain;
     private ArrayList<String> games_bet_active;
@@ -69,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements ModalBottomSheet.
         setSupportActionBar(toolbar);
 
         tv_amount = (TextView) findViewById(R.id.tv_balance_display);
+        iv_profile_icon = (ImageView) findViewById(R.id.iv_profile_icon);
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mGameDatabaseReference = mFirebaseDatabase.getReference();
@@ -214,6 +219,14 @@ public class MainActivity extends AppCompatActivity implements ModalBottomSheet.
                 }
             }
         };
+
+        iv_profile_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent profileIntent = new Intent(MainActivity.this, Profile.class);
+                startActivity(profileIntent);
+            }
+        });
 
     }
 

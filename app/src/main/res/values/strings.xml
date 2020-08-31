@@ -18,7 +18,6 @@
     <string name="back_button_bet_activity">Back</string>
     <string name="bet_placed">Bet placed</string>
     <string name="draw">Draw</string>
-    <string name="balance">Balance:</string>
     <string name="finished_bet">Finished Bet</string>
     <string name="claim_reward">Claim</string>
     <string name="your_reward">Your Reward:</string>
@@ -35,6 +34,10 @@
     <string name="active_bets_team_selected">Selected team:</string>
     <string name="active_bets_possible_revenue">Possible revenue:</string>
     <string name="dollar_sign">$</string>
+    <string name="go_back">Back</string>
+    <string name="username">Username:</string>
+    <string name="email">E-Mail:</string>
+    <string name="balance">Balance:</string>
     <string-array name="football_leagues" >
         <item>Bundesliga</item>
         <item>Premier League</item>
