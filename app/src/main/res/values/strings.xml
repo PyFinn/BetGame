@@ -38,6 +38,17 @@
     <string name="username">Username:</string>
     <string name="email">E-Mail:</string>
     <string name="balance">Balance:</string>
+    <string name="sign_out">Sign out</string>
+    <string name="bet_game">BetGame</string>
+    <string name="profile">My Profile</string>
+    <string name="create_account">Create Account</string>
+    <string name="guest">Guest</string>
+    <string name="cancel">Cancel</string>
+    <string name="create">Create Account</string>
+    <string name="new_account">New Account</string>
+    <string name="create_email">E-Mail:</string>
+    <string name="password">Password:</string>
+    <string name="guest_message">Seems like you are still registered as a Guest. If you´d like to enjoy the full experience of BetGame, create a free Account:</string>
     <string-array name="football_leagues" >
         <item>Bundesliga</item>
         <item>Premier League</item>

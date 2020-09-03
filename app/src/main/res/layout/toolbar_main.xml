@@ -12,6 +12,20 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="@string/bet_game"
+            android:textColor="@color/colorInnerCards"
+            android:textSize="35sp"
+            android:fontFamily="@font/roboto_bolditalic"
+            android:elevation="4sp"
+
+            android:shadowRadius="4"
+            android:shadowColor="@color/black"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/tv_balance_display"
             app:layout_constraintRight_toLeftOf="@id/iv_profile_icon"
             app:layout_constraintTop_toTopOf="parent"

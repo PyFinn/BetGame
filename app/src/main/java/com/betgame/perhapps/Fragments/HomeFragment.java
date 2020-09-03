@@ -105,7 +105,11 @@ public class HomeFragment extends Fragment {
             FinishedBetsDialog finishedBetsDialog = FinishedBetsDialog.newInstance(gamesToPass, betToPass, MainActivity.mBalance);
             if (getFragmentManager() != null){
                 finishedBetsDialog.setTargetFragment(actFrag, 1);
-                finishedBetsDialog.show(getFragmentManager(), "Finished Bet Dialog");
+                try {
+                finishedBetsDialog.show(getFragmentManager(), "Finished Bet Dialog");}
+                catch (IllegalStateException e) {
+
+                }
             }
         }
 

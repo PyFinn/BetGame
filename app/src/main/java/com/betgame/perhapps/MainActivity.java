@@ -63,6 +63,10 @@ public class MainActivity extends AppCompatActivity implements ModalBottomSheet.
     private ValueEventListener mBalanceEventListener;
     public static int mBalance = 0;
     public static boolean loadedBalance = false;
+    private String userName;
+    private String userMail;
+    private boolean gotGuestUserName = false;
+    private String guestUserName = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -190,6 +194,10 @@ public class MainActivity extends AppCompatActivity implements ModalBottomSheet.
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null){
                     final String uid = user.getUid();
+                    if (!guestUserName.equals("")) {
+                    }
+                    userName = user.getDisplayName();
+                    userMail = user.getEmail();
                     mUsersChild.child(uid).child("balance").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -224,6 +232,9 @@ public class MainActivity extends AppCompatActivity implements ModalBottomSheet.
             @Override
             public void onClick(View view) {
                 Intent profileIntent = new Intent(MainActivity.this, Profile.class);
+                profileIntent.putExtra("Name", userName);
+                profileIntent.putExtra("Mail", userMail);
+                profileIntent.putExtra("Balance", mBalance);
                 startActivity(profileIntent);
             }
         });
