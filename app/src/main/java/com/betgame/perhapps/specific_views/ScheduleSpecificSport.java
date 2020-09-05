@@ -13,10 +13,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.betgame.perhapps.Fragments.ScheduleFragment;
+import com.betgame.perhapps.Game;
 import com.betgame.perhapps.R;
 import com.betgame.perhapps.recycler_view_adapters.ScheduleFragmentAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class ScheduleSpecificSport extends Fragment implements ScheduleFragmentAdapter.ForecastAdapterOnClickHandler{
@@ -28,7 +32,7 @@ public class ScheduleSpecificSport extends Fragment implements ScheduleFragmentA
     private ArrayList<String> mActiveBets;
     private ArrayList<Parcelable> mGameArray;
     private String mSportType;
-    private String[] leagues;
+    private Map<String, Integer> mSportTypes;
 
     public static ScheduleSpecificSport newInstance(ArrayList<Parcelable> games, String selectedSports, ArrayList<String> activeBets) {
         ScheduleSpecificSport fragment = new ScheduleSpecificSport();
@@ -58,17 +62,27 @@ public class ScheduleSpecificSport extends Fragment implements ScheduleFragmentA
         mRvAdapter = new ScheduleFragmentAdapter(this);
         rv_explicit_sports_display.setAdapter(mRvAdapter);
 
-        switch (mSportType){
-            case "Soccer":
-                leagues = getResources().getStringArray(R.array.football_leagues);
-                break;
-            case "Basketball":
-                leagues = getResources().getStringArray(R.array.basketball_leagues);
-                break;
-            case "American Football":
-                leagues = getResources().getStringArray(R.array.american_football_leagues);
+        mSportTypes = new HashMap<>();
+
+        if (mGameArray != null) {
+            for (Parcelable game : mGameArray) {
+                Game thisGame = (Game) game;
+                String gameType = thisGame.getLeague();
+                if (thisGame.getSports().equals(mSportType)) {
+                    if (!ScheduleFragment.isAlreadyInList(gameType, mSportTypes) && !thisGame.getStarted()) {
+                        mSportTypes.put(gameType, 1);
+                    }
+                    Integer newNum = 0;
+                    try {
+                        newNum = mSportTypes.get(gameType) + 1;
+                    } catch (Exception e) {
+                    }
+                    mSportTypes.put(gameType, newNum);
+                }
+            }
         }
-        mRvAdapter.setWeatherData(leagues);
+
+        mRvAdapter.setWeatherData(mSportTypes);
         return myView;
     }
 

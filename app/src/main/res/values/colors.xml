@@ -11,4 +11,5 @@
     <color name="oddDrawBackground">#D0EB94</color>
     <color name="black">#000000</color>
     <color name="grey">#BEBEBE</color>
+    <color name="transparent">#660073A8</color>
 </resources>

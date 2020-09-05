@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.betgame.perhapps.R;
 import com.betgame.perhapps.specific_views.LuckyWheel;
+import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
 import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewarded.RewardedAd;
@@ -68,6 +69,24 @@ public class CashFragment extends Fragment implements View.OnClickListener {
         return myView;
     }
 
+    public RewardedAd createAndLoadRewardedAd() {
+        RewardedAd rewardedAd = new RewardedAd(getContext(),
+                "ca-app-pub-8505961705640879/6973071148");
+        RewardedAdLoadCallback adLoadCallback = new RewardedAdLoadCallback() {
+            @Override
+            public void onRewardedAdLoaded() {
+                // Ad successfully loaded.
+            }
+
+            @Override
+            public void onRewardedAdFailedToLoad(LoadAdError adError) {
+                // Ad failed to load.
+            }
+        };
+        rewardedAd.loadAd(new PublisherAdRequest.Builder().build(), adLoadCallback);
+        return rewardedAd;
+    }
+
     @Override
     public void onClick(View v) {
         if (rewardedVideoAd.isLoaded()){
@@ -95,6 +114,11 @@ public class CashFragment extends Fragment implements View.OnClickListener {
                 @Override
                 public void onRewardedAdFailedToShow(int i) {
                     Toast.makeText(getContext(), "Failed to show Ad", Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onRewardedAdClosed() {
+                    rewardedVideoAd = createAndLoadRewardedAd();
                 }
             };
             rewardedVideoAd.show(getActivity(), callback);

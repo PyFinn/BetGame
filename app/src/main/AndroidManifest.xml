@@ -38,6 +38,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".specific_views.Profile" />
+        <activity android:name=".walkthrough.Walkthrough"
+            android:exported="true" />
     </application>
 
 </manifest>

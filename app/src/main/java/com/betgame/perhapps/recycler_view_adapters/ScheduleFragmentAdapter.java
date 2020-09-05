@@ -25,10 +25,14 @@ import android.widget.TextView;
 
 import com.betgame.perhapps.R;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 
 public class ScheduleFragmentAdapter extends RecyclerView.Adapter<ScheduleFragmentAdapter.ForecastAdapterViewHolder> {
 
-    private String[] mWeatherData;
+    private ArrayList<String> mWeatherData;
+    private ArrayList<Integer> mCountGames;
 
     private final ForecastAdapterOnClickHandler mClickHandler;
 
@@ -54,10 +58,12 @@ public class ScheduleFragmentAdapter extends RecyclerView.Adapter<ScheduleFragme
      */
     public class ForecastAdapterViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
         public final TextView mWeatherTextView;
+        private final TextView mGameCount;
 
         public ForecastAdapterViewHolder(View view) {
             super(view);
             mWeatherTextView = (TextView) view.findViewById(R.id.tv_schedule_fragment);
+            mGameCount = (TextView) view.findViewById(R.id.tv_game_count);
             view.setOnClickListener(this);
         }
 
@@ -69,7 +75,7 @@ public class ScheduleFragmentAdapter extends RecyclerView.Adapter<ScheduleFragme
         @Override
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
-            String weatherForDay = mWeatherData[adapterPosition];
+            String weatherForDay = mWeatherData.get(adapterPosition);
             mClickHandler.onClick(weatherForDay);
         }
     }
@@ -108,8 +114,9 @@ public class ScheduleFragmentAdapter extends RecyclerView.Adapter<ScheduleFragme
      */
     @Override
     public void onBindViewHolder(ForecastAdapterViewHolder forecastAdapterViewHolder, int position) {
-        String weatherForThisDay = mWeatherData[position];
+        String weatherForThisDay = mWeatherData.get(position);
         forecastAdapterViewHolder.mWeatherTextView.setText(weatherForThisDay);
+        forecastAdapterViewHolder.mGameCount.setText(String.valueOf(mCountGames.get(position)));
     }
 
     /**
@@ -121,7 +128,7 @@ public class ScheduleFragmentAdapter extends RecyclerView.Adapter<ScheduleFragme
     @Override
     public int getItemCount() {
         if (null == mWeatherData) return 0;
-        return mWeatherData.length;
+        return mWeatherData.size();
     }
 
     /**
@@ -129,10 +136,18 @@ public class ScheduleFragmentAdapter extends RecyclerView.Adapter<ScheduleFragme
      * created one. This is handy when we get new data from the web but don't want to create a
      * new ForecastAdapter to display it.
      *
-     * @param weatherData The new weather data to be displayed.
      */
-    public void setWeatherData(String[] weatherData) {
+    public void setWeatherData(Map<String, Integer> gameMap) {
+        ArrayList<String> weatherData = new ArrayList<>();
+        ArrayList<Integer> counts = new ArrayList<>();
+
+        for (Map.Entry<String, Integer> element : gameMap.entrySet()) {
+            weatherData.add(element.getKey());
+            counts.add(element.getValue());
+        }
+
         mWeatherData = weatherData;
+        mCountGames = counts;
         notifyDataSetChanged();
     }
 }

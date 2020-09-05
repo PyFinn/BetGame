@@ -18,6 +18,8 @@ import com.betgame.perhapps.recycler_view_adapters.ScheduleFragmentAdapter;
 import com.betgame.perhapps.specific_views.ScheduleSpecificSport;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ScheduleFragment extends Fragment implements ScheduleFragmentAdapter.ForecastAdapterOnClickHandler {
     private RecyclerView rv_schedule_fragment;
@@ -26,7 +28,8 @@ public class ScheduleFragment extends Fragment implements ScheduleFragmentAdapte
     private ArrayList<String> mActiveBets;
     private static final String GameArrayKey = "GameArray";
     private static final String ActiveBetsKey = "ActiveBets";
-    Fragment LeaguesFragment;
+    private Map<String, Integer> mSportTypes;
+    private Fragment LeaguesFragment;
 
     public static ScheduleFragment newInstance(ArrayList<Game> games, ArrayList<String> activeBets) {
         ScheduleFragment fragment = new ScheduleFragment();
@@ -49,16 +52,26 @@ public class ScheduleFragment extends Fragment implements ScheduleFragmentAdapte
         rv_schedule_fragment.setHasFixedSize(true);
         mScheduleFragmentAdapter = new ScheduleFragmentAdapter(this);
         rv_schedule_fragment.setAdapter(mScheduleFragmentAdapter);
-        String[] strings = {
-                "Soccer",
-                "Basketball",
-                "American Football",
-                "Tennis",
-                "Volleyball",
-                "Baseball",
-                "Icehockey"
-        };
-        mScheduleFragmentAdapter.setWeatherData(strings);
+
+        mSportTypes = new HashMap<>();
+
+        if (mGameArray != null){
+            for (Parcelable game : mGameArray) {
+                Game thisGame = (Game) game;
+                String gameType = thisGame.getSports();
+                if (!isAlreadyInList(gameType, mSportTypes) && !thisGame.getStarted()){
+                    mSportTypes.put(gameType, 1);
+                }
+                Integer newNum = 0;
+                try {
+                    newNum = mSportTypes.get(gameType) + 1;
+                } catch (Exception e) {
+                }
+                mSportTypes.put(gameType, newNum);
+            }
+        }
+
+        mScheduleFragmentAdapter.setWeatherData(mSportTypes);
 
         return myView;
     }
@@ -71,5 +84,14 @@ public class ScheduleFragment extends Fragment implements ScheduleFragmentAdapte
         ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
         ft.replace(R.id.sv_home_page, LeaguesFragment);
         ft.commitAllowingStateLoss();
+    }
+
+    public static boolean isAlreadyInList(String value, Map<String, Integer> toCheck) {
+        for (Map.Entry<String, Integer> entry : toCheck.entrySet()) {
+            if (entry.getKey().equals(value)){
+                return true;
+            }
+        }
+        return false;
     }
 }

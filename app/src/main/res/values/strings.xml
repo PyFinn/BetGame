@@ -26,7 +26,7 @@
     <string name="ad_reward">+100$</string>
     <string name="all_active_bets">All active bets</string>
     <string name="spin">Daily Spin</string>
-    <string name="daily_spin">Spin the lucky wheel for nice rewards</string>
+    <string name="daily_spin">Spin the lucky wheel</string>
     <string name="no_games">There are no Games for this Event, please try again later.</string>
     <string name="splash_screen_welcome_msg">Free sports betting</string>
     <string name="splash_screen_title">BetGame</string>
@@ -49,6 +49,16 @@
     <string name="create_email">E-Mail:</string>
     <string name="password">Password:</string>
     <string name="guest_message">Seems like you are still registered as a Guest. If you´d like to enjoy the full experience of BetGame, create a free Account:</string>
+    <string name="welcome_to_bet_game">Welcome to BetGame!</string>
+    <string name="bet_on_real_events">Bet on Real Events</string>
+    <string name="grow_your_balance">Grow your Balance</string>
+    <string name="get_started_funds">Starting Bonus</string>
+    <string name="welcome_screen_text">This Application allows you to bet on many different real sports events! In the next screens you will get some useful instructions to use BetGame properly.</string>
+    <string name="real_events_text">Placeholder</string>
+    <string name="grow_balance_text">Placeholder</string>
+    <string name="start_funds_text">Placeholder</string>
+    <string name="next">Next</string>
+    <string name="skip">Skip</string>
     <string-array name="football_leagues" >
         <item>Bundesliga</item>
         <item>Premier League</item>
