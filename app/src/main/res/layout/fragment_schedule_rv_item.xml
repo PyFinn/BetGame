@@ -28,6 +28,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/tv_schedule_fragment"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginRight="20sp"
             android:textSize="30sp"
             android:textColor="@color/colorInnerCards"
             android:fontFamily="@font/roboto_medium"/>

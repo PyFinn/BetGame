@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -34,15 +35,15 @@ public class CashFragment extends Fragment implements View.OnClickListener {
     private DatabaseReference mDatabaseReference;
     private TextView tvLogout;
 
-    private CardView mWacthAdForReward;
-    private CardView mSpinWheel;
+    private ConstraintLayout mWacthAdForReward;
+    private ConstraintLayout mSpinWheel;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View myView = inflater.inflate(R.layout.fragment_cash, container, false);
-        mWacthAdForReward = (CardView) myView.findViewById(R.id.card_view_watch_ad);
-        mSpinWheel = (CardView) myView.findViewById(R.id.card_view_daily_spin);
+        mWacthAdForReward = (ConstraintLayout) myView.findViewById(R.id.card_view_watch_ad);
+        mSpinWheel = (ConstraintLayout) myView.findViewById(R.id.card_view_daily_spin);
         FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(mUser.getUid()).child("balance");
         mWacthAdForReward.setOnClickListener(this);

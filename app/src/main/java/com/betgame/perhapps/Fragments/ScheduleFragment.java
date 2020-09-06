@@ -59,15 +59,17 @@ public class ScheduleFragment extends Fragment implements ScheduleFragmentAdapte
             for (Parcelable game : mGameArray) {
                 Game thisGame = (Game) game;
                 String gameType = thisGame.getSports();
-                if (!isAlreadyInList(gameType, mSportTypes) && !thisGame.getStarted()){
-                    mSportTypes.put(gameType, 1);
+                if (!thisGame.getStarted()) {
+                    if (!isAlreadyInList(gameType, mSportTypes)) {
+                        mSportTypes.put(gameType, 0);
+                    }
+                    Integer newNum = 0;
+                    try {
+                        newNum = mSportTypes.get(gameType) + 1;
+                    } catch (Exception e) {
+                    }
+                    mSportTypes.put(gameType, newNum);
                 }
-                Integer newNum = 0;
-                try {
-                    newNum = mSportTypes.get(gameType) + 1;
-                } catch (Exception e) {
-                }
-                mSportTypes.put(gameType, newNum);
             }
         }
 

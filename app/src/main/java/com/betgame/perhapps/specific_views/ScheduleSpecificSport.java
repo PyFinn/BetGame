@@ -68,16 +68,18 @@ public class ScheduleSpecificSport extends Fragment implements ScheduleFragmentA
             for (Parcelable game : mGameArray) {
                 Game thisGame = (Game) game;
                 String gameType = thisGame.getLeague();
-                if (thisGame.getSports().equals(mSportType)) {
-                    if (!ScheduleFragment.isAlreadyInList(gameType, mSportTypes) && !thisGame.getStarted()) {
-                        mSportTypes.put(gameType, 1);
+                if (!thisGame.getStarted()) {
+                    if (thisGame.getSports().equals(mSportType)) {
+                        if (!ScheduleFragment.isAlreadyInList(gameType, mSportTypes)) {
+                            mSportTypes.put(gameType, 0);
+                        }
+                        Integer newNum = 0;
+                        try {
+                            newNum = mSportTypes.get(gameType) + 1;
+                        } catch (Exception e) {
+                        }
+                        mSportTypes.put(gameType, newNum);
                     }
-                    Integer newNum = 0;
-                    try {
-                        newNum = mSportTypes.get(gameType) + 1;
-                    } catch (Exception e) {
-                    }
-                    mSportTypes.put(gameType, newNum);
                 }
             }
         }
