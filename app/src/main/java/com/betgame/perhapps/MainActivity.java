@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -75,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements ModalBottomSheet.
 
         Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
+
 
         tv_amount = (TextView) findViewById(R.id.tv_balance_display);
         iv_profile_icon = (ImageView) findViewById(R.id.iv_profile_icon);
@@ -176,6 +176,7 @@ public class MainActivity extends AppCompatActivity implements ModalBottomSheet.
                     getSupportFragmentManager().beginTransaction().replace(R.id.sv_home_page, HomeFragment.newInstance(game_arr, mBetArray, games_upcoming, mFinishedGames)).commitAllowingStateLoss();
                 }catch (Exception e) {
                 }
+                Toast.makeText(getApplicationContext(), String.valueOf(SplashScreen.mServerTime), Toast.LENGTH_LONG).show();
             }
 
             @Override

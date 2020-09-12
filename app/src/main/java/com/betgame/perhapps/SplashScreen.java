@@ -15,6 +15,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -22,6 +24,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.functions.FirebaseFunctions;
+import com.google.firebase.functions.HttpsCallableResult;
+
 
 import java.util.Arrays;
 
@@ -32,6 +37,8 @@ public class SplashScreen extends AppCompatActivity {
     ImageView logo, text;
     TextView subText;
     AsyncTask<?,?,?> task;
+    private FirebaseFunctions mFunctions;
+    public static long mServerTime = 0;
 
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mGameDatabaseReference;
@@ -44,6 +51,19 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        mFunctions = FirebaseFunctions.getInstance();
+        Task mTimeReference = mFunctions.getHttpsCallable("getTime").call()
+                .addOnSuccessListener(new OnSuccessListener<HttpsCallableResult>() {
+                    @Override
+                    public void onSuccess(HttpsCallableResult httpsCallableResult) {
+                        try {
+                            mServerTime = (Long) httpsCallableResult.getData();
+                        } catch (NullPointerException e) {
+                            mServerTime = 0;
+                        }
+                    }
+                });
 
         logo = (ImageView) findViewById(R.id.icon);
         text = (ImageView) findViewById(R.id.slogan);

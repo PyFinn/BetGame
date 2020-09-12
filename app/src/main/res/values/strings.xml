@@ -59,23 +59,26 @@
     <string name="start_funds_text">Placeholder</string>
     <string name="next">Next</string>
     <string name="skip">Skip</string>
-    <string-array name="football_leagues" >
-        <item>Bundesliga</item>
-        <item>Premier League</item>
-        <item>La Liga</item>
-        <item>Ligue 1</item>
-        <item>Swiss League</item>
-        <item>Liga NOS</item>
-        <item>Serie A</item>
-        <item>Champions League</item>
-        <item>Europa League</item>
+    <string-array name="daily_challenges">
+        <item>Watch one Ad</item>
+        <item>Place one Bet</item>
+        <item>Place two Bets</item>
+        <item>Earn 500$</item>
+        <item>Earn 100$</item>
+        <item>Earn 200$</item>
+        <item>Place three Bets</item>
+        <item>Spin the Lucky Wheel</item>
+        <item>Watch two Ads</item>
     </string-array>
-    <string-array name="basketball_leagues">
-        <item>NBA</item>
-        <item>German Bundesliga</item>
-        <item>Liga ACB</item>
-    </string-array>
-    <string-array name="american_football_leagues">
-        <item>NFL</item>
+    <string-array name="weekly_challenges">
+        <item>Place 5 Bets</item>
+        <item>Win 1 Bet</item>
+        <item>Win 2 Bets</item>
+        <item>Win 3 Bets</item>
+        <item>Earn 500$</item>
+        <item>Earn 600$</item>
+        <item>Earn 1000$</item>
+        <item>Earn 750$</item>
+        <item>Spin the Lucky Wheel 5 times</item>
     </string-array>
 </resources>
