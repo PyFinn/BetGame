@@ -28,7 +28,7 @@
             android:theme="@style/AppTheme.SlidrActivityTheme"/>
         <activity android:name="com.betgame.perhapps.specific_views.LuckyWheel"
             android:theme="@style/AppTheme.SlidrActivityTheme"/>
-        <activity android:name=".SplashScreen"
+        <activity android:name="com.betgame.perhapps.SplashScreen"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>

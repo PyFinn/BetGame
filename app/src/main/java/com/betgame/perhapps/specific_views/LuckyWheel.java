@@ -6,11 +6,14 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.betgame.perhapps.MainActivity;
 import com.betgame.perhapps.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -21,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.r0adkll.slidr.Slidr;
 import com.r0adkll.slidr.model.SlidrInterface;
 
+import java.util.Calendar;
 import java.util.Random;
 
 public class LuckyWheel extends AppCompatActivity {
@@ -28,6 +32,7 @@ public class LuckyWheel extends AppCompatActivity {
     private SlidrInterface slidr;
     private static final float number = 30f;
     int mDegrees = 0, mOldDegrees = 0;
+    private TextView mCountdownTv;
     Button mButtonStartWheel;
     ImageView mImageWheel;
     Random r;
@@ -38,6 +43,13 @@ public class LuckyWheel extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DAY_OF_MONTH, 1);
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+
         getWindow().addFlags(1024);
         requestWindowFeature(1);
         slidr = Slidr.attach(this);
@@ -49,15 +61,17 @@ public class LuckyWheel extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 currentBalance = (int) ((long)snapshot.getValue());
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
 
+        mCountdownTv = (TextView) findViewById(R.id.countdown_next_spin);
         mButtonStartWheel = (Button) findViewById(R.id.button_start_spin);
         mImageWheel = (ImageView) findViewById(R.id.lucky_wheel);
+
+        mCountdownTv.setText(String.valueOf(c.getTimeInMillis() - MainActivity.mServerTime));
 
         mDbReference.child("spinned").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

@@ -1,28 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.betgame.perhapps.MainActivity"
-    android:orientation="vertical"
     android:background="@drawable/background_main">
-    <RelativeLayout
+    <include layout="@layout/toolbar_back"
+        android:id="@+id/toolbar_lucky"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1.0">
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar_lucky">
         <ImageView
             android:id="@+id/lucky_wheel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/bet_game_lucky_wheel"
             android:adjustViewBounds="true"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="20sp"
+            app:layout_constraintTop_toBottomOf="@id/selector"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="▼"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/selector"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             android:textSize="100sp"
             android:layout_centerHorizontal="true"
             />
@@ -35,7 +42,21 @@
             android:layout_marginBottom="40sp"
             android:padding="20sp"
             android:id="@+id/button_start_spin"
-            android:enabled="false"/>
-    </RelativeLayout>
-
-</LinearLayout>
+            android:enabled="false"
+            app:layout_constraintTop_toBottomOf="@id/lucky_wheel"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/button_start_spin"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:textSize="45sp"
+            android:id="@+id/countdown_next_spin"
+            android:fontFamily="@font/roboto_black"
+            android:background="@color/transparent"
+            android:textColor="@color/colorAccent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

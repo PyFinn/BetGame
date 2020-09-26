@@ -24,7 +24,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.betgame.perhapps.Game;
+import com.betgame.perhapps.MainActivity;
 import com.betgame.perhapps.R;
+import com.betgame.perhapps.SplashScreen;
 
 import java.util.ArrayList;
 
@@ -165,7 +167,7 @@ public class GameCardsActivityAdapter extends RecyclerView.Adapter<GameCardsActi
             mGameArray = null;
         }else {
             for (Game game : games) {
-                if (!game.getStarted() && !game.getFinished()){
+                if (!game.getStarted() && !game.getFinished() && game.getDateMS() > MainActivity.mServerTime){
                     if (game.getSports().equals(gameTypeQuery) && game.getLeague().equals(leagueTypeQuery)) {
                         mQueriedGames.add(game);
                     }

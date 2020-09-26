@@ -5,6 +5,8 @@ import androidx.annotation.NonNull;
 import com.betgame.perhapps.bet_logic.ModalBottomSheet;
 import com.betgame.perhapps.specific_views.Profile;
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.widget.Toolbar;
@@ -29,6 +31,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.functions.FirebaseFunctions;
+import com.google.firebase.functions.HttpsCallableResult;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -66,6 +70,9 @@ public class MainActivity extends AppCompatActivity implements ModalBottomSheet.
     private String userMail;
     private boolean gotGuestUserName = false;
     private String guestUserName = "";
+    private FirebaseFunctions mFunctions;
+    public static long mServerTime = 0;
+    private Task mTimeReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,29 +161,35 @@ public class MainActivity extends AppCompatActivity implements ModalBottomSheet.
 
         mGamesChild.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                game_arr = new ArrayList<Game>(Arrays.asList(makeGamesDataToArray(snapshot)));
-                mFinishedGames = gameArrayToFinishedGameArray(game_arr);
-                long largestA = Long.MAX_VALUE, largestB = Long.MAX_VALUE, largestC = Long.MAX_VALUE;
-                for(long value : gamesMS) {
-                    if(value < largestA) {
-                        largestB = largestA;
-                        largestA = value;
-                    } else if (value < largestB) {
-                        largestC = largestB;
-                        largestB = value;
-                    } else if (value < largestC) {
-                        largestC = value;
+            public void onDataChange(@NonNull final DataSnapshot snapshot) {
+                mFunctions = FirebaseFunctions.getInstance();
+                mTimeReference = mFunctions.getHttpsCallable("getTime").call().addOnCompleteListener(new OnCompleteListener<HttpsCallableResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<HttpsCallableResult> task) {
+                        mServerTime = (long) task.getResult().getData();
+                        game_arr = new ArrayList<Game>(Arrays.asList(makeGamesDataToArray(snapshot)));
+                        mFinishedGames = gameArrayToFinishedGameArray(game_arr);
+                        long largestA = Long.MAX_VALUE, largestB = Long.MAX_VALUE, largestC = Long.MAX_VALUE;
+                        for(long value : gamesMS) {
+                            if(value < largestA) {
+                                largestB = largestA;
+                                largestA = value;
+                            } else if (value < largestB) {
+                                largestC = largestB;
+                                largestB = value;
+                            } else if (value < largestC) {
+                                largestC = value;
+                            }
+                        }
+                        games_upcoming[0] = largestA;
+                        games_upcoming[1] = largestB;
+                        games_upcoming[2] = largestC;
+                        try {
+                            getSupportFragmentManager().beginTransaction().replace(R.id.sv_home_page, HomeFragment.newInstance(game_arr, mBetArray, games_upcoming, mFinishedGames)).commitAllowingStateLoss();
+                        }catch (Exception e) {
+                        }
                     }
-                }
-                games_upcoming[0] = largestA;
-                games_upcoming[1] = largestB;
-                games_upcoming[2] = largestC;
-                try {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.sv_home_page, HomeFragment.newInstance(game_arr, mBetArray, games_upcoming, mFinishedGames)).commitAllowingStateLoss();
-                }catch (Exception e) {
-                }
-                Toast.makeText(getApplicationContext(), String.valueOf(SplashScreen.mServerTime), Toast.LENGTH_LONG).show();
+                });
             }
 
             @Override
@@ -348,6 +361,7 @@ public class MainActivity extends AppCompatActivity implements ModalBottomSheet.
 
 
     public Game[] makeGamesDataToArray(DataSnapshot snapshotToConvert) {
+        final long currentTime = mServerTime;
         // filters
         final String RESULTS = "game";
         final String HOME_TEAM = "home_team_name";
@@ -451,8 +465,9 @@ public class MainActivity extends AppCompatActivity implements ModalBottomSheet.
             games[counter].setYear(times[0]);
             games[counter].setDate(times[1] + "." + times[2]);
             games[counter].setTime(times[3] + ":" + times[4]);
-            if (!games[counter].getStarted()){
-                gamesMS.add(createDateFromString(convertMe));
+            long finalGame = createDateFromString(convertMe);
+            if (!games[counter].getStarted() && finalGame > currentTime){
+                gamesMS.add(finalGame);
             }
             games[counter].setDateMS(createDateFromString(convertMe));
 
