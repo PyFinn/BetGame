@@ -1,4 +1,6 @@
 package com.betgame.perhapps.specific_views;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
@@ -24,7 +26,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.r0adkll.slidr.Slidr;
 import com.r0adkll.slidr.model.SlidrInterface;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.Random;
 
 public class LuckyWheel extends AppCompatActivity {
@@ -43,12 +47,10 @@ public class LuckyWheel extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Calendar c = Calendar.getInstance();
-        c.add(Calendar.DAY_OF_MONTH, 1);
-        c.set(Calendar.HOUR_OF_DAY, 0);
-        c.set(Calendar.MINUTE, 0);
-        c.set(Calendar.SECOND, 0);
-        c.set(Calendar.MILLISECOND, 0);
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/YY", Locale.GERMAN);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(MainActivity.mServerTime);
+        String date = format.format(calendar.getTime());
 
         getWindow().addFlags(1024);
         requestWindowFeature(1);
@@ -71,21 +73,6 @@ public class LuckyWheel extends AppCompatActivity {
         mButtonStartWheel = (Button) findViewById(R.id.button_start_spin);
         mImageWheel = (ImageView) findViewById(R.id.lucky_wheel);
 
-        mCountdownTv.setText(String.valueOf(c.getTimeInMillis() - MainActivity.mServerTime));
-
-        mDbReference.child("spinned").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (!(boolean) snapshot.getValue()){
-                    mButtonStartWheel.setEnabled(true);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
 
         r = new Random();
         mButtonStartWheel.setOnClickListener(new View.OnClickListener() {

@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -11,7 +12,9 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/home_team_score_display"
         android:fontFamily="@font/roboto_regular"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="20dp"
+        android:textSize="20sp"
+        tools:text="Home Team"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,7 +23,8 @@
         app:layout_constraintTop_toTopOf="@id/home_team_name_reward_sheet"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:fontFamily="@font/roboto_bold"/>
+        android:fontFamily="@font/roboto_bold"
+        android:textSize="20sp"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,7 +32,9 @@
         app:layout_constraintRight_toLeftOf="@id/vs_tv_reward_bet"
         app:layout_constraintTop_toTopOf="@id/vs_tv_reward_bet"
         android:fontFamily="@font/roboto_bold"
-        android:layout_marginRight="5sp"/>
+        android:layout_marginRight="5sp"
+        android:textSize="20sp"
+        tools:text="1"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -36,7 +42,9 @@
         app:layout_constraintLeft_toRightOf="@id/vs_tv_reward_bet"
         app:layout_constraintTop_toTopOf="@id/vs_tv_reward_bet"
         android:fontFamily="@font/roboto_bold"
-        android:layout_marginLeft="5sp"/>
+        android:layout_marginLeft="5sp"
+        android:textSize="20sp"
+        tools:text="1"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -44,7 +52,9 @@
         app:layout_constraintTop_toTopOf="@id/home_team_name_reward_sheet"
         app:layout_constraintLeft_toRightOf="@id/away_team_score_display"
         app:layout_constraintRight_toRightOf="parent"
-        android:fontFamily="@font/roboto_regular"/>
+        android:fontFamily="@font/roboto_regular"
+        android:textSize="20sp"
+        tools:text="Away Team"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -64,7 +74,8 @@
         android:textStyle="bold"
         android:textSize="20sp"
         android:layout_marginLeft="7sp"
-        android:layout_marginRight="40sp"/>
+        android:layout_marginRight="40sp"
+        tools:text="500$"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -3,10 +3,12 @@ package com.betgame.perhapps.specific_views;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -57,6 +59,8 @@ public class GamesForSport extends AppCompatActivity implements GameCardsActivit
         LeagueTypeQuery = intent.getStringExtra("SelectedLeague");
         mActiveBets = intent.getStringArrayListExtra("ActiveBets");
         setContentView(R.layout.explicit_sports_display);
+        androidx.appcompat.widget.Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_back);
+        ImageView iv_go_back = (ImageView) toolbar.findViewById(R.id.iv_go_back);
         rv_games = (RecyclerView) findViewById(R.id.rv_explicit_sports_display);
         mNoGamesTextView = (TextView) findViewById(R.id.no_games_tv);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
@@ -67,6 +71,12 @@ public class GamesForSport extends AppCompatActivity implements GameCardsActivit
         rv_games.setHasFixedSize(true);
         mAdapterGames = new GameCardsActivityAdapter(this);
         rv_games.setAdapter(mAdapterGames);
+        iv_go_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         mAdapterGames.setWeatherData(games, GameTypeQuery, LeagueTypeQuery);
         if (mAdapterGames.getItemCount() == 0){

@@ -1,17 +1,23 @@
 package com.betgame.perhapps.specific_views;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.betgame.perhapps.Fragments.ScheduleFragment;
 import com.betgame.perhapps.Game;
@@ -50,8 +56,12 @@ public class ScheduleSpecificSport extends Fragment implements ScheduleFragmentA
         return fragment;
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View myView = inflater.inflate(R.layout.explicit_sports_display, container, false);
+        androidx.appcompat.widget.Toolbar toolbar = (Toolbar) myView.findViewById(R.id.toolbar_back);
+        toolbar.setVisibility(View.GONE);
+        toolbar.setEnabled(false);
         mGameArray = getArguments() != null ? getArguments().getBundle("BundleGameArray").getParcelableArrayList(GameArrayKey) : null;
         mSportType = getArguments() != null ? getArguments().getBundle("BundleSportsName").getString(StringKey) : null;
         mActiveBets = getArguments() != null ? getArguments().getBundle("BundleActiveBets").getStringArrayList(ActiveBetsKey) : null;
@@ -61,6 +71,7 @@ public class ScheduleSpecificSport extends Fragment implements ScheduleFragmentA
         rv_explicit_sports_display.setHasFixedSize(true);
         mRvAdapter = new ScheduleFragmentAdapter(this);
         rv_explicit_sports_display.setAdapter(mRvAdapter);
+
 
         mSportTypes = new HashMap<>();
 
